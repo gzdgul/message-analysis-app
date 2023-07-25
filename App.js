@@ -1,20 +1,30 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React from 'react';
+import {StyleSheet, View, Button, Text} from 'react-native';
+import {pickDocument} from "./components/utils";
 
 export default function App() {
+
+  const [data, setData] = React.useState([])
+
+  const handlePress = async () => {
+    const fileContent =  await pickDocument()
+    setData(fileContent)
+    console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!',fileContent)
+  }
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+      <View style={styles.container}>
+        <Text>Dosya Seç: </Text>
+        <Button title="Dosya Seç" onPress={handlePress} />
+      </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
     justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#fff',
   },
 });
