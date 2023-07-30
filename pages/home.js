@@ -1,12 +1,16 @@
-import React from 'react';
-import {Button, StyleSheet, Text, View} from "react-native";
+import React, {useEffect} from 'react';
+import {Button, Pressable, StyleSheet, Text, View} from "react-native";
 import {findAnalysis, findMaxCountKey, pickDocument, sumCounts} from "../components/utils";
 import {COLORS} from "../config/constants";
+import {LinearGradient} from "expo-linear-gradient";
+import { View as MotiView } from "moti/build/components/view";
+import AnalysisBox from "../components/AnalysisBox";
+
+
 
 const Home = () => {
 
     const [data, setData] = React.useState([])
-    const [deneme, setDeneme] = React.useState('')
 
     const handlePress = async () => {
         const fileContent =  await pickDocument()
@@ -21,7 +25,7 @@ const Home = () => {
             allSendings,
 
         } = findAnalysis(fileContent);
-        setDeneme(mostUsedEmojisAndSenders[0]?.emoji)
+        // setDeneme(mostUsedEmojisAndSenders[0]?.emoji)
         console.log('Toplam Mesaj:', sumCounts(allSendings.messageCounts));
         console.log('Mesaj Gönderimi:', allSendings.messageCounts);
         console.log('En Çok Mesaj Yazan:',  findMaxCountKey(allSendings.messageCounts));
@@ -54,14 +58,30 @@ const Home = () => {
 
     }
 
+
+
     return (
         <View style={styles.container}>
-            <View style={styles.circle}>
-                <View style={styles.innerCircle}></View>
+            <View style={{ gap: 15}}>
+                <AnalysisBox position={'left'}/>
+                <AnalysisBox position={'right'}/>
+                <AnalysisBox position={'left'}/>
             </View>
-            {/*<Text>{deneme}</Text>*/}
-            {/*<Text>Dosya Seç: </Text>*/}
+            <View style={{marginTop: 20, width: '100%'}}>
+                <View style={styles.steps}>
+                    <View style={{flexDirection: 'row'}}>
+                        <Text style={styles.buttonText}>Step 1:</Text>
+                        <Text style={styles.buttonText}>Dosya Seç</Text>
+                    </View>
+                    <View style={styles.button}>
+                        <Text style={styles.buttonText}>Dosya Seç</Text>
+                    </View>
+                </View>
+
+            </View>
+
             {/*<Button title="Dosya Seç" onPress={handlePress}/>*/}
+
         </View>
     );
 };
@@ -77,17 +97,53 @@ const styles = StyleSheet.create({
         paddingTop: 60,
     },
     circle: {
-        width: 200,
-        height: 200,
-        backgroundColor: 'white',
+        width: 160,
+        height: 160,
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 100,
+        // overflow: 'hidden',
     },
     innerCircle: {
-        width: 165,
-        height: 165,
-        backgroundColor:  COLORS.darkPurple,
+        width: 135,
+        height: 135,
+        backgroundColor:  COLORS.white,
         borderRadius: 100,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    circleText: {
+        color: 'black',
+        fontSize: 14,
+    },
+    button: {
+        backgroundColor: COLORS.pink,
+        paddingHorizontal: 25,
+        paddingVertical: 15,
+        borderRadius: 10,
+    },
+    buttonText: {
+        color: 'white',
+        fontSize: 14,
+    },
+    steps: {
+        width: '100%',
+        // backgroundColor: 'red',
+        // flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+
+    },
+    box: {
+        width: '90%',
+        height: 180,
+        backgroundColor: COLORS.white,
+        alignItems: 'center',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        paddingHorizontal: 10,
+        borderRadius: 30,
+        borderTopRightRadius: 100,
+        borderBottomRightRadius: 100,
     }
 });
