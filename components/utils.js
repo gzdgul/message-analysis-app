@@ -33,7 +33,7 @@ const missedCalls = [
 ]
 
 //findAnalysis
-export function findAnalysis(messages) {
+export async function findAnalysis(messages) {
     const pictureCounts = {};
     const videoCounts = {};
     const audioCounts = {};
@@ -231,10 +231,8 @@ export const pickDocument = async () => {
 
         if (result) {
             // Dosya seçildiyse
-            console.log('Dosya URI:', result.assets[0].uri);
-            return readFileContent(result.assets[0].uri);
+            return result.assets[0].uri;
         } else {
-            // console.log(result);
             console.log('Dosya seçilmedi');
             return null;
         }
@@ -243,7 +241,7 @@ export const pickDocument = async () => {
     }
 };
 
-const readFileContent = async (uri) => {
+export const readFileContent = async (uri) => {
     try {
         const fileContent = await FileSystem.readAsStringAsync(uri);
         return parseData(fileContent)
@@ -297,5 +295,5 @@ function compareCounts(a, b) {
     const aToplam = Object.values(a.count).reduce((acc, curr) => acc + curr, 0);
     const bToplam = Object.values(b.count).reduce((acc, curr) => acc + curr, 0);
 
-    return bToplam - aToplam; // Büyükten küçüğe sıralamak için bToplam - aToplam
+    return bToplam - aToplam;
 }

@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {Button, Pressable, StyleSheet, Text, View} from "react-native";
+import {Button, Pressable, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {findAnalysis, findMaxCountKey, pickDocument, sumCounts} from "../components/utils";
 import {COLORS} from "../config/constants";
 import {LinearGradient} from "expo-linear-gradient";
@@ -8,7 +8,7 @@ import AnalysisBox from "../components/AnalysisBox";
 
 
 
-const Home = () => {
+const Home = ({navigation}) => {
 
     const [data, setData] = React.useState([])
 
@@ -26,32 +26,33 @@ const Home = () => {
 
         } = findAnalysis(fileContent);
         // setDeneme(mostUsedEmojisAndSenders[0]?.emoji)
-        console.log('Toplam Mesaj:', sumCounts(allSendings.messageCounts));
-        console.log('Mesaj Gönderimi:', allSendings.messageCounts);
-        console.log('En Çok Mesaj Yazan:',  findMaxCountKey(allSendings.messageCounts));
-        console.log('En Uzun Mesaj:', longestMessage.message);
-        console.log('En Uzun Mesaj Yazan:', longestMessage.name);
-        console.log('mostRepeatedWordsAndSenders:', mostRepeatedWordsAndSenders);
-        console.log('***********************************************************************:');
-        console.log('En Çok Mesajlaşılan Tarih:', mostRepeatedDate);
-        console.log('Mesajlaşılan Zamanlar:', messagingByTime);
-        console.log('En Çok Mesajlaşılan Zaman:', findMaxCountKey(messagingByTime),' - ', messagingByTime[findMaxCountKey(messagingByTime)] );
-        console.log('***********************************************************************:');
-        console.log('Toplam Emoji:', sumCounts(allSendings.emojiCounts));
-        console.log('Emoji Gönderimi:', allSendings.emojiCounts);
-        console.log('mostUsedEmojisAndSenders:', mostUsedEmojisAndSenders);
-        console.log('En Çok kullanılan Emoji:', mostUsedEmojisAndSenders[0].emoji);
-        console.log('En Çok kullanılan Emojiyi Atan:', findMaxCountKey(mostUsedEmojisAndSenders[0].count));
-        console.log('***********************************************************************:');
-        console.log('Fotograf Gönderimi:', allSendings.pictureCounts);
-        console.log('Video Gönderimi:', allSendings.videoCounts);
-        console.log('Ses Gönderimi:', allSendings.audioCounts);
-        console.log('Belge Gönderimi:', allSendings.documentCounts);
-        console.log('GIF Gönderimi:', allSendings.gifCounts);
-        console.log('Sticker Gönderimi:', allSendings.stickerCounts);
-        console.log('Link Gönderimi:', allSendings.linkCounts);
-        console.log('Cevapsız Aramalar:', allSendings.missedCallCounts);
-        console.log('En çok fotoğraf gönderen:', findMaxCountKey(allSendings.pictureCounts));
+        // console.log('fileContent:', data);
+        // console.log('Toplam Mesaj:', sumCounts(allSendings.messageCounts));
+        // console.log('Mesaj Gönderimi:', allSendings.messageCounts);
+        // console.log('En Çok Mesaj Yazan:',  findMaxCountKey(allSendings.messageCounts));
+        // console.log('En Uzun Mesaj:', longestMessage.message);
+        // console.log('En Uzun Mesaj Yazan:', longestMessage.name);
+        // console.log('mostRepeatedWordsAndSenders:', mostRepeatedWordsAndSenders);
+        // console.log('***********************************************************************:');
+        // console.log('En Çok Mesajlaşılan Tarih:', mostRepeatedDate);
+        // console.log('Mesajlaşılan Zamanlar:', messagingByTime);
+        // console.log('En Çok Mesajlaşılan Zaman:', findMaxCountKey(messagingByTime),' - ', messagingByTime[findMaxCountKey(messagingByTime)] );
+        // console.log('***********************************************************************:');
+        // console.log('Toplam Emoji:', sumCounts(allSendings.emojiCounts));
+        // console.log('Emoji Gönderimi:', allSendings.emojiCounts);
+        // console.log('mostUsedEmojisAndSenders:', mostUsedEmojisAndSenders);
+        // console.log('En Çok kullanılan Emoji:', mostUsedEmojisAndSenders[0].emoji);
+        // console.log('En Çok kullanılan Emojiyi Atan:', findMaxCountKey(mostUsedEmojisAndSenders[0].count));
+        // console.log('***********************************************************************:');
+        // console.log('Fotograf Gönderimi:', allSendings.pictureCounts);
+        // console.log('Video Gönderimi:', allSendings.videoCounts);
+        // console.log('Ses Gönderimi:', allSendings.audioCounts);
+        // console.log('Belge Gönderimi:', allSendings.documentCounts);
+        // console.log('GIF Gönderimi:', allSendings.gifCounts);
+        // console.log('Sticker Gönderimi:', allSendings.stickerCounts);
+        // console.log('Link Gönderimi:', allSendings.linkCounts);
+        // console.log('Cevapsız Aramalar:', allSendings.missedCallCounts);
+        // console.log('En çok fotoğraf gönderen:', findMaxCountKey(allSendings.pictureCounts));
 
 
 
@@ -62,26 +63,22 @@ const Home = () => {
 
     return (
         <View style={styles.container}>
-            <View style={{ gap: 15}}>
-                <AnalysisBox position={'left'}/>
-                <AnalysisBox position={'right'}/>
-                <AnalysisBox position={'left'}/>
+            <View style={{ gap: 10}}>
+                <AnalysisBox position={'left'} colors={[COLORS.green, COLORS.lightGreen]} color={COLORS.pink} title={'Simple Message Analysis'} description={'Total message count and messaging statistics for each sender.'} navigation={navigation}/>
+                <AnalysisBox position={'right'} colors={[COLORS.red, COLORS.orange]} color={'orange'} title={'Message Analysis Tournament'} description={'Rank users based on messaging habits and host a fun tournament.'} navigation={navigation}/>
+                <AnalysisBox position={'left'} colors={[COLORS.darkBlue, COLORS.purple]} color={COLORS.blue} title={'Message Timeline'} description={'Visualize messaging activities over time for better recall.'} navigation={navigation}/>
             </View>
             <View style={{marginTop: 20, width: '100%'}}>
-                <View style={styles.steps}>
-                    <View style={{flexDirection: 'row'}}>
-                        <Text style={styles.buttonText}>Step 1:</Text>
-                        <Text style={styles.buttonText}>Dosya Seç</Text>
-                    </View>
-                    <View style={styles.button}>
-                        <Text style={styles.buttonText}>Dosya Seç</Text>
-                    </View>
-                </View>
-
+                {/*<View style={styles.steps}>*/}
+                {/*    <View style={{flexDirection: 'row'}}>*/}
+                {/*        <Text style={styles.buttonText}>Step 1:</Text>*/}
+                {/*        <Text style={styles.buttonText}>Dosya Seç</Text>*/}
+                {/*    </View>*/}
+                {/*    <TouchableOpacity style={styles.button} onPress={handlePress}>*/}
+                {/*        <Text style={styles.buttonText}>Dosya Seç</Text>*/}
+                {/*    </TouchableOpacity>*/}
+                {/*</View>*/}
             </View>
-
-            {/*<Button title="Dosya Seç" onPress={handlePress}/>*/}
-
         </View>
     );
 };
@@ -93,7 +90,7 @@ const styles = StyleSheet.create({
         flex: 1,
         // justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: COLORS.darkPurple,
+        backgroundColor: COLORS.darkBG,
         paddingTop: 60,
     },
     circle: {
