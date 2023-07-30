@@ -130,7 +130,6 @@ const Analysis = ({navigation, route}) => {
                <Text style={styles.textStyle}>******************************</Text>
            <Text style={styles.textStyle}>Cevapsızlar:</Text>
            <ListObjects obj={missedCallCounts}/>
-
            </ScrollView>
        </View>
 
