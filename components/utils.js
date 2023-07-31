@@ -49,11 +49,8 @@ export async function findAnalysis(messages) {
     let mostRepeatedWordsAndSenders = [];
     let mostUsedEmojisAndSenders = [];
     let longestMessage = {message: '', name: ''};
-    let isFirstMessage = true;
+    messages.shift();
     messages.forEach((messageObj) => {
-        if (isFirstMessage) {
-            isFirstMessage = false;
-        } else {
             const message = messageObj.message.toLowerCase();
             const name = messageObj.name;
             if (!medya.some(item => message.includes(item)) && !missedCalls.some(item => message.includes(item)))
@@ -93,12 +90,12 @@ export async function findAnalysis(messages) {
                     missedCallCounts[messageObj.name] = (missedCallCounts[messageObj.name] || 0) + 1;
                 }
             }
-        }
     });
 
     const words = messages.reduce((allWords, messageObj) => {
         const message = messageObj.message.toLowerCase();
-        if (!medya.some(item => message.includes(item)) && !missedCalls.some(item => message.includes(item))) {
+        const emojisInMessage = messageObj.message.match(emojiRegex());
+        if (!medya.some(item => message.includes(item)) && !missedCalls.some(item => message.includes(item)) && !emojisInMessage) {
             const messageWords = message.split(/\s+/); // Split message into words
             return allWords.concat(messageWords);
         } else {
@@ -112,7 +109,8 @@ export async function findAnalysis(messages) {
             wordCount[word] = (wordCount[word] || 0) + 1;
         }
     });
-
+    const totalWord = sumCounts(wordCount)
+    console.log('DENEMEEEEE',wordCount)
 
     let mostRepeatedWords = [];
     for (const word in wordCount) {
@@ -220,7 +218,7 @@ export async function findAnalysis(messages) {
         messagingByTime: messagingByTime,
         mostRepeatedWordsAndSenders: mostRepeatedWordsAndSenders,
         mostUsedEmojisAndSenders: mostUsedEmojisAndSenders,
-        allSendings: {messageCounts,pictureCounts,videoCounts,audioCounts,documentCounts,gifCounts,linkCounts,missedCallCounts,emojiCounts, stickerCounts, nameCount}
+        allSendings: {messageCounts,pictureCounts,videoCounts,audioCounts,documentCounts,gifCounts,linkCounts,missedCallCounts,emojiCounts, stickerCounts, nameCount, totalWord}
     };
 }
 

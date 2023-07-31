@@ -6,7 +6,7 @@ import {findMaxCountKey, sumCounts} from "../components/utils";
 const Analysis = ({navigation, route}) => {
     const analyzedData = route.params.analyzedData
     const totalMessage = sumCounts(analyzedData.allSendings.messageCounts)
-    const totalEmoji = sumCounts(analyzedData.allSendings.emojiCounts)
+    const totalword = analyzedData.allSendings.totalWord
     const totalPicture = sumCounts(analyzedData.allSendings.pictureCounts)
     const mostRepeatedDate = analyzedData.mostRepeatedDate
     // const mostPostedTime = findMaxCountKey(analyzedData.messagingByTime)
@@ -97,10 +97,12 @@ const Analysis = ({navigation, route}) => {
                <Text style={styles.mainTitle}>Simple Message Analysis</Text>
             <AnalysisLabel title={'Toplam Mesaj'} value={sumCounts(messageSending)}/>
             <AnalysisLabel title={'En Çok Mesajlaşılan Tarih'} value={mostRepeatedDate}/>
+
                <Text style={styles.labelTitleText}>Mesajlaşılan Zamanlar</Text>
                <AnalysisValueBoxContainer data={messagingByTime} titleArr={['morning','night']}/>
                <Text style={styles.labelTitleText}>Mesaj Gönderimi</Text>
                 <AnalysisValueBoxContainer data={messageSending}/>
+               <AnalysisLabel title={'Toplam Kelime'} value={totalword}/>
                <Text style={styles.labelTitleText}>En Çok Gönderilen Kelimeler</Text>
                <View style={{marginTop: 15}}>
                    {mostRepeatedWordsAndSenders.map((x, index) => (
