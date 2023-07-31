@@ -122,15 +122,15 @@ export async function findAnalysis(messages) {
     mostRepeatedWords.sort((a, b) => b.count - a.count);
     mostRepeatedWords = mostRepeatedWords.slice(0, 10);
 
-    const nameCount = {};
+    const messageCounts = {};
     messages.forEach((messageObj) => {
         const name = messageObj.name;
-        nameCount[name] = (nameCount[name] || 0) + 1;
+        messageCounts[name] = (messageCounts[name] || 0) + 1;
     });
 
-    let messageCounts = {};
-    for (const name in nameCount) {
-        messageCounts[name] = nameCount[name];
+    let nameCount = [];
+    for (const name in messageCounts) {
+       nameCount.push(name);
     }
 
     const timeCount = { morning: 0, night: 0 };
@@ -218,7 +218,7 @@ export async function findAnalysis(messages) {
         messagingByTime: messagingByTime,
         mostRepeatedWordsAndSenders: mostRepeatedWordsAndSenders,
         mostUsedEmojisAndSenders: mostUsedEmojisAndSenders,
-        allSendings: {messageCounts,pictureCounts,videoCounts,audioCounts,documentCounts,gifCounts,linkCounts,missedCallCounts,emojiCounts, stickerCounts}
+        allSendings: {messageCounts,pictureCounts,videoCounts,audioCounts,documentCounts,gifCounts,linkCounts,missedCallCounts,emojiCounts, stickerCounts, nameCount}
     };
 }
 
