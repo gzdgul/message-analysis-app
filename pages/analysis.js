@@ -57,7 +57,7 @@ const Analysis = ({navigation, route}) => {
     const AnalysisValueBox = ({data, i, titleArr}) => (
         <View style={[styles.box,colorCorrector(data,i,titleArr)]}>
             <Text style={[styles.boxTitleText, colorCorrector(data,i, titleArr)]}>{ titleArr ? titleArr[i] : names[i]}</Text>
-            <Text style={[styles.boxValueText, colorCorrector(data,i, titleArr)]}>{titleArr ? data[titleArr[i]]: data[names[i]]}</Text>
+            <Text style={[styles.boxValueText, colorCorrector(data,i, titleArr)]}>{titleArr ? data[titleArr[i]]: data[names[i]] ? data[names[i]] : 0}</Text>
         </View>
     )
     const AnalysisValueBoxSmall = ({data, i, titleArr, customValue, type}) => (
@@ -93,7 +93,7 @@ const Analysis = ({navigation, route}) => {
 
     return (
        <View style={styles.container}>
-           <ScrollView contentContainerStyle={{}}>
+           <ScrollView contentContainerStyle={{ paddingHorizontal: 30,}}>
                <Text style={styles.mainTitle}>Simple Message Analysis</Text>
             <AnalysisLabel title={'Toplam Mesaj'} value={sumCounts(messageSending)}/>
             <AnalysisLabel title={'En Çok Mesajlaşılan Tarih'} value={mostRepeatedDate}/>
@@ -234,7 +234,7 @@ const styles = StyleSheet.create({
         // alignItems: 'center',
         backgroundColor: COLORS.darkBG,
         paddingTop: 60,
-        paddingHorizontal: 30,
+
     },
     textStyle: {
         color: COLORS.white,

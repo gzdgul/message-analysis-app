@@ -12,7 +12,8 @@ const medya =
         'gif dahil edilmedi',' gif not included',
         'çıkartma dahil edilmedi', 'sticker not included',
         'kişi kartı dahil edilmedi','contact card not included',
-        'http'
+        'http',
+        'bu mesajı sildiniz', 'deleted this message'
 
     ];
 const mediaTypes = [
@@ -22,7 +23,8 @@ const mediaTypes = [
     { type: 'document', keywords: [medya[6], medya[7]] },
     { type: 'gif', keywords: [medya[8], medya[9]] },
     { type: 'sticker', keywords: [medya[10], medya[11]] },
-    { type: 'link', keywords: [medya[14]] }
+    { type: 'link', keywords: [medya[14]] },
+    { type: 'deleted', keywords: [medya[15], medya[16]] },
 ];
 
 const missedCalls = [
