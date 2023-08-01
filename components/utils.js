@@ -184,6 +184,7 @@ export async function findAnalysis(messages) {
         const name = messageObj.name;
         const date = messageObj.date;
         let media = null;
+        let others = null;
             for (const mediaType of mediaTypes) {
                 if (mediaType.keywords.some(keyword => message.includes(keyword))) {
                     switch (mediaType.type) {
@@ -197,21 +198,21 @@ export async function findAnalysis(messages) {
                             media = "audio";
                             break;
                         case "document":
-                            media = "document";
+                            others = "document";
                             break;
                         case "gif":
-                            media = "gif";
+                            others = "gif";
                             break;
                         case "sticker":
-                            media = "sticker";
+                            others = "sticker";
                             break;
                         case "link":
-                            media = "link";
+                            others = "link";
                             break;
                     }
                 }
             }
-        deneme.push({ date: date, name: name, emoji: emojisInMessage, media: media, })
+        deneme.push({ date: date, name: name, emoji: emojisInMessage, media: media, others:others })
     });
     const test = [];
     for (const date in dateCount) {
@@ -235,8 +236,17 @@ export async function findAnalysis(messages) {
                 return null;
         })
             console.log('****************************************',media1)
+        const othersFiltered = name1Filtered.filter((z) => z.others !== null)
+        const others1 = othersFiltered.map((a) => {
+            if (a.others) {
+                return a.others
+            }
+            return null;
+        })
+        console.log('****************************************',others1)
 
-        const name1Data = { emoji: emoji1, media: media1, message: message1}
+
+        const name1Data = { emoji: emoji1, media: media1, others: others1,message: message1}
         const name2Filtered = arr.filter((x) => x.date === date).filter((y) => y.name === nameCount[1])
         const message2 = name2Filtered.length
         const emojiFiltered2 = name2Filtered.filter((z) => z.emoji !== null)
@@ -257,8 +267,17 @@ export async function findAnalysis(messages) {
                 return null;
             })
             console.log('****************************************media2',media2)
+        const othersFiltered2 = name2Filtered.filter((z) => z.others !== null)
+        const others2 = othersFiltered2.map((a) => {
+            if (a.others) {
+                return a.others
+            }
+            return null;
+        })
+        console.log('****************************************',others2)
 
-        const name2Data = {emoji: emoji2, media: media2, message: message2}
+
+        const name2Data = {emoji: emoji2, media: media2, others: others2, message: message2}
         test.push({ date: date, [nameCount[0]]: name1Data , [nameCount[1]]: name2Data, count: message1 + message2 })
     }
 
@@ -409,3 +428,4 @@ export function findMaxCount(data) {
     }
     return maxCount;
 }
+
