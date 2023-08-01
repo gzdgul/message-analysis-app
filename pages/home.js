@@ -10,74 +10,14 @@ import AnalysisBox from "../components/AnalysisBox";
 
 const Home = ({navigation}) => {
 
-    const [data, setData] = React.useState([])
-
-    const handlePress = async () => {
-        const fileContent =  await pickDocument()
-        setData(fileContent)
-        console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!',fileContent)
-        const {
-            longestMessage,
-            messagingByTime,
-            mostRepeatedDate,
-            mostRepeatedWordsAndSenders,
-            mostUsedEmojisAndSenders,
-            allSendings,
-
-        } = findAnalysis(fileContent);
-        // setDeneme(mostUsedEmojisAndSenders[0]?.emoji)
-        // console.log('fileContent:', data);
-        // console.log('Toplam Mesaj:', sumCounts(allSendings.messageCounts));
-        // console.log('Mesaj Gönderimi:', allSendings.messageCounts);
-        // console.log('En Çok Mesaj Yazan:',  findMaxCountKey(allSendings.messageCounts));
-        // console.log('En Uzun Mesaj:', longestMessage.message);
-        // console.log('En Uzun Mesaj Yazan:', longestMessage.name);
-        // console.log('mostRepeatedWordsAndSenders:', mostRepeatedWordsAndSenders);
-        // console.log('***********************************************************************:');
-        // console.log('En Çok Mesajlaşılan Tarih:', mostRepeatedDate);
-        // console.log('Mesajlaşılan Zamanlar:', messagingByTime);
-        // console.log('En Çok Mesajlaşılan Zaman:', findMaxCountKey(messagingByTime),' - ', messagingByTime[findMaxCountKey(messagingByTime)] );
-        // console.log('***********************************************************************:');
-        // console.log('Toplam Emoji:', sumCounts(allSendings.emojiCounts));
-        // console.log('Emoji Gönderimi:', allSendings.emojiCounts);
-        // console.log('mostUsedEmojisAndSenders:', mostUsedEmojisAndSenders);
-        // console.log('En Çok kullanılan Emoji:', mostUsedEmojisAndSenders[0].emoji);
-        // console.log('En Çok kullanılan Emojiyi Atan:', findMaxCountKey(mostUsedEmojisAndSenders[0].count));
-        // console.log('***********************************************************************:');
-        // console.log('Fotograf Gönderimi:', allSendings.pictureCounts);
-        // console.log('Video Gönderimi:', allSendings.videoCounts);
-        // console.log('Ses Gönderimi:', allSendings.audioCounts);
-        // console.log('Belge Gönderimi:', allSendings.documentCounts);
-        // console.log('GIF Gönderimi:', allSendings.gifCounts);
-        // console.log('Sticker Gönderimi:', allSendings.stickerCounts);
-        // console.log('Link Gönderimi:', allSendings.linkCounts);
-        // console.log('Cevapsız Aramalar:', allSendings.missedCallCounts);
-        // console.log('En çok fotoğraf gönderen:', findMaxCountKey(allSendings.pictureCounts));
-
-
-
-
-    }
-
-
-
     return (
         <View style={styles.container}>
             <View style={{ gap: 10}}>
-                <AnalysisBox position={'left'} colors={[COLORS.green, COLORS.lightGreen]} color={COLORS.pink} title={'Simple Message Analysis'} description={'Total message count and messaging statistics for each sender.'} navigation={navigation}/>
-                <AnalysisBox position={'right'} colors={[COLORS.red, COLORS.orange]} color={'orange'} title={'Message Analysis Tournament'} description={'Rank users based on messaging habits and host a fun tournament.'} navigation={navigation}/>
-                <AnalysisBox position={'left'} colors={[COLORS.darkBlue, COLORS.purple]} color={COLORS.blue} title={'Message Timeline'} description={'Visualize messaging activities over time for better recall.'} navigation={navigation}/>
+                <AnalysisBox position={'left'} colors={[COLORS.green, COLORS.lightGreen]} title={'Message Analysis Simple'} description={'Total message count and messaging statistics for each sender.'} navigation={navigation} id={'simple'}/>
+                <AnalysisBox position={'right'} colors={[COLORS.red, COLORS.orange]}  title={'Message Analysis Advanced '} description={'Rank users based on messaging habits and host a fun tournament.'} navigation={navigation} id={'advanced'}/>
+                <AnalysisBox position={'left'} colors={[COLORS.darkBlue, COLORS.purple]} title={'Message Analysis Timeline'} description={'Visualize messaging activities over time for better recall.'} navigation={navigation} id={'timeline'}/>
             </View>
             <View style={{marginTop: 20, width: '100%'}}>
-                {/*<View style={styles.steps}>*/}
-                {/*    <View style={{flexDirection: 'row'}}>*/}
-                {/*        <Text style={styles.buttonText}>Step 1:</Text>*/}
-                {/*        <Text style={styles.buttonText}>Dosya Seç</Text>*/}
-                {/*    </View>*/}
-                {/*    <TouchableOpacity style={styles.button} onPress={handlePress}>*/}
-                {/*        <Text style={styles.buttonText}>Dosya Seç</Text>*/}
-                {/*    </TouchableOpacity>*/}
-                {/*</View>*/}
             </View>
         </View>
     );

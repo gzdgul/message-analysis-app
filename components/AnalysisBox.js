@@ -6,7 +6,7 @@ import {COLORS} from "../config/constants";
 import {findAnalysis, findMaxCountKey, pickDocument, readFileContent, sumCounts} from "./utils";
 import MaskedView from "@react-native-masked-view/masked-view";
 
-const AnalysisBox = ({navigation,position,title, description, color, colors}) => {
+const AnalysisBox = ({navigation,position,title, description, colors, id}) => {
     const [fileUri, setFileUri] = React.useState('')
     const [isAnalysisStarted, setIsAnalysisStarted] = React.useState(false)
     const [circleText, setCircleText] = React.useState('START')
@@ -37,48 +37,25 @@ const AnalysisBox = ({navigation,position,title, description, color, colors}) =>
                 const fileContent = await readFileContent(fileUri)
                 const {
                     longestMessage,
-                    messagingByTime,
                     mostRepeatedDate,
+                    mostRepeatedDates,
                     mostRepeatedWordsAndSenders,
                     mostUsedEmojisAndSenders,
                     allSendings,
 
                 } = await findAnalysis(fileContent);
+            setTimeout(() => {
                 setIsAnalysisStarted(false)
                 navigation.navigate('Analysis', {analyzedData: {
                         longestMessage,
-                        messagingByTime,
                         mostRepeatedDate,
+                        mostRepeatedDates,
                         mostRepeatedWordsAndSenders,
                         mostUsedEmojisAndSenders,
-                        allSendings
+                        allSendings,
+                        id
                     }});
-                console.log('Toplam Mesaj:', sumCounts(allSendings.messageCounts));
-                console.log('Mesaj Gönderimi:', allSendings.messageCounts);
-                console.log('En Çok Mesaj Yazan:',  findMaxCountKey(allSendings.messageCounts));
-                console.log('En Uzun Mesaj:', longestMessage.message);
-                console.log('En Uzun Mesaj Yazan:', longestMessage.name);
-                console.log('mostRepeatedWordsAndSenders:', mostRepeatedWordsAndSenders);
-                console.log('***********************************************************************:');
-                console.log('En Çok Mesajlaşılan Tarih:', mostRepeatedDate);
-                console.log('Mesajlaşılan Zamanlar:', messagingByTime);
-                console.log('En Çok Mesajlaşılan Zaman:', findMaxCountKey(messagingByTime),' - ', messagingByTime[findMaxCountKey(messagingByTime)] );
-                console.log('***********************************************************************:');
-                console.log('Toplam Emoji:', sumCounts(allSendings.emojiCounts));
-                console.log('Emoji Gönderimi:', allSendings.emojiCounts);
-                console.log('mostUsedEmojisAndSenders:', mostUsedEmojisAndSenders);
-                console.log('En Çok kullanılan Emoji:', mostUsedEmojisAndSenders[0].emoji);
-                console.log('En Çok kullanılan Emojiyi Atan:', findMaxCountKey(mostUsedEmojisAndSenders[0].count));
-                console.log('***********************************************************************:');
-                console.log('Fotograf Gönderimi:', allSendings.pictureCounts);
-                console.log('Video Gönderimi:', allSendings.videoCounts);
-                console.log('Ses Gönderimi:', allSendings.audioCounts);
-                console.log('Belge Gönderimi:', allSendings.documentCounts);
-                console.log('GIF Gönderimi:', allSendings.gifCounts);
-                console.log('Sticker Gönderimi:', allSendings.stickerCounts);
-                console.log('Link Gönderimi:', allSendings.linkCounts);
-                console.log('Cevapsız Aramalar:', allSendings.missedCallCounts);
-                console.log('En çok fotoğraf gönderen:', findMaxCountKey(allSendings.pictureCounts));
+            },5000)
         }else Alert.alert('Geçerli bir dosya giriniz')
     }
     const GradientText = props => {
@@ -104,7 +81,7 @@ const AnalysisBox = ({navigation,position,title, description, color, colors}) =>
                 <View style={styles.desArea}>
                     <GradientText style={[styles.titleText]} colors={colors}>{title}</GradientText>
                     <Text style={styles.desText}>{description}</Text>
-                    <TouchableOpacity style={[styles.button, {backgroundColor: color}]} onPress={handlePickDocument}>
+                    <TouchableOpacity style={[styles.button, {backgroundColor: colors[0]}]} onPress={handlePickDocument}>
                         <LinearGradient
                             style={{ width: '100%', height: '100%', borderRadius: 10, position: 'absolute'}}
                             colors={[colors[0], colors[1]]}
@@ -155,7 +132,7 @@ const AnalysisBox = ({navigation,position,title, description, color, colors}) =>
                 <View style={styles.desArea}>
                     <GradientText style={[styles.titleText, {textAlign: 'right'}]} colors={colors}>{title}</GradientText>
                     <Text style={[styles.desText, {textAlign: 'right'}]}>{description}</Text>
-                    <TouchableOpacity style={[styles.button, {backgroundColor: color}]} onPress={handlePickDocument}>
+                    <TouchableOpacity style={[styles.button, {backgroundColor: colors[0]}]} onPress={handlePickDocument}>
                         <LinearGradient
                             style={{ width: '100%', height: '100%', borderRadius: 10, position: 'absolute'}}
                             colors={[colors[0], colors[1]]}
