@@ -394,9 +394,17 @@ export const findMaxCountKey = (obj) => {
     let maxValue = -Infinity;
 
     for (const key in obj) {
-        if (obj.hasOwnProperty(key) && typeof obj[key] === 'number' && obj[key] > maxValue) {
-            maxKey = key;
-            maxValue = obj[key];
+        if (obj.hasOwnProperty(key) && typeof obj[key] === 'number') {
+            if (obj[key] > maxValue) {
+                maxKey = key;
+                maxValue = obj[key];
+            }
+        }
+        else {
+            if (obj[key].length > maxValue) {
+                maxKey = key;
+                maxValue = obj[key].length;
+            }
         }
     }
 
@@ -408,6 +416,9 @@ export const sumCounts = (obj) => {
     for (const key in obj) {
         if (obj.hasOwnProperty(key) && typeof obj[key] === 'number') {
             sum += obj[key];
+        }
+        else {
+            sum += obj[key].length;
         }
     }
 

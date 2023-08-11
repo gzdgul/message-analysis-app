@@ -16,7 +16,7 @@ export const AnalysisValueBoxContainer = ({data, titleArr}) => (
 )
 export const AnalysisValueBox = ({data, i, titleArr}) => (
     <View style={[styles.box,colorCorrector(data,i,titleArr)]}>
-        <Text style={[styles.boxTitleText, colorCorrector(data,i, titleArr)]}>{titleArr[i]}</Text>
+        <Text  numberOfLines={1} style={[styles.boxTitleText, colorCorrector(data,i, titleArr)]}>{titleArr[i]}</Text>
         <Text style={[styles.boxValueText, colorCorrector(data,i, titleArr)]}>{data[titleArr[i]] ? data[titleArr[i]] : 0}</Text>
     </View>
 )
@@ -26,7 +26,7 @@ export const AnalysisValueBoxSmall = ({data, i, titleArr, customValue, type}) =>
             customValue
                 ? <Text style={[styles.boxValueText, type === 'emoji' ? {fontSize: 40} : {fontSize: 20} ,{alignSelf: 'center'}]}>{customValue}</Text>
                 : <>
-                    <Text style={[styles.boxTitleText,  {fontSize: 13 }, colorCorrector(data,i, titleArr)]}>{titleArr[i]}</Text>
+                    <Text  numberOfLines={1} style={[styles.boxTitleText,  {fontSize: 13 }, colorCorrector(data,i, titleArr)]}>{titleArr[i]}</Text>
                     <Text style={[styles.boxValueText, {fontSize: 25 }, colorCorrector(data,i, titleArr)]}>{data[titleArr[i]]}</Text>
                 </>
         }
@@ -39,6 +39,14 @@ export const colorCorrector = (data, i, titleArr) => {
     if (findMaxCountKey(data) === titleArr[i]) {
         return {
             backgroundColor: COLORS.lightGreen,
+            color: COLORS.darkPurple,
+        }
+    } else return null;
+}
+export const colorCorrector2 = (data, i, titleArr) => {
+    if (findMaxCountKey(data) === titleArr[i]) {
+        return {
+            backgroundColor: COLORS.color2,
             color: COLORS.darkPurple,
         }
     } else return null;

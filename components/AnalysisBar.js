@@ -1,24 +1,31 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {View as MotiView} from "moti/build/components/view";
 import {LinearGradient} from "expo-linear-gradient";
 import {COLORS} from "../config/constants";
 import {StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import { Dimensions } from 'react-native';
 
-const AnalysisBar = ({ id, percentageOfChange, pressedDay, setPressedDay, day, elementCount}) => {
+const AnalysisBar = ({  id, percentageOfChange,block, pressed, setPressed, day, elementCount}) => {
     const { width, height } = Dimensions.get('window');
-    const areaWidth =  Math.floor(width)-35
-    const barWidth = pressedDay === id ? areaWidth/elementCount - 5 + 15 : areaWidth/elementCount - 5
-    console.log(areaWidth)
+    const areaWidth =  Math.floor(width)
+
+    const barWidth =
+        pressed.block === block
+        ? pressed.DAY === id ? areaWidth/elementCount - 5 + 15 : areaWidth/elementCount - 5 -(15/elementCount)
+        : areaWidth/elementCount - 5
     const handleBarPress = () => {
-        setPressedDay(id)
+        if (pressed.DAY === id) {
+            setPressed({})
+        }
+        else setPressed({DAY: id, block: block })
     }
+
     return (
         <TouchableOpacity onPress={handleBarPress} style={{flexDirection: 'column', }}>
             <MotiView
                 transition={{ delay: 10, damping: 20, mass: 0.8 }}
                 animate={{
-                    height: pressedDay === id ? 160 - percentageOfChange : 150 - percentageOfChange,
+                    height: pressed.DAY === id ? 160 - percentageOfChange : 150 - percentageOfChange,
                     width: barWidth
                 }}
                 exit={{
