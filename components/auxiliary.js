@@ -44,7 +44,7 @@ export const colorCorrector = (data, i, titleArr) => {
     } else return null;
 }
 export const colorCorrector2 = (data, i, titleArr) => {
-    if (findMaxCountKey(data) === titleArr[i]) {
+    if ((findMaxCountKey(data) === titleArr[i])) {
         return {
             backgroundColor: COLORS.color2,
             color: COLORS.darkPurple,

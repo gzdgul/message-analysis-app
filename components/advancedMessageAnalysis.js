@@ -32,14 +32,14 @@ const AdvancedMessageAnalysis = ({analyzedData}) => {
     // console.log('mostRepeatedDates!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!',mostRepeatedDates)
     // console.log('mostRepeatedDatesSorted!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!',mostRepeatedDatesSorted)
     // console.log('mostRepeatedDateeee!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!',mostRepeatedDateeee)
-    const aaa =  test.slice(0,100)
+    // const aaa =  test.slice(0,100)
 
     // console.log('aaa!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!',aaa)
     // Verileri tarihlerine göre gruplamak için boş bir nesne oluşturuyoruz
     let gruplanmisVeriler = {};
 
 // Veriler dizisini tarihlerine göre gruplayan bir döngü
-    aaa.forEach(function(veri) {
+    test.forEach(function(veri) {
         const tarihParcalari = veri.date.split('.');
         const ay = '**.' + tarihParcalari[1] + '.' + tarihParcalari[2];
 
@@ -61,8 +61,6 @@ const AdvancedMessageAnalysis = ({analyzedData}) => {
     const handlePressBack = () => {
         if (deneme[deneme.length -1 - (page + 1)]) {
             setPage(prevState => prevState + 1)
-            console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!GOZDEEEEEEE',deneme[deneme.length -1 - (page +1)][deneme[deneme.length -1 - (page +1)].length - 1].date)
-            // setPressedDay(deneme[deneme.length -1 - (page +1)][deneme[deneme.length -1 - (page +1)].length - 1].date)
         }
     }
     const handlePressNext = () => {
@@ -129,7 +127,9 @@ const AdvancedMessageAnalysis = ({analyzedData}) => {
             }
             dataObj.sum[names[0]] = dataObj.data1;
             dataObj.sum[names[1]] = dataObj.data2;
+
         }
+        const equalData = dataObj.data1 === dataObj.data2
         return (
             <MotiView
                 transition={{ delay: id*100, damping: 15, mass: 1 }}
@@ -154,11 +154,11 @@ const AdvancedMessageAnalysis = ({analyzedData}) => {
                     <Text style={[styles.boxTitleText]}>{title}</Text>
                 </View>
 
-                <View style={[styles.box, colorCorrector2(data,0, names)]}>
-                    <Text style={[styles.boxValueText, {color: COLORS.color2}, colorCorrector2(data,0, names)]}>{dataObj.data1}</Text>
+                <View style={[styles.box, !equalData && colorCorrector2(data,0, names),]}>
+                    <Text style={[styles.boxValueText, {color: COLORS.color2}, !equalData && colorCorrector2(data,0, names)]}>{dataObj.data1}</Text>
                 </View>
-                <View style={[styles.box, colorCorrector2(data,1, names)]}>
-                    <Text style={[styles.boxValueText,{color: COLORS.color2}, colorCorrector2(data,1, names)]}>{dataObj.data2}</Text>
+                <View style={[styles.box, !equalData && colorCorrector2(data,1, names)]}>
+                    <Text style={[styles.boxValueText,{color: COLORS.color2}, !equalData && colorCorrector2(data,1, names)]}>{dataObj.data2}</Text>
                 </View>
                 <View style={[styles.box,{borderWidth: 1, borderColor: COLORS.color2, backgroundColor: 'transparent'}]}>
                     <Text style={[styles.boxValueText, {color: COLORS.color2}]}>{sumCounts(dataObj.sum)}</Text>
@@ -231,11 +231,7 @@ const AdvancedMessageAnalysis = ({analyzedData}) => {
     return (
         <View style={{flex: 1}}>
             <Text style={styles.mainTitle}>Message Analysis Advanced</Text>
-            {/*<Text style={styles.mainTitle}>{page}</Text>*/}
-
-
-
-            <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
+            <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginVertical: 10,}}>
                 <TouchableOpacity style={styles.arrow} onPress={ handlePressBack }>
                     <Image
                         source={require('../assets/arrow_left.png')}
