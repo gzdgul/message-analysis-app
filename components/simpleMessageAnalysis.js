@@ -1,8 +1,9 @@
 import React from 'react';
 import {ScrollView, StyleSheet, Text, View} from "react-native";
-import {findMaxCountKey, sumCounts} from "./utils";
 import {COLORS} from "../config/constants";
-import {AnalysisLabel, AnalysisValueBoxContainer, AnalysisValueBoxSmall} from "./auxiliary";
+
+import {AnalysisLabel, AnalysisValueBoxContainer, AnalysisValueBoxSmall} from "../libraries/UI_Component_Library";
+import {sumCounts} from "../libraries/Helper_Function_Library";
 
 const SimpleMessageAnalysis = ({analyzedData}) => {
     const totalword = analyzedData.allSendings.totalWord

@@ -1,9 +1,6 @@
 import React, {useEffect} from 'react';
 import {Button, Pressable, StyleSheet, Text, TouchableOpacity, View} from "react-native";
-import {findAnalysis, findMaxCountKey, pickDocument, sumCounts} from "../components/utils";
 import {COLORS} from "../config/constants";
-import {LinearGradient} from "expo-linear-gradient";
-import { View as MotiView } from "moti/build/components/view";
 import AnalysisBox from "../components/AnalysisBox";
 
 

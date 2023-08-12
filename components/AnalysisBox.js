@@ -3,7 +3,7 @@ import {Alert, Button, Pressable, StyleSheet, Text, TouchableOpacity, View} from
 import {View as MotiView} from "moti/build/components/view";
 import {LinearGradient} from "expo-linear-gradient";
 import {COLORS} from "../config/constants";
-import {findAnalysis, findMaxCountKey, pickDocument, readFileContent, sumCounts} from "./utils";
+import {findAnalysis, readFileContent, pickDocument} from "../libraries/Helper_Function_Library";
 import MaskedView from "@react-native-masked-view/masked-view";
 
 const AnalysisBox = ({navigation,position,title, description, colors, id}) => {
