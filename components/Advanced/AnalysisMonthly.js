@@ -16,7 +16,7 @@ const AnalysisMonthly = ({monthly, names}) => {
                     <Text style={styles.advancedBoxValueText}>{data[names[0]] + data[names[1]]}</Text>
                 </View>
 
-                <View style={{width: '100%', height: 10, backgroundColor: COLORS.color2, borderRadius: 100}}></View>
+                <View style={{width: '100%', height: 10, backgroundColor: COLORS.lightPurple, borderRadius: 100}}></View>
                 <View style={{flexDirection: 'row', gap: 5}}>
                     <View style={[{flex: data[names[0]], height: 10, backgroundColor: COLORS.darkPurple,  borderRadius: 100}, colorCorrector2(data,0, names)]}></View>
                     <View style={[{flex: data[names[1]], height: 10, backgroundColor: COLORS.darkPurple, borderRadius: 100}, colorCorrector2(data,1, names)]}></View>
@@ -26,8 +26,8 @@ const AnalysisMonthly = ({monthly, names}) => {
                     <Text style={styles.advancedBoxTitleText}>{names[1]}</Text>
                 </View>
                 <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                    <Text style={[styles.advancedBoxTitleText, {color: COLORS.color2}]}>{data[names[0]]}</Text>
-                    <Text style={[styles.advancedBoxTitleText, {color: COLORS.color2}]}>{data[names[1]]}</Text>
+                    <Text style={[styles.advancedBoxTitleText, {color: COLORS.lightPurple}]}>{data[names[0]]}</Text>
+                    <Text style={[styles.advancedBoxTitleText, {color: COLORS.lightPurple}]}>{data[names[1]]}</Text>
                 </View>
             </View>
         )

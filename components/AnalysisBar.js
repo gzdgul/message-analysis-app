@@ -43,7 +43,7 @@ const AnalysisBar = ({  id, percentageOfChange,block, pressed, setPressed, day, 
                     percentageOfChange < 75 &&
                     <LinearGradient
                         style={{ width: '100%', height: '100%', borderRadius: 15, position: 'absolute'}}
-                        colors={[COLORS.red, COLORS.orange, COLORS.orange]}
+                        colors={[COLORS.purple, COLORS.white, COLORS.white]}
                         start={{ x: 0, y: 0 }}
                         end={{ x: 0, y: 1 }}
                         pointerEvents="none"
@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
         fontSize: 17
     },
     bar: {
-        backgroundColor: COLORS.orange,
+        backgroundColor: COLORS.white,
         borderRadius: 15,
 
     },

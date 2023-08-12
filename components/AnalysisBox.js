@@ -41,6 +41,7 @@ const AnalysisBox = ({navigation,position,title, description, colors, id}) => {
                     mostRepeatedDates,
                     mostRepeatedWordsAndSenders,
                     mostUsedEmojisAndSenders,
+                    dataObjsByDate,
                     allSendings,
 
                 } = await findAnalysis(fileContent);
@@ -53,6 +54,7 @@ const AnalysisBox = ({navigation,position,title, description, colors, id}) => {
                         mostRepeatedWordsAndSenders,
                         mostUsedEmojisAndSenders,
                         allSendings,
+                        dataObjsByDate,
                         id
                     }});
             },5000)

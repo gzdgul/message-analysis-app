@@ -35,24 +35,33 @@ export const AnalysisValueBoxSmall = ({data, i, titleArr, customValue, type}) =>
         }
     </View>
 )
-export const AnalysisBoxRow = ({title, data, id, names}) => {
+export const AnalysisBoxRow = ({title, data, id, names, type}) => {
     let dataObj;
     if (typeof data[names[0]] === 'number') {
-        // console.log('number')
+
         dataObj = {
             data1: data[names[0]],
             data2: data[names[1]],
             sum: data,
         };
     } else  {
-        // console.log('otherrrrrrrrrrrrr')
-        dataObj = {
-            data1: [].concat(...data[names[0]]).length,
-            data2: [].concat(...data[names[1]]).length,
-            sum: {},
+        if (type === 'emoji') {
+            dataObj = {
+                data1: data[names[0]],
+                data2: data[names[1]],
+                sum: data,
+            };
         }
-        dataObj.sum[names[0]] = dataObj.data1;
-        dataObj.sum[names[1]] = dataObj.data2;
+        else {
+            dataObj = {
+                data1: [].concat(...data[names[0]]).length,
+                data2: [].concat(...data[names[1]]).length,
+                sum: {},
+            }
+            dataObj.sum[names[0]] = dataObj.data1;
+            dataObj.sum[names[1]] = dataObj.data2;
+        }
+
 
     }
     const equalData = dataObj.data1 === dataObj.data2
@@ -75,19 +84,19 @@ export const AnalysisBoxRow = ({title, data, id, names}) => {
                 type: 'timing',
                 duration: 300,
             }}
-            style={[styles.advancedValueBoxContainer,{ marginVertical: 3}, {height: 45}]}>
-            <View style={[styles.advancedBox,{borderWidth: 1, borderColor: COLORS.color2, backgroundColor: 'transparent'}]}>
+            style={[styles.advancedValueBoxContainer,{ marginVertical: 3}, {height: 43}]}>
+            <View style={[styles.advancedBox,{borderWidth: 1, borderColor: COLORS.lightPurple, backgroundColor: 'transparent'}]}>
                 <Text style={[styles.advancedBoxTitleText]}>{title}</Text>
             </View>
 
             <View style={[styles.advancedBox, !equalData && colorCorrector2(data,0, names),]}>
-                <Text style={[styles.advancedBoxValueText, {color: COLORS.color2}, !equalData && colorCorrector2(data,0, names)]}>{dataObj.data1}</Text>
+                <Text style={[styles.advancedBoxValueText, {color: COLORS.lightPurple}, !equalData && colorCorrector2(data,0, names)]}>{dataObj.data1}</Text>
             </View>
             <View style={[styles.advancedBox, !equalData && colorCorrector2(data,1, names)]}>
-                <Text style={[styles.advancedBoxValueText,{color: COLORS.color2}, !equalData && colorCorrector2(data,1, names)]}>{dataObj.data2}</Text>
+                <Text style={[styles.advancedBoxValueText,{color: COLORS.lightPurple}, !equalData && colorCorrector2(data,1, names)]}>{dataObj.data2}</Text>
             </View>
-            <View style={[styles.advancedBox,{borderWidth: 1, borderColor: COLORS.color2, backgroundColor: 'transparent'}]}>
-                <Text style={[styles.advancedBoxValueText, {color: COLORS.color2}]}>{sumCounts(dataObj.sum)}</Text>
+            <View style={[styles.advancedBox,{borderWidth: 1, borderColor: COLORS.lightPurple, backgroundColor: 'transparent'}]}>
+                <Text style={[styles.advancedBoxValueText, {color: COLORS.lightPurple}]}>{sumCounts(dataObj.sum)}</Text>
             </View>
         </MotiView>
     )

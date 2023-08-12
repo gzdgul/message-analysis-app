@@ -12,15 +12,11 @@ export const COLORS = {
     lightPink: '#fdcdcc',
     green: '#19de96',
     lightGreen: '#8efd7c',
-    red: '#847bec',
-    orange: '#ffffff',
     purple: '#847bec',
     darkBlue: '#0f4a80',
-    color1: '#3c388a',
-    color2: '#aba1fa',
-    color3: '#ddd9ff',
-    test: 'rgba(56,56,56,0.5)',
-    shadowColor: 'rgba(56,56,56,0.4)'
+    lightPurple: '#aba1fa',
+    // color1: '#3c388a',
+    // color3: '#ddd9ff',
 
 }
 export const monthsArr = ["January","February","March","April","May","June","July","August","September","October","November","December"];

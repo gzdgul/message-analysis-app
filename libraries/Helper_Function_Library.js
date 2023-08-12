@@ -82,7 +82,7 @@ export const colorCorrector = (data, i, titleArr) => {
 export const colorCorrector2 = (data, i, titleArr) => {
     if ((findMaxCountKey(data) === titleArr[i])) {
         return {
-            backgroundColor: COLORS.color2,
+            backgroundColor: COLORS.lightPurple,
             color: COLORS.darkPurple,
         }
     } else return null;
@@ -312,7 +312,7 @@ export async function findAnalysis(messages) {
         }
         deneme.push({ date: date, name: name, emoji: emojisInMessage, media: media, others:others })
     });
-    const test = [];
+    const dataObjsByDate = [];
     for (const date in dateCount) {
         const arr = [...deneme]
         const name1Filtered = arr.filter((x) => x.date === date).filter((y) => y.name === nameCount[0])
@@ -376,7 +376,7 @@ export async function findAnalysis(messages) {
 
 
         const name2Data = {emoji: emoji2, media: media2, others: others2, message: message2}
-        test.push({ date: date, [nameCount[0]]: name1Data , [nameCount[1]]: name2Data, count: message1 + message2 })
+        dataObjsByDate.push({ date: date, [nameCount[0]]: name1Data , [nameCount[1]]: name2Data, count: message1 + message2 })
     }
 
     messages.forEach((messageObj) => {
@@ -429,7 +429,7 @@ export async function findAnalysis(messages) {
     // console.log('allEmojisInMessageCount',allEmojisInMessageCount)
     // console.log('emojiCounts',emojiCounts)
     // console.log('deneme',deneme)
-    // console.log('test',test)
+    // console.log('dataObjsByDate',dataObjsByDate)
 
 
     return {
@@ -438,6 +438,7 @@ export async function findAnalysis(messages) {
         mostRepeatedDates: mostRepeatedDates,
         mostRepeatedWordsAndSenders: mostRepeatedWordsAndSenders,
         mostUsedEmojisAndSenders: mostUsedEmojisAndSenders,
-        allSendings: {messageCounts,pictureCounts,videoCounts,audioCounts,documentCounts,gifCounts,linkCounts,missedCallCounts,emojiCounts, stickerCounts, nameCount, totalWord, timeCount, test}
+        dataObjsByDate: dataObjsByDate,
+        allSendings: {messageCounts,pictureCounts,videoCounts,audioCounts,documentCounts,gifCounts,linkCounts,missedCallCounts,emojiCounts, stickerCounts, nameCount, totalWord, timeCount}
     };
 }

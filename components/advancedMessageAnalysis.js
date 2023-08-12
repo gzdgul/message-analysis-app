@@ -1,13 +1,12 @@
-import React, {useEffect} from 'react';
-import {Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View, Image} from "react-native";
-import {COLORS, monthsArr} from "../config/constants";
-import {View as MotiView} from "moti/build/components/view";
-import AnalysisBar from "./AnalysisBar";
-import {AnimatePresence} from "moti";
-import {colorCorrector2, findMaxCount, sumCounts} from "../libraries/Helper_Function_Library";
-import {AverageLine} from "../libraries/UI_Component_Library";
-import AnalysisTable from "./Advanced/AnalysisTable";
-import AnalysisMonthly from "./Advanced/AnalysisMonthly";
+import React, { useState, useEffect } from 'react';
+import { View, Text, TouchableOpacity, Image, ScrollView, StyleSheet } from 'react-native';
+import { View as MotiView, AnimatePresence } from 'moti';
+import { COLORS, monthsArr } from '../config/constants';
+import { findMaxCount } from '../libraries/Helper_Function_Library';
+import { AverageLine } from '../libraries/UI_Component_Library';
+import AnalysisBar from './AnalysisBar';
+import AnalysisTable from './Advanced/AnalysisTable';
+import AnalysisMonthly from './Advanced/AnalysisMonthly';
 
 const AdvancedMessageAnalysis = ({analyzedData}) => {
     const [page, setPage] = React.useState(0)
@@ -16,39 +15,32 @@ const AdvancedMessageAnalysis = ({analyzedData}) => {
     const [pressed, setPressed] = React.useState({})
     const mostRepeatedDates = analyzedData.mostRepeatedDates
     const names = analyzedData.allSendings.nameCount
-    const maxMessageCount = findMaxCount(mostRepeatedDates)
-    const test = analyzedData.allSendings.test
+    const maxMessageCount = React.useMemo(() => findMaxCount(mostRepeatedDates), [mostRepeatedDates]);
+    const dataObjsByDate = analyzedData.dataObjsByDate
     console.log('pressed.DAY',pressed.DAY)
 
     // Verileri tarihlerine göre gruplamak için boş bir nesne oluşturuyoruz
-    let gruplanmisVeriler = {};
+    let groupedData = {};
+    // Veriler dizisini tarihlerine göre gruplayan bir döngü
+    dataObjsByDate.forEach(veri => {
+        const [day, month, year] = veri.date.split('.');
+        const date = `**.${month}.${year}`;
 
-// Veriler dizisini tarihlerine göre gruplayan bir döngü
-    test.forEach(function (veri) {
-        const tarihParcalari = veri.date.split('.');
-        const ay = '**.' + tarihParcalari[1] + '.' + tarihParcalari[2];
-
-        if (!gruplanmisVeriler[ay]) {
-            gruplanmisVeriler[ay] = [];
-        }
-
-        gruplanmisVeriler[ay].push(veri);
+        groupedData[date] = groupedData[date] || [];
+        groupedData[date].push(veri);
     });
 
-    const deneme = []
-    for (const ay in gruplanmisVeriler) {
-        deneme.push(gruplanmisVeriler[ay])
-    }
+    const dataGroupsByMonth = Object.values(groupedData);
 
-    const [monthlyData, setMonthlyData] = React.useState([...deneme[deneme.length - 1]])
+    const [monthlyData, setMonthlyData] = React.useState([...dataGroupsByMonth[dataGroupsByMonth.length - 1]])
 
     const handlePressBack = () => {
-        if (deneme[deneme.length - 1 - (page + 1)]) {
+        if (dataGroupsByMonth[dataGroupsByMonth.length - 1 - (page + 1)]) {
             setPage(prevState => prevState + 1)
         }
     }
     const handlePressNext = () => {
-        if (deneme[deneme.length - 1 - (page - 1)]) {
+        if (dataGroupsByMonth[dataGroupsByMonth.length - 1 - (page - 1)]) {
             setPage(prevState => prevState - 1)
         }
     }
@@ -60,46 +52,44 @@ const AdvancedMessageAnalysis = ({analyzedData}) => {
     }, [pressed])
 
     useEffect(() => {
-        const newMonthlyData = deneme[deneme.length - 1 - page]
+        const newMonthlyData = dataGroupsByMonth[dataGroupsByMonth.length - 1 - page]
         console.log('newMonthlyData', newMonthlyData)
         setMonthlyData(newMonthlyData)
     }, [page])
 
     useEffect(() => {
-        const splittedDate = [...monthlyData].shift().date.split(".");
-        const month = parseInt(splittedDate[1]) - 1; // aylar 0-11
-        const year = parseInt(splittedDate[2]);
-        const date = new Date(year, month);
+        const firstItem = monthlyData[0];
+        const splittedDate = firstItem.date.split(".");
+        const date = new Date(parseInt(splittedDate[2]), parseInt(splittedDate[1]) - 1);
         const dateString = monthsArr[date.getMonth()] + " " + date.getFullYear();
-        let messageCount = 0;
-        let N1messageCount = 0;
-        let N2messageCount = 0;
-        let N1emojiCount = 0;
-        let N2emojiCount = 0;
-        let N1mediaCount = 0;
-        let N2mediaCount = 0;
-        let N1othersCount = 0;
-        let N2othersCount = 0;
-        for (const item of monthlyData) {
-            messageCount += item.count;
-            N1messageCount += item[names[0]].message;
-            N2messageCount += item[names[1]].message;
-            N1emojiCount += [].concat(...item[names[0]].emoji).length;
-            N2emojiCount += [].concat(...item[names[1]].emoji).length;
-            N1mediaCount += [].concat(...item[names[0]].media).length;
-            N2mediaCount += [].concat(...item[names[1]].media).length;
-            N1othersCount += [].concat(...item[names[0]].others).length;
-            N2othersCount += [].concat(...item[names[1]].others).length;
-        }
-        setMonthly({
-            messageCount: {[names[0]]: N1messageCount, [names[1]]: N2messageCount},
-            emojiCount: {[names[0]]: N1emojiCount, [names[1]]: N2emojiCount},
-            mediaCount: {[names[0]]: N1mediaCount, [names[1]]: N2mediaCount},
-            othersCount: {[names[0]]: N1othersCount, [names[1]]: N2othersCount},
-            dateString: dateString,
 
-        })
-    }, [monthlyData])
+        const getCount = (data, name, property) =>
+            data.reduce((total, item) => total + item[name][property], 0);
+
+        const getNestedCount = (data, name, property) =>
+            data.reduce((total, item) => total + [].concat(...item[name][property]).length, 0);
+
+        const N1messageCount = getCount(monthlyData, names[0], 'message');
+        const N2messageCount = getCount(monthlyData, names[1], 'message');
+        const N1emojiCount = getNestedCount(monthlyData, names[0], 'emoji');
+        const N2emojiCount = getNestedCount(monthlyData, names[1], 'emoji');
+        const N1emojis = getCount(monthlyData, names[0], 'emoji');
+        const N2emojis = getCount(monthlyData, names[1], 'emoji');
+        const N1mediaCount = getNestedCount(monthlyData, names[0], 'media');
+        const N2mediaCount = getNestedCount(monthlyData, names[1], 'media');
+        const N1othersCount = getNestedCount(monthlyData, names[0], 'others');
+        const N2othersCount = getNestedCount(monthlyData, names[1], 'others');
+
+        setMonthly({
+            messageCount: { [names[0]]: N1messageCount, [names[1]]: N2messageCount },
+            emojiCount: { [names[0]]: N1emojiCount, [names[1]]: N2emojiCount },
+            emojis: { [names[0]]: N1emojis, [names[1]]: N2emojis },
+            mediaCount: { [names[0]]: N1mediaCount, [names[1]]: N2mediaCount },
+            othersCount: { [names[0]]: N1othersCount, [names[1]]: N2othersCount },
+            dateString: dateString,
+        });
+    }, [monthlyData]);
+
 
 
     return (
@@ -114,11 +104,7 @@ const AdvancedMessageAnalysis = ({analyzedData}) => {
                 <TouchableOpacity style={styles.arrow} onPress={handlePressBack}>
                     <Image
                         source={require('../assets/arrow_left.png')}
-                        style={{
-                            width: 20,
-                            height: 20,
-                            tintColor: 'white',
-                        }}
+                        style={styles.arrowIcon}
                     />
                 </TouchableOpacity>
                 <View style={{justifyContent: 'center', alignItems: 'center'}}>
@@ -131,11 +117,7 @@ const AdvancedMessageAnalysis = ({analyzedData}) => {
                 <TouchableOpacity style={styles.arrow} onPress={handlePressNext}>
                     <Image
                         source={require('../assets/arrow_right.png')}
-                        style={{
-                            width: 20,
-                            height: 20,
-                            tintColor: 'white',
-                        }}
+                        style={styles.arrowIcon}
                     />
                 </TouchableOpacity>
             </View>
@@ -162,12 +144,11 @@ const AdvancedMessageAnalysis = ({analyzedData}) => {
                 <AverageLine/>
             </View>
             <ScrollView contentContainerStyle={{}}>
-                {
-                    dataset
-                        ? <AnalysisTable dataset={dataset} names={names}/>
-                        : monthly && <AnalysisMonthly monthly={monthly} names={names}/>
-
-                }
+                {dataset ? (
+                    <AnalysisTable dataset={dataset} names={names} />
+                ) : (
+                    monthly !== null && <AnalysisMonthly monthly={monthly} names={names} />
+                )}
             </ScrollView>
         </View>
     );
@@ -184,14 +165,15 @@ const styles = StyleSheet.create({
     bar: {
         width: '100%',
         height: 150,
-        backgroundColor: COLORS.orange,
+        backgroundColor: COLORS.white,
         borderRadius: 15,
 
     },
     mainTitle: {
-        color: COLORS.orange,
-        fontSize: 25,
+        color: COLORS.white,
+        fontSize: 22,
         fontWeight: '600',
+        textAlign: 'center',
     },
     dateTitle: {
         color: COLORS.white,
@@ -249,5 +231,10 @@ const styles = StyleSheet.create({
         borderRadius: 100,
         justifyContent: 'center',
         alignItems: 'center'
+    },
+    arrowIcon: {
+        width: 20,
+        height: 20,
+        tintColor: 'white',
     }
 });

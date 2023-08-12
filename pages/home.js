@@ -11,7 +11,7 @@ const Home = ({navigation}) => {
         <View style={styles.container}>
             <View style={{ gap: 10}}>
                 <AnalysisBox position={'left'} colors={[COLORS.green, COLORS.lightGreen]} title={'Message Analysis Simple'} description={'Total message count and messaging statistics for each sender.'} navigation={navigation} id={'simple'}/>
-                <AnalysisBox position={'right'} colors={[COLORS.red, COLORS.orange]}  title={'Message Analysis Advanced '} description={'Rank users based on messaging habits and host a fun tournament.'} navigation={navigation} id={'advanced'}/>
+                <AnalysisBox position={'right'} colors={[COLORS.purple, COLORS.white]}  title={'Message Analysis Advanced '} description={'Rank users based on messaging habits and host a fun tournament.'} navigation={navigation} id={'advanced'}/>
                 <AnalysisBox position={'left'} colors={[COLORS.darkBlue, COLORS.purple]} title={'Message Analysis Timeline'} description={'Visualize messaging activities over time for better recall.'} navigation={navigation} id={'timeline'}/>
             </View>
             <View style={{marginTop: 20, width: '100%'}}>
