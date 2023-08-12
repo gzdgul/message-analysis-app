@@ -17,7 +17,8 @@ const AdvancedMessageAnalysis = ({analyzedData}) => {
     const names = analyzedData.allSendings.nameCount
     const maxMessageCount = React.useMemo(() => findMaxCount(mostRepeatedDates), [mostRepeatedDates]);
     const dataObjsByDate = analyzedData.dataObjsByDate
-    console.log('pressed.DAY',pressed.DAY)
+    // console.log('pressed.DAY',pressed.DAY)
+
 
     // Verileri tarihlerine göre gruplamak için boş bir nesne oluşturuyoruz
     let groupedData = {};
@@ -37,23 +38,25 @@ const AdvancedMessageAnalysis = ({analyzedData}) => {
     const handlePressBack = () => {
         if (dataGroupsByMonth[dataGroupsByMonth.length - 1 - (page + 1)]) {
             setPage(prevState => prevState + 1)
+            setPressed({})
         }
     }
     const handlePressNext = () => {
         if (dataGroupsByMonth[dataGroupsByMonth.length - 1 - (page - 1)]) {
             setPage(prevState => prevState - 1)
+            setPressed({})
         }
     }
 
     useEffect(() => {
         const newDataset = monthlyData.find((a) => a.date === pressed.DAY)
-        console.log('newDataset',newDataset)
+        // console.log('newDataset',newDataset)
         setDataset(newDataset)
     }, [pressed])
 
     useEffect(() => {
         const newMonthlyData = dataGroupsByMonth[dataGroupsByMonth.length - 1 - page]
-        console.log('newMonthlyData', newMonthlyData)
+        // console.log('newMonthlyData', newMonthlyData)
         setMonthlyData(newMonthlyData)
     }, [page])
 
@@ -94,12 +97,13 @@ const AdvancedMessageAnalysis = ({analyzedData}) => {
 
     return (
         <View style={{flex: 1}}>
-            <Text style={styles.mainTitle}>Message Analysis Advanced</Text>
+            <Text style={styles.mainTitle}>{names[0] + ' - ' + names[1]}</Text>
             <View style={{
                 flexDirection: 'row',
                 justifyContent: 'space-between',
                 alignItems: 'center',
                 marginVertical: 10,
+                paddingHorizontal: 10,
             }}>
                 <TouchableOpacity style={styles.arrow} onPress={handlePressBack}>
                     <Image
@@ -109,7 +113,7 @@ const AdvancedMessageAnalysis = ({analyzedData}) => {
                 </TouchableOpacity>
                 <View style={{justifyContent: 'center', alignItems: 'center'}}>
                     <Text style={{
-                        color: COLORS.white,
+                        color: COLORS.lightPurple,
                         fontWeight: '700',
                         fontSize: 15
                     }}>{monthlyData[0].date} - {monthlyData[monthlyData.length - 1].date}</Text>

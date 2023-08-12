@@ -8,8 +8,8 @@ import {AnimatePresence} from "moti";
 
 const AnalysisTable = ({dataset, names}) => {
     const emojiObj = countArray('emoji',null, dataset,names)
-    const user1Emojis = [].concat([],...emojiObj[names[0]])
-    const user2Emojis = [].concat([],...emojiObj[names[1]])
+    const user1Emojis = [].concat([],...emojiObj[names[0]]).slice(0,50)
+    const user2Emojis = [].concat([],...emojiObj[names[1]]).slice(0,50)
     // console.log(user1Emojis)
     const [emojiData,setEmojiData] = useState(user1Emojis)
     const [showEmoji,setShowEmoji] = useState(false)
@@ -33,10 +33,10 @@ const AnalysisTable = ({dataset, names}) => {
         setTimeout(() => {
             setShowEmoji(false);
 
-        }, 3000);
+        }, 2000);
         setTimeout(() => {
             setPressAllowed(true); // Belirli bir süre sonra basılmaya izin ver
-        }, 6500);
+        }, 5500);
     }
     return (
         <MotiView
@@ -97,13 +97,13 @@ const AnalysisTable = ({dataset, names}) => {
                         const randomNum1 = Math.floor(Math.random() * areaWidth) + 1;
                         const randomNum2 = Math.floor(Math.random() * areaHeight) + 1;
                         const randomNum3 = Math.floor(Math.random() * 25) + 15;
-                        const randomValue = Math.random() * 0.9 + 0.1;
+                        const randomValue = Math.random() * 0.9 + 0.2;
                         const randomNum4 = parseFloat(randomValue.toFixed(1));
                         console.log(randomNum1, randomNum2, randomNum3, randomNum4)
                         return (
                             <MotiView
                                 key={index}
-                                transition={{ delay: index*(3000/emojiData.length), damping: 15, mass: 1,  duration: 300, }}
+                                transition={{ delay: index*(2000/emojiData.length), damping: 15, mass: 1,  duration: 300, }}
                                 from={{
                                     opacity: 0,
                                     left: randomNum1,
