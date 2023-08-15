@@ -16,9 +16,10 @@ const AdvancedMessageAnalysis = ({analyzedData}) => {
     const [dataset, setDataset] = React.useState(null)
     const [monthly, setMonthly] = React.useState(null)
     const [pressed, setPressed] = React.useState({})
-    const mostRepeatedDates = analyzedData.mostRepeatedDates
+    // const mostRepeatedDates = analyzedData.mostRepeatedDates
     const names = analyzedData.allSendings.nameCount
-    const maxMessageCount = React.useMemo(() => findMaxCount(mostRepeatedDates), [mostRepeatedDates]);
+    // const maxMessageCount = React.useMemo(() => findMaxCount(mostRepeatedDates), [mostRepeatedDates]);
+    const maxMessageCount = analyzedData.maxMessageCount;
     const [monthlyData, setMonthlyData] = React.useState([...dataGroupsByMonth[dataGroupsByMonth.length - 1]])
 
     const handlePressBack = () => {

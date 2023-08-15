@@ -66,7 +66,6 @@ export const findMaxCountKey = (obj) => {
             }
         }
     }
-
     return maxKey;
 }
 
@@ -119,7 +118,7 @@ export const sumCounts = (obj) => {
 }
 
 export const countArray = (key, patch, dataset, names) => {
-    // console.log('????????????????????????????????????')
+
     if (patch) {
         return {
             [names[0]]: dataset[names[0]][key].filter(item => item === patch).length,
@@ -135,7 +134,6 @@ export const countArray = (key, patch, dataset, names) => {
 
 export const groupDataByMonths = (dataObjsByDate) => {
     // Verileri tarihlerine göre gruplamak için boş bir nesne oluşturuyoruz
-    console.log('1111111111111111111111111111111111111')
     let groupedData = {};
     // Veriler dizisini tarihlerine göre gruplayan bir döngü
     dataObjsByDate.forEach(veri => {
@@ -170,20 +168,21 @@ export async function findAnalysis(messages) {
         const includesMedia = isIncludesMedia(message)
         const emojisInMessage = messageObj.message.match(emojiRegex());
 
-        /////////Finding the distribution of messages by person
+        // Finding the distribution of messages by person
         messageCounts[name] = (messageCounts[name] || 0) + 1;
 
-        /////////Finding the distribution of emojis by person
+        // Finding the distribution of emojis by person
         if (emojisInMessage) {
             emojiCounts[name] = (emojiCounts[name] || 0) + emojisInMessage.length;
         }
 
-        /////////Finding how many messages were sent by date
+        // Finding how many messages were sent by date
         const date = messageObj.date;
         dateCount[date] = (dateCount[date] || 0) + 1;
 
-        /////////Finding how many messages were sent by time
+        // Finding how many messages were sent by time
         const time = Number(messageObj.time.split(':')[0]);
+
         if (time >= 6 && time < 18) {
             timeCount.morning++;
         } else {
@@ -191,14 +190,12 @@ export async function findAnalysis(messages) {
         }
 
         if (!includesMedia) {
-
-
             const pattern = /[\s.,!?]+|(\p{Emoji_Presentation}|\p{Emoji}\uFE0F)/gu
             const messageWords = message.split(pattern).filter(Boolean); // Split message into words
 
             messageWords.forEach((word) => {
                 if (!word.match(emojiRegex())) {
-                    /////////Finding words and frequency of use
+                    // Finding words and frequency of use
                     if (word.length > 1) {
                         wordCount[word] = (wordCount[word] || 0) + 1;
                         if (!wordCountsByUsers[word]) {
@@ -208,7 +205,7 @@ export async function findAnalysis(messages) {
                     }
 
                 } else {
-                    /////////Finding emojis and frequency of use
+                    // Finding emojis and frequency of use
                     if (!emojiCountsByUsers[word]) {
                         emojiCountsByUsers[word] = {emoji: word, count: {}};
                     }
@@ -216,15 +213,14 @@ export async function findAnalysis(messages) {
                 }
             });
 
-
-            /////////Longest Message
+            // Longest Message
             if (message.length > longestMessage.message.length) {
                 longestMessage = {message: message, name: name};
             }
 
         } else {
 
-            /////////Media Counts
+            // Media Counts
             for (const mediaType of mediaTypes) {
                 if (mediaType.keywords.some(keyword => message.includes(keyword))) {
                     mediaCounts[mediaType.type] = mediaCounts[mediaType.type] || {};
@@ -237,13 +233,11 @@ export async function findAnalysis(messages) {
         }
     });
 
-    /////////Finding how many words there are in total
-    const totalWord = sumCounts(wordCount)
 
-    /////////Array of users
-    let nameCount = Object.keys(messageCounts);
-
-
+    const mostRepeatedDate = findMaxCountKey(dateCount); // Most messaged date
+    const maxMessageCount = dateCount[mostRepeatedDate]; // Maximum Message Count
+    const totalWord = sumCounts(wordCount); // How many words there are in total
+    let nameCount = Object.keys(messageCounts); // Array of users
     const wordStats = Object.values(wordCountsByUsers);
     const updatedWordStats = wordStats.map((entry) => {
         if (!entry.count[nameCount[0]]) {
@@ -254,6 +248,7 @@ export async function findAnalysis(messages) {
         }
         return entry;
     });
+    console.log('date',dateCount)
 
     const emojiStats = Object.values(emojiCountsByUsers);
     const updatedEmojiStats = emojiStats.map((entry) => {
@@ -265,27 +260,11 @@ export async function findAnalysis(messages) {
         }
         return entry;
     });
+    const mostRepeatedWordsAndSenders = updatedWordStats.sort(compareCounts).slice(0, 10); // Most repeated words and senders
+    const mostUsedEmojisAndSenders = updatedEmojiStats.sort(compareCounts).slice(0, 10); // Most used rmojis and senders
 
-    const mostRepeatedWordsAndSenders = updatedWordStats.sort(compareCounts).slice(0, 10);
-    const mostUsedEmojisAndSenders = updatedEmojiStats.sort(compareCounts).slice(0, 10);
-
-    const mostRepeatedDates = [];
-    for (const date in dateCount) {
-        mostRepeatedDates.push({date: date, count: dateCount[date]});
-    }
-    // mostRepeatedDates.sort((a, b) => b.count - a.count);
-
-    let mostRepeatedDate = "";
-    let mostRepeatedDateCount = 0;
-    for (const date in dateCount) {
-        if (dateCount[date] > mostRepeatedDateCount) {
-            mostRepeatedDateCount = dateCount[date];
-            mostRepeatedDate = date;
-        }
-    }
-
-
-    const test = {}
+    //All analyzes by day
+    const dataObjsByDateCount = {}
     messages.forEach((messageObj) => {
         const emojisInMessage = messageObj.message.match(emojiRegex());
         const message = messageObj.message.toLowerCase()
@@ -293,7 +272,6 @@ export async function findAnalysis(messages) {
         const date = messageObj.date;
         let media = null;
         let others = null;
-
 
         for (const mediaType of mediaTypes) {
             if (mediaType.keywords.some(keyword => message.includes(keyword))) {
@@ -323,15 +301,15 @@ export async function findAnalysis(messages) {
             }
         }
 
-        if (!test[date]) {
-            test[date] = {count: 0, date: date};
-            test[date][nameCount[0]] = {
+        if (!dataObjsByDateCount[date]) {
+            dataObjsByDateCount[date] = {count: 0, date: date};
+            dataObjsByDateCount[date][nameCount[0]] = {
                 emoji: [],
                 media: [],
                 others: [],
                 message: 0
             };
-            test[date][nameCount[1]] = {
+            dataObjsByDateCount[date][nameCount[1]] = {
                 emoji: [],
                 media: [],
                 others: [],
@@ -340,29 +318,27 @@ export async function findAnalysis(messages) {
         }
 
         if (emojisInMessage) {
-            test[date][name].emoji.push(...emojisInMessage);
+            dataObjsByDateCount[date][name].emoji.push(...emojisInMessage);
         }
 
         if (media) {
-            test[date][name].media.push(media);
+            dataObjsByDateCount[date][name].media.push(media);
         }
 
         if (others) {
-            test[date][name].others.push(others);
+            dataObjsByDateCount[date][name].others.push(others);
         }
 
-        test[date][name].message++;
-        test[date].count++;
+        dataObjsByDateCount[date][name].message++;
+        dataObjsByDateCount[date].count++;
     });
 
-
-    const dataObjsByDate = Object.values(test)
-    console.log('mostUsedEmojisAndSenders', mostUsedEmojisAndSenders)
+    const dataObjsByDate = Object.values(dataObjsByDateCount)
 
     return {
         longestMessage: longestMessage,
         mostRepeatedDate: mostRepeatedDate,
-        mostRepeatedDates: mostRepeatedDates,
+        maxMessageCount: maxMessageCount,
         mostRepeatedWordsAndSenders: mostRepeatedWordsAndSenders,
         mostUsedEmojisAndSenders: mostUsedEmojisAndSenders,
         dataObjsByDate: dataObjsByDate,

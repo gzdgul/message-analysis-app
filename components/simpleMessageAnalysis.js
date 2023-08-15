@@ -8,14 +8,6 @@ import {sumCounts} from "../libraries/Helper_Function_Library";
 const SimpleMessageAnalysis = ({analyzedData}) => {
     const totalword = analyzedData.allSendings.totalWord
     const mostRepeatedDate = analyzedData.mostRepeatedDate
-    const mostRepeatedDates = analyzedData.mostRepeatedDates
-    const mostRepeatedDatesSorted = [...mostRepeatedDates].sort((a, b) => b.count - a.count);
-    const mostRepeatedDateeee = mostRepeatedDatesSorted[0].date
-    // console.log('mostRepeatedDates!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!',mostRepeatedDates)
-    // console.log('mostRepeatedDatesSorted!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!',mostRepeatedDatesSorted)
-    // console.log('mostRepeatedDateeee!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!',mostRepeatedDateeee)
-    const longestMessageSender = analyzedData.longestMessage.name
-    const longestMessage = analyzedData.longestMessage.message
     const mostRepeatedWordsAndSenders = analyzedData.mostRepeatedWordsAndSenders
     const mostUsedEmojisAndSenders = analyzedData.mostUsedEmojisAndSenders
     const messageSending = analyzedData.allSendings.messageCounts
@@ -25,11 +17,13 @@ const SimpleMessageAnalysis = ({analyzedData}) => {
     const audioSending = analyzedData.allSendings.mediaCounts.audio
     const documentSending = analyzedData.allSendings.mediaCounts.document
     const gifSending = analyzedData.allSendings.mediaCounts.gif
-    const stickerSending = analyzedData.allSendings.mediaCounts.sticker
-    const linkSending = analyzedData.allSendings.mediaCounts.link
-    const missedCallCounts = analyzedData.allSendings.missedCallCounts
     const messagingByTime = analyzedData.allSendings.timeCount
     const names = analyzedData.allSendings.nameCount
+    // const stickerSending = analyzedData.allSendings.mediaCounts.sticker
+    // const linkSending = analyzedData.allSendings.mediaCounts.link
+    // const missedCallCounts = analyzedData.allSendings.missedCallCounts
+    // const longestMessageSender = analyzedData.longestMessage.name
+    // const longestMessage = analyzedData.longestMessage.message
 
    const DualBoxView = ({title, totalTitle, data, titleArr, total}) => (
        <View>

@@ -38,7 +38,7 @@ const AnalysisBox = ({navigation,position,title, description, colors, id}) => {
                 const {
                     longestMessage,
                     mostRepeatedDate,
-                    mostRepeatedDates,
+                    maxMessageCount,
                     mostRepeatedWordsAndSenders,
                     mostUsedEmojisAndSenders,
                     dataObjsByDate,
@@ -50,7 +50,7 @@ const AnalysisBox = ({navigation,position,title, description, colors, id}) => {
                 navigation.navigate('Analysis', {analyzedData: {
                         longestMessage,
                         mostRepeatedDate,
-                        mostRepeatedDates,
+                        maxMessageCount,
                         mostRepeatedWordsAndSenders,
                         mostUsedEmojisAndSenders,
                         allSendings,
