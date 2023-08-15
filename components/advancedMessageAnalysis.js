@@ -2,69 +2,65 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, Image, ScrollView, StyleSheet } from 'react-native';
 import { View as MotiView, AnimatePresence } from 'moti';
 import { COLORS, monthsArr } from '../config/constants';
-import { findMaxCount } from '../libraries/Helper_Function_Library';
+import {groupDataByMonths, findMaxCount} from '../libraries/Helper_Function_Library';
 import { AverageLine } from '../libraries/UI_Component_Library';
 import AnalysisBar from './AnalysisBar';
 import AnalysisTable from './Advanced/AnalysisTable';
 import AnalysisMonthly from './Advanced/AnalysisMonthly';
 
 const AdvancedMessageAnalysis = ({analyzedData}) => {
+    const dataObjsByDate = analyzedData.dataObjsByDate
+    const dataGroupsByMonth = React.useMemo(() =>  groupDataByMonths(dataObjsByDate), [dataObjsByDate]);
     const [page, setPage] = React.useState(0)
+    const [pressAllowed ,setPressAllowed ] = useState(true)
     const [dataset, setDataset] = React.useState(null)
     const [monthly, setMonthly] = React.useState(null)
     const [pressed, setPressed] = React.useState({})
     const mostRepeatedDates = analyzedData.mostRepeatedDates
     const names = analyzedData.allSendings.nameCount
     const maxMessageCount = React.useMemo(() => findMaxCount(mostRepeatedDates), [mostRepeatedDates]);
-    const dataObjsByDate = analyzedData.dataObjsByDate
-    // console.log('pressed.DAY',pressed.DAY)
-
-
-    // Verileri tarihlerine göre gruplamak için boş bir nesne oluşturuyoruz
-    let groupedData = {};
-    // Veriler dizisini tarihlerine göre gruplayan bir döngü
-    dataObjsByDate.forEach(veri => {
-        const [day, month, year] = veri.date.split('.');
-        const date = `**.${month}.${year}`;
-
-        groupedData[date] = groupedData[date] || [];
-        groupedData[date].push(veri);
-    });
-
-    const dataGroupsByMonth = Object.values(groupedData);
-
     const [monthlyData, setMonthlyData] = React.useState([...dataGroupsByMonth[dataGroupsByMonth.length - 1]])
 
     const handlePressBack = () => {
+        if (!pressAllowed) {
+            return;
+        }
         if (dataGroupsByMonth[dataGroupsByMonth.length - 1 - (page + 1)]) {
             setPage(prevState => prevState + 1)
             setPressed({})
         }
     }
     const handlePressNext = () => {
+        if (!pressAllowed) {
+            return;
+        }
         if (dataGroupsByMonth[dataGroupsByMonth.length - 1 - (page - 1)]) {
             setPage(prevState => prevState - 1)
             setPressed({})
         }
     }
-
-    useEffect(() => {
-        const newDataset = monthlyData.find((a) => a.date === pressed.DAY)
-        // console.log('newDataset',newDataset)
-        setDataset(newDataset)
-    }, [pressed])
-
     useEffect(() => {
         const newMonthlyData = dataGroupsByMonth[dataGroupsByMonth.length - 1 - page]
-        // console.log('newMonthlyData', newMonthlyData)
+
         setMonthlyData(newMonthlyData)
     }, [page])
+
+    useEffect(() => {
+        if (pressed.DAY !== undefined) {
+            const newDataset = monthlyData.find((a) => a.date === pressed.DAY)
+
+            setDataset(newDataset)
+        } else  setDataset(null)
+    }, [pressed])
+
+
 
     useEffect(() => {
         const firstItem = monthlyData[0];
         const splittedDate = firstItem.date.split(".");
         const date = new Date(parseInt(splittedDate[2]), parseInt(splittedDate[1]) - 1);
         const dateString = monthsArr[date.getMonth()] + " " + date.getFullYear();
+
 
         const getCount = (data, name, property) =>
             data.reduce((total, item) => total + item[name][property], 0);
@@ -96,7 +92,7 @@ const AdvancedMessageAnalysis = ({analyzedData}) => {
 
 
     return (
-        <View style={{flex: 1}}>
+        <View style={styles.container}>
             <Text style={styles.mainTitle}>{names[0] + ' - ' + names[1]}</Text>
             <View style={{
                 flexDirection: 'row',
@@ -137,7 +133,7 @@ const AdvancedMessageAnalysis = ({analyzedData}) => {
                                     const elementCount = monthlyData.length
                                     return (
                                         <AnalysisBar key={index} id={x.date} block={block}
-                                                     percentageOfChange={percentageOfChange} pressed={pressed}
+                                                     percentageOfChange={percentageOfChange} pressed={pressed} pressAllowed={pressAllowed}
                                                      setPressed={setPressed} day={day} elementCount={elementCount}/>
                                     )
                                 })
@@ -149,9 +145,9 @@ const AdvancedMessageAnalysis = ({analyzedData}) => {
             </View>
             <ScrollView contentContainerStyle={{}}>
                 {dataset ? (
-                    <AnalysisTable dataset={dataset} names={names} />
+                    <AnalysisTable dataset={dataset} names={names} pressAllowed={pressAllowed} setPressAllowed={setPressAllowed} />
                 ) : (
-                    monthly !== null && <AnalysisMonthly monthly={monthly} names={names} />
+                    monthly !== null && <AnalysisMonthly key={monthly.dateString} monthly={monthly} names={names}  />
                 )}
             </ScrollView>
         </View>
@@ -161,7 +157,9 @@ const AdvancedMessageAnalysis = ({analyzedData}) => {
 export default AdvancedMessageAnalysis;
 
 const styles = StyleSheet.create({
-
+    container: {
+        flex: 1
+    },
     textStyle: {
         color: COLORS.white,
         fontSize: 17

@@ -5,7 +5,7 @@ import {COLORS} from "../config/constants";
 import {StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import { Dimensions } from 'react-native';
 
-const AnalysisBar = ({  id, percentageOfChange,block, pressed, setPressed, day, elementCount}) => {
+const AnalysisBar = ({  id, percentageOfChange,block, pressed, setPressed, day, elementCount, pressAllowed}) => {
     const { width, height } = Dimensions.get('window');
     const areaWidth =  Math.floor(width)
 
@@ -14,6 +14,9 @@ const AnalysisBar = ({  id, percentageOfChange,block, pressed, setPressed, day, 
         ? pressed.DAY === id ? areaWidth/elementCount - 5 + 15 : areaWidth/elementCount - 5 -(15/elementCount)
         : areaWidth/elementCount - 5
     const handleBarPress = () => {
+        if (!pressAllowed) {
+            return;
+        }
         if (pressed.DAY === id) {
             setPressed({})
         }
@@ -54,7 +57,6 @@ const AnalysisBar = ({  id, percentageOfChange,block, pressed, setPressed, day, 
                 transition={{ delay: 10, damping: 20, mass: 0.8 }}
                 animate={{
                     width: barWidth
-                    // scale: (areaWidth/elementCount - 5)*0.15 > 3 ? 3 : (areaWidth/elementCount - 5)*0.15
                 }}
                 exit={{
                     opacity: 0,

@@ -6,14 +6,14 @@ import {AnalysisBoxRow} from "../../libraries/UI_Component_Library";
 import {countArray} from "../../libraries/Helper_Function_Library";
 import {AnimatePresence} from "moti";
 
-const AnalysisTable = ({dataset, names}) => {
+const AnalysisTable = ({dataset, names, setPressAllowed, pressAllowed}) => {
     const emojiObj = countArray('emoji',null, dataset,names)
     const user1Emojis = [].concat([],...emojiObj[names[0]]).slice(0,50)
     const user2Emojis = [].concat([],...emojiObj[names[1]]).slice(0,50)
     // console.log(user1Emojis)
     const [emojiData,setEmojiData] = useState(user1Emojis)
     const [showEmoji,setShowEmoji] = useState(false)
-    const [pressAllowed ,setPressAllowed ] = useState(true)
+
     const { width, height } = Dimensions.get('window');
     const areaWidth = width - 50
     const areaHeight = height - 400
@@ -33,7 +33,7 @@ const AnalysisTable = ({dataset, names}) => {
         setTimeout(() => {
             setShowEmoji(false);
 
-        }, 2000);
+        }, 3000);
         setTimeout(() => {
             setPressAllowed(true); // Belirli bir süre sonra basılmaya izin ver
         }, 5500);
@@ -87,7 +87,7 @@ const AnalysisTable = ({dataset, names}) => {
                         {title: 'Sticker', key: 'others', patch: 'sticker'},
                         {title: 'Link', key: 'others', patch: 'link'},
                     ].map((x,index) => {
-                        return  <AnalysisBoxRow key={index} id={index} title={x.title} names={names} data={countArray(x.key,x.patch, dataset,names)}/>
+                        return  <AnalysisBoxRow key={index + dataset.date} id={index} title={x.title} names={names} data={countArray(x.key,x.patch, dataset,names)}/>
                     })
                 }
                 <AnimatePresence>
@@ -99,7 +99,7 @@ const AnalysisTable = ({dataset, names}) => {
                         const randomNum3 = Math.floor(Math.random() * 25) + 15;
                         const randomValue = Math.random() * 0.9 + 0.2;
                         const randomNum4 = parseFloat(randomValue.toFixed(1));
-                        console.log(randomNum1, randomNum2, randomNum3, randomNum4)
+                        // console.log(randomNum1, randomNum2, randomNum3, randomNum4)
                         return (
                             <MotiView
                                 key={index}

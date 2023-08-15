@@ -120,6 +120,7 @@ export const sumCounts = (obj) => {
 }
 
 export const countArray = (key, patch,dataset, names) => {
+    // console.log('????????????????????????????????????')
     if (patch) {
         return  {
             [names[0]]: dataset[names[0]][key].filter(item => item === patch).length,
@@ -132,6 +133,22 @@ export const countArray = (key, patch,dataset, names) => {
         }
     }
 }
+
+export const groupDataByMonths = (dataObjsByDate) => {
+    // Verileri tarihlerine göre gruplamak için boş bir nesne oluşturuyoruz
+    console.log('1111111111111111111111111111111111111')
+    let groupedData = {};
+    // Veriler dizisini tarihlerine göre gruplayan bir döngü
+    dataObjsByDate.forEach(veri => {
+        const [day, month, year] = veri.date.split('.');
+        const date = `**.${month}.${year}`;
+
+        groupedData[date] = groupedData[date] || [];
+        groupedData[date].push(veri);
+    });
+    return Object.values(groupedData)
+}
+
 //findAnalysis
 export async function findAnalysis(messages) {
     const pictureCounts = {};
