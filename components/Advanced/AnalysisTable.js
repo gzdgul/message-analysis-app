@@ -103,7 +103,12 @@ const AnalysisTable = ({dataset, names, setPressAllowed, pressAllowed}) => {
                         return (
                             <MotiView
                                 key={index}
-                                transition={{ delay: index*(2000/emojiData.length), damping: 15, mass: 1,  duration: 300, }}
+                                transition={{
+                                    delay: index*(2000/emojiData.length),
+                                    damping: 15,
+                                    mass: 1,
+                                    duration: 300,
+                                }}
                                 from={{
                                     opacity: 0,
                                     left: randomNum1,

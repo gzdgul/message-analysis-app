@@ -5,14 +5,16 @@ export const COLORS = {
     black: '#000000',
     white: '#FFFFFF',
     gray: '#131313',
+    lightGray: '#ececec',
     stone: '#2f2f2f',
-    ash: '#BDBDBD',
+    ash: '#dcdcdc',
     darkBG: '#0d0e16',
     blue: '#8edaf2',
     pink: '#ff4a74',
     lightPink: '#fdcdcc',
     green: '#19de96',
     lightGreen: '#8efd7c',
+    darkGreen: '#183b12',
     purple: '#847bec',
     darkBlue: '#0f4a80',
     lightPurple: '#aba1fa',
@@ -57,21 +59,17 @@ export const htmlMaker = (names, mostMessagingDate, data) => {
     const sendingsCountData = data.allSendings;
     const mostRepeatedWordsAndSenders = data.mostRepeatedWordsAndSenders;
     const mostUsedEmojisAndSenders = data.mostUsedEmojisAndSenders;
-    const colors = {
-        primary: COLORS.darkPurple,
-        secondary: COLORS.lightGreen,
-    };
 
     const generateDataRow = (label, values, type) => {
         return `
-            <div style="display: flex; flex-direction: row; padding: 0 0 0 10px; justify-content: space-between; border-top:  ${type === 'names' ? 0 : '1px solid gray'} ; background-color: ${values.backgroundColor}; max-height: 40px">
+            <div style="display: flex; flex-direction: row; padding: 0 0 0 10px; justify-content: space-between; background-color: ${values.backgroundColor.main}; max-height: 40px">
                 <div style="display: flex; justify-content: center; align-items: center;">
                 <p style="font-size: ${type === 'emoji' ? 20 : values.fontSize}">${label}</p>
                 </div>
-                <div style="width: 240px; display: flex; flex-direction: row; justify-content: space-between">
-                    <div style="width: 80px; height: 40px; display: flex; justify-content: center; align-items: center; border-left: 1px solid gray"><p style="text-align: center; font-size: ${values.fontSize}">${ type === 'names' ? [names[0]] : values.count[names[0]]}</p></div>
-                    <div style="width: 80px; height: 40px; display: flex; justify-content: center; align-items: center; border-left: 1px solid gray"><p style="text-align: center; font-size: ${values.fontSize}">${ type === 'names' ? [names[1]] : values.count[names[1]]}</p></div>
-                    <div style="width: 80px; height: 40px; display: flex; justify-content: center; align-items: center; border-left: 1px solid gray"><p style="text-align: center; font-size: ${values.fontSize}; font-weight: bold">${type === 'names' ? 'TOTAL' : values.total}</p></div>
+                <div style="width: 240px; display: flex; flex-direction: row; justify-content: space-between; color: ${COLORS.darkGreen}">
+                    <div style="width: 80px; height: 40px; display: flex; justify-content: center; align-items: center; background-color: ${values.backgroundColor.i0}; border-left: 1px solid ${values.borderColor}"><p style="text-align: center; font-size: ${values.fontSize}">${ type === 'names' ? [names[0]] : values.count[names[0]]}</p></div>
+                    <div style="width: 80px; height: 40px; display: flex; justify-content: center; align-items: center; background-color: ${values.backgroundColor.i1}; border-left: 1px solid ${values.borderColor}"><p style="text-align: center; font-size: ${values.fontSize}">${ type === 'names' ? [names[1]] : values.count[names[1]]}</p></div>
+                    <div style="width: 80px; height: 40px; display: flex; justify-content: center; align-items: center; border-left: 1px solid ${values.borderColor}"><p style="text-align: center; font-size: ${values.fontSize}; font-weight: bold">${type === 'names' ? 'TOTAL' : values.total}</p></div>
                 </div>
             </div>
         `;
@@ -81,25 +79,41 @@ export const htmlMaker = (names, mostMessagingDate, data) => {
     let wordsCount = 0;
     const generateSendingsDataRow = (label, count) => {
         sendingsCount++;
+        const user1count =  count[names[0]] ? count[names[0]] : 0;
+        const user2count =  count[names[1]] ? count[names[1]] : 0;
         return generateDataRow(
             label,
             {
-                count: count,
+                count: {
+                    [names[0]]: user1count,
+                    [names[1]]: user2count,
+                },
                 fontSize: '12px',
-                backgroundColor: sendingsCount%2 === 0 ? 'white' : 'lightgray',
-                total: count[names[0]] + count[names[1]],
+                backgroundColor: {
+                        main: sendingsCount%2 === 0 ? 'white' : COLORS.lightGray,
+                    i0: user1count > user2count ? COLORS.lightGreen : '',
+                    i1: user2count > user1count ? COLORS.lightGreen : '',
+                },
+                borderColor: sendingsCount%2 === 0 ? COLORS.lightGray : 'white',
+                total: user1count + user2count,
             }
         );
     };
-    const generateEmojisDataRow = (emoji, count) => {
+    const generateEmojisDataRow = (emojiData) => {
         emojisCount++;
         return generateDataRow(
-            emoji,
+            `${emojiData.emoji}`,
             {
-                count: count,
+                count: emojiData.count,
                 fontSize: '12px',
-                backgroundColor: emojisCount%2 === 0 ? 'white' : 'lightgray',
-                total: count[names[0]] + count[names[1]],
+                backgroundColor: {
+                    main: emojisCount%2 === 0 ? 'white' :  COLORS.lightGray,
+                    i0: emojiData.count[names[0]] > emojiData.count[names[1]] ? COLORS.lightGreen : '',
+                    i1: emojiData.count[names[1]] > emojiData.count[names[0]] ? COLORS.lightGreen : '',
+            },
+
+                total: emojiData.count[names[0]] + emojiData.count[names[1]],
+                borderColor: emojisCount%2 === 0 ? COLORS.lightGray : 'white',
             },
             'emoji'
         );
@@ -112,8 +126,13 @@ export const htmlMaker = (names, mostMessagingDate, data) => {
             {
                 count: wordData.count,
                 fontSize: '12px',
-                backgroundColor: wordsCount%2 === 0 ? 'white' : 'lightgray',
+                backgroundColor: {
+                    main: wordsCount%2 === 0 ? 'white' :  COLORS.lightGray,
+                    i0: wordData.count[names[0]] > wordData.count[names[1]] ? COLORS.lightGreen : '',
+                    i1: wordData.count[names[1]] > wordData.count[names[0]] ? COLORS.lightGreen : '',
+                },
                 total: wordData.count[names[0]] + wordData.count[names[1]],
+                borderColor: wordsCount%2 === 0 ? COLORS.lightGray : 'white',
             }
         );
     };
@@ -130,15 +149,15 @@ export const htmlMaker = (names, mostMessagingDate, data) => {
         <body>
             <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: flex-end">
                 <div>
-                    <h1>Simple Message Analysis</h1>
-                    <p style="font-size: 25px; margin-top: -15px;">${names[0]} - ${names[1]}</p>
+                    <h1 style="color: ${COLORS.darkGreen}">Simple Message Analysis</h1>
+                    <p style="color: ${COLORS.darkGreen}; font-size: 25px; margin-top: -15px;">${names[0]} - ${names[1]}</p>
                 </div>
                 <div>
-                    <p style="color: green;">En Çok Mesajlaşılan Tarih</p>
-                    <p style="font-size: 30px; font-weight: 900; margin-top: -15px; text-align: end">${mostMessagingDate}</p>
+                    <p style="color: ${COLORS.darkGreen};">En Çok Mesajlaşılan Tarih</p>
+                    <p style="color: ${COLORS.darkGreen}; font-size: 30px; font-weight: 900; margin-top: -15px; text-align: end">${mostMessagingDate}</p>
                 </div>
             </div>
-            ${generateDataRow('', { fontSize: '10px', backgroundColor: 'white'} ,'names')}
+            ${generateDataRow('', { fontSize: '10px', backgroundColor: 'white', borderColor: COLORS.lightGray} ,'names')}
             ${generateSendingsDataRow('Mesaj Gönderimi', sendingsCountData.messageCounts)}
             ${generateSendingsDataRow('Emoji Gönderimi', sendingsCountData.emojiCounts)}
             ${generateSendingsDataRow('Fotoğraf Gönderimi', sendingsCountData.mediaCounts.picture)}
@@ -148,43 +167,18 @@ export const htmlMaker = (names, mostMessagingDate, data) => {
             ${generateSendingsDataRow('GIF Gönderimi', sendingsCountData.mediaCounts.gif)}
             <div style="display: flex; flex-direction: row; justify-content: space-between; margin-top: 10px">
                 <div style="width: 350px;">
-                    <p style="color: green;">En Çok Gönderilen Kelimeler</p>
-                    ${generateDataRow('', { fontSize: '10px', backgroundColor: 'white'} ,'names')}
-                    ${generateWordsDataRow(mostRepeatedWordsAndSenders[0])}
-                    ${generateWordsDataRow(mostRepeatedWordsAndSenders[1])}
-                    ${generateWordsDataRow(mostRepeatedWordsAndSenders[2])}
-                    ${generateWordsDataRow(mostRepeatedWordsAndSenders[3])}
-                    ${generateWordsDataRow(mostRepeatedWordsAndSenders[4])}
-                    ${generateWordsDataRow(mostRepeatedWordsAndSenders[5])}
-                    ${generateWordsDataRow(mostRepeatedWordsAndSenders[6])}
-                    ${generateWordsDataRow(mostRepeatedWordsAndSenders[7])}
-                    ${generateWordsDataRow(mostRepeatedWordsAndSenders[8])}
-                    ${generateWordsDataRow(mostRepeatedWordsAndSenders[9])}
+                    <p style="color: ${COLORS.darkGreen};">En Çok Gönderilen Kelimeler</p>
+                    ${generateDataRow('', { fontSize: '10px', backgroundColor: 'white', borderColor: COLORS.lightGray} ,'names')}
+                    ${mostRepeatedWordsAndSenders.slice(0, 10).map(wordData => generateWordsDataRow(wordData)).join('')}
+                    
                 </div>
                 <div style="width: 350px;">
-                    <p style="color: green;">En Çok Kullanılan Emojiler</p>
-                    ${generateDataRow('', { fontSize: '10px', backgroundColor: 'white'} ,'names')}
-                    ${generateEmojisDataRow(mostUsedEmojisAndSenders[0].emoji, mostUsedEmojisAndSenders[0].count)}
-                    ${generateEmojisDataRow(mostUsedEmojisAndSenders[1].emoji, mostUsedEmojisAndSenders[1].count)}
-                    ${generateEmojisDataRow(mostUsedEmojisAndSenders[2].emoji, mostUsedEmojisAndSenders[2].count)}
-                    ${generateEmojisDataRow(mostUsedEmojisAndSenders[3].emoji, mostUsedEmojisAndSenders[3].count)}
-                    ${generateEmojisDataRow(mostUsedEmojisAndSenders[4].emoji, mostUsedEmojisAndSenders[4].count)}
-                    ${generateEmojisDataRow(mostUsedEmojisAndSenders[5].emoji, mostUsedEmojisAndSenders[5].count)}
-                    ${generateEmojisDataRow(mostUsedEmojisAndSenders[6].emoji, mostUsedEmojisAndSenders[6].count)}
-                    ${generateEmojisDataRow(mostUsedEmojisAndSenders[7].emoji, mostUsedEmojisAndSenders[7].count)}
-                    ${generateEmojisDataRow(mostUsedEmojisAndSenders[8].emoji, mostUsedEmojisAndSenders[8].count)}
-                    ${generateEmojisDataRow(mostUsedEmojisAndSenders[9].emoji, mostUsedEmojisAndSenders[9].count)}
+                    <p style="color: ${COLORS.darkGreen};">En Çok Kullanılan Emojiler</p>
+                    ${generateDataRow('', { fontSize: '10px', backgroundColor: 'white', borderColor: COLORS.lightGray} ,'names')}
+                    ${mostUsedEmojisAndSenders.slice(0, 10).map(emojiData => generateEmojisDataRow(emojiData)).join('')}
                 </div>
             </div>
         </body>
         </html>
     `;
 };
-
-// export const html = `
-//     <html>
-//     <body>
-//     <h1>${name} hello everyone!</h1>
-//     </body>
-//     </html>
-// `
