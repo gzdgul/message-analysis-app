@@ -1,5 +1,5 @@
 import {StyleSheet, Text, View} from "react-native";
-import {colorCorrector, colorCorrector2, sumCounts} from "./Helper_Function_Library";
+import {colorCorrector, colorCorrector2, numberCheck, sumCounts} from "./Helper_Function_Library";
 import {COLORS} from "../config/constants";
 import React from "react";
 import {View as MotiView} from "moti/build/components/view";
@@ -84,27 +84,30 @@ export const AnalysisBoxRow = ({title, data, id, names, type}) => {
                 type: 'timing',
                 duration: 300,
             }}
-            style={[styles.advancedValueBoxContainer,{ marginVertical: 3}, {height: 43}]}>
-            <View style={[styles.advancedBox,{borderWidth: 1, borderColor: COLORS.lightPurple, backgroundColor: 'transparent'}]}>
-                <Text style={[styles.advancedBoxTitleText]}>{title}</Text>
+            style={[styles.valueBoxContainer,{ marginVertical: 3}, {height: 43}]}>
+            <View style={advanced.boxStyle.custom}>
+                <Text style={{...advanced.valueTextStyle, fontSize: 13, color: COLORS.white}}>{title}</Text>
             </View>
 
-            <View style={[styles.advancedBox, !equalData && colorCorrector2(data,0, names),]}>
-                <Text style={[styles.advancedBoxValueText, {color: COLORS.lightPurple}, !equalData && colorCorrector2(data,0, names)]}>{dataObj.data1}</Text>
+            <View style={[advanced.boxStyle.default, !equalData && colorCorrector2(data,0, names),]}>
+                <Text style={[advanced.valueTextStyle, !equalData && colorCorrector2(data,0, names)]}>{numberCheck(dataObj.data1)}</Text>
             </View>
-            <View style={[styles.advancedBox, !equalData && colorCorrector2(data,1, names)]}>
-                <Text style={[styles.advancedBoxValueText,{color: COLORS.lightPurple}, !equalData && colorCorrector2(data,1, names)]}>{dataObj.data2}</Text>
+            <View style={[advanced.boxStyle.default, !equalData && colorCorrector2(data,1, names)]}>
+                <Text style={[advanced.valueTextStyle, !equalData && colorCorrector2(data,1, names)]}>{numberCheck(dataObj.data2)}</Text>
             </View>
-            <View style={[styles.advancedBox,{borderWidth: 1, borderColor: COLORS.lightPurple, backgroundColor: 'transparent'}]}>
-                <Text style={[styles.advancedBoxValueText, {color: COLORS.lightPurple}]}>{sumCounts(dataObj.sum)}</Text>
+            <View style={advanced.boxStyle.custom}>
+                <Text style={advanced.valueTextStyle}>{numberCheck(sumCounts(dataObj.sum))}</Text>
             </View>
         </MotiView>
     )
 
 }
-export const AverageLine = () => (
+export const AverageLine = ({num}) => (
     <View style={{width: '100%', height: 80, position: 'absolute', justifyContent: 'flex-end', pointerEvents: 'none'}}>
-        <Text style={{color: 'white', opacity: 0.5, alignSelf: 'flex-end'}}>average</Text>
+        <View style={{flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 5}}>
+            <Text style={{color: COLORS.white, opacity: 0.6, alignSelf: 'flex-end', fontSize: 10, top: 10}}>{num}</Text>
+            <Text style={{color: COLORS.white, opacity: 0.6, alignSelf: 'flex-end', fontSize: 10, top: 10}}>average</Text>
+        </View>
         <Text numberOfLines={1} ellipsizeMode="clip" style={{color: 'white', opacity: 0.5}}
         >_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ </Text>
     </View>
@@ -151,32 +154,36 @@ const styles = StyleSheet.create({
         gap: 5,
         marginVertical: 15,
     },
-    advancedBox: {
-        flex: 1,
-        height: '100%',
-        backgroundColor: COLORS.darkPurple,
-        borderRadius: 15,
-        paddingHorizontal: 10,
-        paddingVertical: 10,
-        justifyContent: 'center',
-        alignItems: 'center'
-    },
-    advancedValueBoxContainer: {
-        width: '100%',
-        height: 115,
-        flexDirection: 'row',
-        gap: 5,
-        marginVertical: 15,
-    },
-    advancedBoxTitleText: {
-        color: COLORS.white,
-        fontSize: 15,
-        fontWeight: '500',
-    },
-    advancedBoxValueText: {
-        color: COLORS.white,
-        fontSize: 20,
-        fontWeight: '600'
-    },
+
 });
 
+const advancedBoxStyles = {
+    ...styles.box,
+    borderRadius: 15,
+    paddingHorizontal: 10,
+    paddingVertical: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+};
+
+const advanced = {
+    boxStyle: {
+        default: {
+            ...advancedBoxStyles,
+
+        },
+        custom: {
+            ...advancedBoxStyles,
+            borderWidth: 1,
+            borderColor: COLORS.lightPurple,
+            backgroundColor: 'transparent',
+        }
+    },
+    valueTextStyle: {
+        ...styles.boxValueText,
+        color: COLORS.lightPurple,
+        fontSize: 19
+    }
+
+
+};

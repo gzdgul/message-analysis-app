@@ -4,6 +4,13 @@ import * as FileSystem from "expo-file-system";
 import * as DocumentPicker from "expo-document-picker";
 import {Platform} from "react-native";
 
+export function numberCheck(number) {
+    if (number >= 10000) {
+        return (Math.floor(number / 100) / 10) + 'K';
+    } else {
+        return number.toString();
+    }
+}
 export const pickDocument = async () => {
     try {
         const result = await DocumentPicker.getDocumentAsync({
@@ -190,7 +197,7 @@ export async function findAnalysis(messages) {
         }
 
         if (!includesMedia) {
-            const pattern = /[\s.,!?]+|(\p{Emoji_Presentation}|\p{Emoji}\uFE0F)/gu
+            const pattern = /[\s.,!?]+|(\p{Emoji_Presentation}\p{Emoji_Modifier}*|\p{Emoji}\p{Emoji_Modifier}*\uFE0F)/gu
             const messageWords = message.split(pattern).filter(Boolean); // Split message into words
 
             messageWords.forEach((word) => {
@@ -238,6 +245,7 @@ export async function findAnalysis(messages) {
     const maxMessageCount = dateCount[mostRepeatedDate]; // Maximum Message Count
     const totalWord = sumCounts(wordCount); // How many words there are in total
     let nameCount = Object.keys(messageCounts); // Array of users
+
     const wordStats = Object.values(wordCountsByUsers);
     const updatedWordStats = wordStats.map((entry) => {
         if (!entry.count[nameCount[0]]) {

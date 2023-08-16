@@ -2,7 +2,7 @@ import React from 'react';
 import {View as MotiView} from "moti/build/components/view";
 import {StyleSheet, Text, View} from "react-native";
 import {COLORS} from "../../config/constants";
-import {colorCorrector2} from "../../libraries/Helper_Function_Library";
+import {colorCorrector2, numberCheck} from "../../libraries/Helper_Function_Library";
 
 const AnalysisMonthly = ({monthly, names}) => {
     const LineGraphic = ({title, data, description}) => {
@@ -13,7 +13,7 @@ const AnalysisMonthly = ({monthly, names}) => {
                         <Text style={styles.advancedBoxTitleText}>{title}</Text>
                         <Text style={[styles.advancedBoxTitleText, {fontSize: 12, opacity: 0.5}]}>{description}</Text>
                     </View>
-                    <Text style={styles.advancedBoxValueText}>{data[names[0]] + data[names[1]]}</Text>
+                    <Text style={styles.advancedBoxValueText}>{numberCheck(data[names[0]] + data[names[1]])}</Text>
                 </View>
 
                 <View style={{width: '100%', height: 10, backgroundColor: COLORS.lightPurple, borderRadius: 100}}></View>
@@ -26,8 +26,8 @@ const AnalysisMonthly = ({monthly, names}) => {
                     <Text style={styles.advancedBoxTitleText}>{names[1]}</Text>
                 </View>
                 <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                    <Text style={[styles.advancedBoxTitleText, {color: COLORS.lightPurple}]}>{data[names[0]]}</Text>
-                    <Text style={[styles.advancedBoxTitleText, {color: COLORS.lightPurple}]}>{data[names[1]]}</Text>
+                    <Text style={[styles.advancedBoxTitleText, {color: COLORS.lightPurple}]}>{numberCheck(data[names[0]])}</Text>
+                    <Text style={[styles.advancedBoxTitleText, {color: COLORS.lightPurple}]}>{numberCheck(data[names[1]])}</Text>
                 </View>
             </View>
         )

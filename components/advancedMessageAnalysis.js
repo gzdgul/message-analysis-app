@@ -26,6 +26,12 @@ const AdvancedMessageAnalysis = ({analyzedData}) => {
         if (!pressAllowed) {
             return;
         }
+        setPressAllowed(false)
+
+        setTimeout(() => {
+            setPressAllowed(true)
+        },1000)
+
         if (dataGroupsByMonth[dataGroupsByMonth.length - 1 - (page + 1)]) {
             setPage(prevState => prevState + 1)
             setPressed({})
@@ -35,6 +41,12 @@ const AdvancedMessageAnalysis = ({analyzedData}) => {
         if (!pressAllowed) {
             return;
         }
+        setPressAllowed(false)
+
+        setTimeout(() => {
+            setPressAllowed(true)
+        },1000)
+
         if (dataGroupsByMonth[dataGroupsByMonth.length - 1 - (page - 1)]) {
             setPage(prevState => prevState - 1)
             setPressed({})
@@ -102,7 +114,7 @@ const AdvancedMessageAnalysis = ({analyzedData}) => {
                 marginVertical: 10,
                 paddingHorizontal: 10,
             }}>
-                <TouchableOpacity style={styles.arrow} onPress={handlePressBack}>
+                <TouchableOpacity disabled={!pressAllowed} style={styles.arrow} onPress={handlePressBack}>
                     <Image
                         source={require('../assets/arrow_left.png')}
                         style={styles.arrowIcon}
@@ -115,7 +127,7 @@ const AdvancedMessageAnalysis = ({analyzedData}) => {
                         fontSize: 15
                     }}>{monthlyData[0].date} - {monthlyData[monthlyData.length - 1].date}</Text>
                 </View>
-                <TouchableOpacity style={styles.arrow} onPress={handlePressNext}>
+                <TouchableOpacity disabled={!pressAllowed} style={styles.arrow} onPress={handlePressNext}>
                     <Image
                         source={require('../assets/arrow_right.png')}
                         style={styles.arrowIcon}
@@ -142,7 +154,7 @@ const AdvancedMessageAnalysis = ({analyzedData}) => {
                         </AnimatePresence>
                     </View>
                 </View>
-                <AverageLine/>
+                <AverageLine num={Math.round(maxMessageCount/2)}/>
             </View>
             <ScrollView contentContainerStyle={{}}>
                 {dataset ? (

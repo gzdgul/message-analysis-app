@@ -22,7 +22,7 @@ const AnalysisTable = ({dataset, names, setPressAllowed, pressAllowed}) => {
     },[])
     const handlePress = (emojiData) => {
 
-        if (!pressAllowed) {
+        if (!pressAllowed || emojiData?.length < 1) {
             return; // Fonksiyon hemen sonlanır ve tekrar çalışmaz
         }
 
