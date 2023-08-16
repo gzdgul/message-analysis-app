@@ -1,9 +1,11 @@
 import React from 'react';
-import {ScrollView, StyleSheet, Text, View} from "react-native";
-import {COLORS} from "../config/constants";
+import {Button, ScrollView, StyleSheet, Text, View} from "react-native";
+import {COLORS, html, htmlMaker} from "../config/constants";
 
 import {AnalysisLabel, AnalysisValueBoxContainer, AnalysisValueBoxSmall} from "../libraries/UI_Component_Library";
 import {sumCounts} from "../libraries/Helper_Function_Library";
+import { printToFileAsync } from "expo-print";
+import {shareAsync} from "expo-sharing";
 
 const SimpleMessageAnalysis = ({analyzedData}) => {
     const totalword = analyzedData.allSendings.totalWord
@@ -24,7 +26,16 @@ const SimpleMessageAnalysis = ({analyzedData}) => {
     // const missedCallCounts = analyzedData.allSendings.missedCallCounts
     // const longestMessageSender = analyzedData.longestMessage.name
     // const longestMessage = analyzedData.longestMessage.message
+    const deneme = htmlMaker(names,mostRepeatedDate,analyzedData)
+    let generatePdf = async () => {
+        const file = await  printToFileAsync({
+            html: deneme,
+            base64: false,
+            useMarkupFormatter: true
+        });
 
+        await shareAsync(file.uri);
+    };
    const DualBoxView = ({title, totalTitle, data, titleArr, total}) => (
        <View>
            {
@@ -70,6 +81,10 @@ const SimpleMessageAnalysis = ({analyzedData}) => {
             <DualBoxView totalTitle={'Toplam Ses Kaydı'} title={'Ses Kaydı Gönderimi'} data={audioSending} titleArr={names} total={true}/>
             <DualBoxView totalTitle={'Toplam Belge'} title={'Belge Gönderimi'} data={documentSending} titleArr={names} total={true}/>
             <DualBoxView totalTitle={'Toplam GIF'} title={'GIF Gönderimi'} data={gifSending} titleArr={names} total={true}/>
+            <View style={{paddingVertical: 20}}>
+                <Button title={'Generate PDF'} onPress={generatePdf}/>
+            </View>
+
         </ScrollView>
     );
 };
