@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {Button, Dimensions, ScrollView, StyleSheet, Text, View} from "react-native";
+import {Button, Dimensions, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {COLORS, htmlMaker} from "../config/constants";
 
 import {AnalysisLabel, AnalysisValueBoxContainer, AnalysisValueBoxSmall} from "../libraries/UI_Component_Library";
@@ -12,6 +12,7 @@ import {AnimatePresence} from "moti";
 const SimpleMessageAnalysis = ({analyzedData}) => {
     const { width, height } = Dimensions.get('window');
     const [showEmojiBOMB, setShowEmojiBOMB] = React.useState(false)
+    const [pressAllowed, setPressAllowed] = React.useState(true)
     const totalword = analyzedData.allSendings.totalWord
     // const mostRepeatedDate = analyzedData.mostRepeatedDate
     const activeDays = analyzedData.activeDays
@@ -37,6 +38,7 @@ const SimpleMessageAnalysis = ({analyzedData}) => {
     const timeInterval = `${[...activeDays].shift()[0]} - ${[...activeDays].pop()[0]}`
     const dateDataforPDF = {mostRepeatedDate: mostRepeatedDate, timeInterval: timeInterval}
     const emojiBOMB = [];
+    const [countdown, setCountdown] = React.useState(0);
     mostUsedEmojisAndSenders.forEach((x) => {
       emojiBOMB.push(x.emoji)
     })
@@ -64,14 +66,31 @@ const SimpleMessageAnalysis = ({analyzedData}) => {
        </View>
    )
     const handleEmojiButtonPress = () => {
-       if (showEmojiBOMB === false) {
+       if (pressAllowed === true) {
+           setPressAllowed(false)
            setShowEmojiBOMB(true)
            setTimeout(() => {
                setShowEmojiBOMB(false);
+               setCountdown(5);
+           }, 5000);
+           setTimeout(() => {
+               setPressAllowed(true)
 
-           }, 4000);
+           }, 12000);
        }
     }
+
+
+    useEffect(() => {
+        if (countdown > 0) {
+            const timer = setTimeout(() => {
+                setCountdown(countdown - 1);
+            }, 1000);
+
+            return () => clearTimeout(timer);
+        }
+    }, [countdown]);
+
     useEffect(() => {
         handleEmojiButtonPress();
     },[])
@@ -126,14 +145,29 @@ const SimpleMessageAnalysis = ({analyzedData}) => {
         <ScrollView contentContainerStyle={{ paddingHorizontal: 30,}}>
 
             <Text style={styles.mainTitle}>Simple Message Analysis</Text>
-            <View style={{paddingVertical: 20}}>
-                <Button title={'EMOJI BOMB'} onPress={handleEmojiButtonPress}/>
-                <Text style={{color: COLORS.white, fontSize: 12, fontWeight: 'bold'}}>Tap to see the EMOJI CONFETTI of the most used emojis again</Text>
-            </View>
-            <View style={{width: 50, height: 50, backgroundColor: COLORS.lightGreen, borderRadius: 100}}></View>
+
             <View style={{marginTop: -10, paddingVertical: 10, paddingHorizontal: 10, borderRadius:25, alignItems: 'center', gap: 5 }}>
                 <Text style={{color: COLORS.white, fontSize: 17, fontWeight: 'bold'}}>{names[0] + ' - ' + names[1]}</Text>
                 <Text style={{color: COLORS.white, fontSize: 17, fontWeight: 'bold'}}>{timeInterval}</Text>
+
+                <TouchableOpacity style={{flexDirection: 'row', alignItems: 'center'}} onPress={handleEmojiButtonPress}>
+                    <MotiView
+                        animate={{left: countdown > 0 ? 80 : 0,}}
+                    >
+                        <View  style={{width: 50, height: 50, justifyContent: 'center', alignItems: 'center'}} >
+                            <Text style={{fontSize: 30}}>🎉</Text>
+                        </View>
+                    </MotiView>
+
+                    <MotiView
+                        animate={{left: countdown > 0 ? 80 : 0,}}
+                        style={{width: 170}}>
+                        {
+                            countdown !== 0 ? <Text style={{color: COLORS.white,opacity: 0.5, fontSize: 15, fontWeight: 'bold'}}>{countdown}</Text>
+                                :  <Text style={{color: COLORS.white,opacity: 0.5, fontSize: 10, fontWeight: 'bold'}}>Tap to see the EMOJI CONFETTI of the most used emojis again</Text>
+                        }
+                    </MotiView>
+                </TouchableOpacity>
 
             </View>
             <AnalysisLabel title={'Toplam Mesaj'} value={sumCounts(messageSending)}/>

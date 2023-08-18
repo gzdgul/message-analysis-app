@@ -169,13 +169,13 @@ export const htmlMaker = (names, dateDataforPDF, data) => {
             ${generateSendingsDataRow('GIF Gönderimi', sendingsCountData.mediaCounts.gif)}
             <div style="display: flex; flex-direction: row; justify-content: space-between; margin-top: 10px">
                 <div style="width: 350px;">
-                    <p style="color: ${COLORS.darkGreen};">En Çok Gönderilen Kelimeler</p>
+                    <p style="color: ${COLORS.darkGreen};">En Çok Gönderilen Kelimeler ✏️</p>
                     ${generateDataRow('', { fontSize: '10px', backgroundColor: 'white', borderColor: COLORS.lightGray} ,'names')}
                     ${mostRepeatedWordsAndSenders.slice(0, 10).map(wordData => generateWordsDataRow(wordData)).join('')}
                     
                 </div>
                 <div style="width: 350px;">
-                    <p style="color: ${COLORS.darkGreen};">En Çok Kullanılan Emojiler</p>
+                    <p style="color: ${COLORS.darkGreen};">En Çok Kullanılan Emojiler 🎉</p>
                     ${generateDataRow('', { fontSize: '10px', backgroundColor: 'white', borderColor: COLORS.lightGray} ,'names')}
                     ${mostUsedEmojisAndSenders.slice(0, 10).map(emojiData => generateEmojisDataRow(emojiData)).join('')}
                 </div>
