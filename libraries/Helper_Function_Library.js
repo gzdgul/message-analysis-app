@@ -29,24 +29,75 @@ export const pickDocument = async () => {
     }
 };
 
-export const readFileContent = async (uri) => {
+export const readFileContent = async (uri,dateFormat) => {
     try {
         const fileContent = await FileSystem.readAsStringAsync(uri);
-        return parseData(fileContent)
+        return parseData(fileContent,dateFormat)
     } catch (error) {
         console.log('Dosya okuma hatası:', error);
     }
 };
+function manipulateTimeString(input) {
+    const AMarr = ["ÖÖ", "AM"];
+    const PMarr = ["ÖS", "PM"];
+    let output = input;
 
-const parseData = (data) => {
+    if (AMarr.some(item => output.includes(item))) {
+
+        AMarr.forEach(item => {
+            output = output.replace(item, "").trim();
+        });
+
+        const timeParts = output.split(":");
+        const hours = parseInt(timeParts[0]);
+        const adjustedHours = (hours === 12) ? 0 : hours;
+        timeParts[0] = adjustedHours.toString().padStart(2, "0");
+        output = timeParts.join(":");
+    } else if (PMarr.some(item => output.includes(item))) {
+
+        PMarr.forEach(item => {
+            output = output.replace(item, "").trim();
+        });
+
+        const timeParts = output.split(":");
+        const hours = parseInt(timeParts[0]);
+        const adjustedHours = ((hours === 12) ? hours : hours + 12) % 24;
+        timeParts[0] = adjustedHours.toString().padStart(2, "0");
+        output = timeParts.join(":");
+    }
+
+    return output;
+}
+
+const dateFormatter = (date, dateFormat) => {
+    let output = date.replaceAll("/", ".").replaceAll(",", "").trim();
+    if (dateFormat === 'MM/DD/YY') {
+        const dateParts = output.split('.');
+        const day = dateParts[1];
+        const month = dateParts[0].padStart(2, "0");
+        const year = dateParts[2].padStart(4, "20");
+        output = [day,month,year].join(".");
+    }
+    if (output.split('.')[1] > 12) {
+        console.log('Date Error: Please check your date format')
+        return null; // İşlemi durdur ve null döndür
+    }
+    return output;
+}
+const parseData = (data,dateFormat) => {
+
     const regex = /\[(.*?)\] (.*?): (.*)/g;
     const newData = [];
     let match;
 
     while ((match = regex.exec(data)) !== null) {
         const dateTime = match[1].split(' ');
-        const date = dateTime[0];
-        const time = dateTime[1];
+        const date = dateFormatter(dateTime[0],dateFormat);
+        if (date === null) {
+            console.log('Parsing Error: Invalid date format');
+            return null; // İşlemi durdur ve null döndür
+        }
+        const time = manipulateTimeString(dateTime[1]);
         const name = match[2];
         const message = match[3];
 
@@ -55,7 +106,17 @@ const parseData = (data) => {
 
     return newData;
 }
-
+// const deneme1 = "[06.13.2023 14:03:31] emily: selammmmm"
+// const deneme2 = "[06.13.2023 ÖS 02:03:31] emily: selammmmm"
+// const deneme3 = "[06.13.2023 PM 02:03:31] emily: selammmmm"
+// const deneme4 = "[6/3/2023 ÖS 02:03:31] emily: selammmmm"
+// const deneme5 = "[06/3/23 PM 02:03:31] emily: selammmmm"
+// console.log('DENEME1',parseData(deneme1))
+// console.log('DENEME2',parseData(deneme2))
+// console.log('DENEME3',parseData(deneme3))
+// console.log('DENEME4',parseData(deneme4))
+// console.log('DENEME5',parseData(deneme5))
+// console.log('*************************************************************')
 export const findMaxCountKey = (obj) => {
     let maxKey = null;
     let maxValue = -Infinity;
@@ -164,6 +225,7 @@ export async function findAnalysis(messages) {
     const emojiCountsByUsers = {};
     const emojiCounts = {};
     const dateCount = {};
+    const dateArr = [];
     const timeCount = {morning: 0, night: 0};
     const isIncludesMedia = (x) => medya.some(item => x.includes(item)) || missedCalls.some(item => x.includes(item))
 
@@ -186,6 +248,10 @@ export async function findAnalysis(messages) {
         // Finding how many messages were sent by date
         const date = messageObj.date;
         dateCount[date] = (dateCount[date] || 0) + 1;
+        if (!dateArr.includes(date)) {
+            dateArr.push(date);
+        }
+
 
         // Finding how many messages were sent by time
         const time = Number(messageObj.time.split(':')[0]);
@@ -241,10 +307,14 @@ export async function findAnalysis(messages) {
     });
 
 
-    const mostRepeatedDate = findMaxCountKey(dateCount); // Most messaged date
-    const maxMessageCount = dateCount[mostRepeatedDate]; // Maximum Message Count
+    // const mostRepeatedDate = findMaxCountKey(dateCount); // Most messaged date
+    // const maxMessageCount = dateCount[mostRepeatedDate]; // Maximum Message Count
+
     const totalWord = sumCounts(wordCount); // How many words there are in total
     let nameCount = Object.keys(messageCounts); // Array of users
+    const activeDays = dateArr.map((x) => { //Message days
+        return [x, dateCount[x]]
+    })
 
     const wordStats = Object.values(wordCountsByUsers);
     const updatedWordStats = wordStats.map((entry) => {
@@ -256,7 +326,8 @@ export async function findAnalysis(messages) {
         }
         return entry;
     });
-    console.log('date',dateCount)
+
+
 
     const emojiStats = Object.values(emojiCountsByUsers);
     const updatedEmojiStats = emojiStats.map((entry) => {
@@ -345,8 +416,7 @@ export async function findAnalysis(messages) {
 
     return {
         longestMessage: longestMessage,
-        mostRepeatedDate: mostRepeatedDate,
-        maxMessageCount: maxMessageCount,
+        activeDays: activeDays,
         mostRepeatedWordsAndSenders: mostRepeatedWordsAndSenders,
         mostUsedEmojisAndSenders: mostUsedEmojisAndSenders,
         dataObjsByDate: dataObjsByDate,

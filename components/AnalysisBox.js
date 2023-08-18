@@ -6,7 +6,7 @@ import {COLORS} from "../config/constants";
 import {findAnalysis, readFileContent, pickDocument} from "../libraries/Helper_Function_Library";
 import MaskedView from "@react-native-masked-view/masked-view";
 
-const AnalysisBox = ({navigation,position,title, description, colors, id}) => {
+const AnalysisBox = ({navigation,position,title, description, colors, id, dateFormat}) => {
     const [fileUri, setFileUri] = React.useState('')
     const [isAnalysisStarted, setIsAnalysisStarted] = React.useState(false)
     const [circleText, setCircleText] = React.useState('START')
@@ -34,11 +34,16 @@ const AnalysisBox = ({navigation,position,title, description, colors, id}) => {
         if (fileUri) {
             setIsAnalysisStarted(true)
 
-                const fileContent = await readFileContent(fileUri)
+                const fileContent = await readFileContent(fileUri,dateFormat)
+                if (fileContent === null) {
+                    setIsAnalysisStarted(false)
+                    console.log('DENEME')
+                    Alert.alert('Oops..','The date format seems to be incorrect. please check👆')
+                    return;
+                }
                 const {
                     longestMessage,
-                    mostRepeatedDate,
-                    maxMessageCount,
+                    activeDays,
                     mostRepeatedWordsAndSenders,
                     mostUsedEmojisAndSenders,
                     dataObjsByDate,
@@ -49,8 +54,7 @@ const AnalysisBox = ({navigation,position,title, description, colors, id}) => {
                 setIsAnalysisStarted(false)
                 navigation.navigate('Analysis', {analyzedData: {
                         longestMessage,
-                        mostRepeatedDate,
-                        maxMessageCount,
+                        activeDays,
                         mostRepeatedWordsAndSenders,
                         mostUsedEmojisAndSenders,
                         allSendings,

@@ -18,6 +18,7 @@ export const COLORS = {
     purple: '#847bec',
     darkBlue: '#0f4a80',
     lightPurple: '#aba1fa',
+    deneme: 'rgba(255,242,0,0.22)',
     // color1: '#3c388a',
     // color3: '#ddd9ff',
 
@@ -25,15 +26,15 @@ export const COLORS = {
 export const monthsArr = ["January","February","March","April","May","June","July","August","September","October","November","December"];
 export const medya =
     [
-        'görüntü dahil edilmedi','image not included',
-        'video dahil edilmedi','video not included',
-        'ses dahil edilmedi','audio not included',
-        'belge dahil edilmedi','document not included',
-        'gif dahil edilmedi',' gif not included',
-        'çıkartma dahil edilmedi', 'sticker not included',
-        'kişi kartı dahil edilmedi','contact card not included',
+        'görüntü dahil edilmedi','image omitted',
+        'video dahil edilmedi','video omitted',
+        'ses dahil edilmedi','audio omitted',
+        'belge dahil edilmedi','document omitted',
+        'gif dahil edilmedi','gif omitted',
+        'çıkartma dahil edilmedi', 'sticker omitted',
+        'kişi kartı dahil edilmedi','contact card omitted',
         'http',
-        'bu mesajı sildiniz', 'deleted this message'
+        'bu mesajı sildiniz', 'this message was deleted'
 
     ];
 
@@ -55,7 +56,7 @@ export const missedCalls = [
     'cevapsız görüntülü grup araması', 'missed group video call',
 ]
 
-export const htmlMaker = (names, mostMessagingDate, data) => {
+export const htmlMaker = (names, dateDataforPDF, data) => {
     const sendingsCountData = data.allSendings;
     const mostRepeatedWordsAndSenders = data.mostRepeatedWordsAndSenders;
     const mostUsedEmojisAndSenders = data.mostUsedEmojisAndSenders;
@@ -151,10 +152,11 @@ export const htmlMaker = (names, mostMessagingDate, data) => {
                 <div>
                     <h1 style="color: ${COLORS.darkGreen}">Simple Message Analysis</h1>
                     <p style="color: ${COLORS.darkGreen}; font-size: 25px; margin-top: -15px;">${names[0]} - ${names[1]}</p>
+                    <p style="color: ${COLORS.darkGreen}; font-size: 15px; margin-top: -15px;">${dateDataforPDF.timeInterval}</p>
                 </div>
                 <div>
                     <p style="color: ${COLORS.darkGreen};">En Çok Mesajlaşılan Tarih</p>
-                    <p style="color: ${COLORS.darkGreen}; font-size: 30px; font-weight: 900; margin-top: -15px; text-align: end">${mostMessagingDate}</p>
+                    <p style="color: ${COLORS.darkGreen}; font-size: 30px; font-weight: 900; margin-top: -15px; text-align: end">${dateDataforPDF.mostRepeatedDate}</p>
                 </div>
             </div>
             ${generateDataRow('', { fontSize: '10px', backgroundColor: 'white', borderColor: COLORS.lightGray} ,'names')}

@@ -1,15 +1,20 @@
-import React from 'react';
-import {Button, ScrollView, StyleSheet, Text, View} from "react-native";
-import {COLORS, html, htmlMaker} from "../config/constants";
+import React, {useEffect} from 'react';
+import {Button, Dimensions, ScrollView, StyleSheet, Text, View} from "react-native";
+import {COLORS, htmlMaker} from "../config/constants";
 
 import {AnalysisLabel, AnalysisValueBoxContainer, AnalysisValueBoxSmall} from "../libraries/UI_Component_Library";
 import {sumCounts} from "../libraries/Helper_Function_Library";
 import { printToFileAsync } from "expo-print";
 import {shareAsync} from "expo-sharing";
+import {View as MotiView} from "moti/build/components/view";
+import {AnimatePresence} from "moti";
 
 const SimpleMessageAnalysis = ({analyzedData}) => {
+    const { width, height } = Dimensions.get('window');
+    const [showEmojiBOMB, setShowEmojiBOMB] = React.useState(false)
     const totalword = analyzedData.allSendings.totalWord
-    const mostRepeatedDate = analyzedData.mostRepeatedDate
+    // const mostRepeatedDate = analyzedData.mostRepeatedDate
+    const activeDays = analyzedData.activeDays
     const mostRepeatedWordsAndSenders = analyzedData.mostRepeatedWordsAndSenders
     const mostUsedEmojisAndSenders = analyzedData.mostUsedEmojisAndSenders
     const messageSending = analyzedData.allSendings.messageCounts
@@ -26,10 +31,22 @@ const SimpleMessageAnalysis = ({analyzedData}) => {
     // const missedCallCounts = analyzedData.allSendings.missedCallCounts
     // const longestMessageSender = analyzedData.longestMessage.name
     // const longestMessage = analyzedData.longestMessage.message
-    const deneme = htmlMaker(names,mostRepeatedDate,analyzedData)
+    const activeDaysMaxToMin = [...activeDays].sort((a,b) => b[1] - a[1])
+    const mostRepeatedDate = activeDaysMaxToMin[0][0];
+    // const maxMessageCount = activeDaysMaxToMin[0][1];
+    const timeInterval = `${[...activeDays].shift()[0]} - ${[...activeDays].pop()[0]}`
+    const dateDataforPDF = {mostRepeatedDate: mostRepeatedDate, timeInterval: timeInterval}
+    const emojiBOMB = [];
+    mostUsedEmojisAndSenders.forEach((x) => {
+      emojiBOMB.push(x.emoji)
+    })
+    console.log(emojiBOMB)
+
+    const html = htmlMaker(names,dateDataforPDF,analyzedData)
+
     let generatePdf = async () => {
         const file = await  printToFileAsync({
-            html: deneme,
+            html: html,
             base64: false,
             useMarkupFormatter: true
         });
@@ -46,10 +63,79 @@ const SimpleMessageAnalysis = ({analyzedData}) => {
            <AnalysisValueBoxContainer data={data} titleArr={titleArr}/>
        </View>
    )
+    const handleEmojiButtonPress = () => {
+       if (showEmojiBOMB === false) {
+           setShowEmojiBOMB(true)
+           setTimeout(() => {
+               setShowEmojiBOMB(false);
 
+           }, 4000);
+       }
+    }
+    useEffect(() => {
+        handleEmojiButtonPress();
+    },[])
     return (
+        <View style={styles.container}>
+            <AnimatePresence>
+                {showEmojiBOMB &&
+                    [...emojiBOMB,...emojiBOMB,...emojiBOMB,...emojiBOMB,...emojiBOMB].map((x, index) => {
+                        const randomNum1 = Math.floor(Math.random() * width-90) + 90;
+                        const randomNum2 = Math.floor(Math.random() * 2000) + 300;
+                        const randomNum3 = Math.floor(Math.random() * 35) + 25;
+                        const randomValue = Math.random() * 0.9 + 0.6;
+                        const randomNum4 = parseFloat(randomValue.toFixed(1));
+                        // console.log(randomNum1, randomNum2, randomNum3, randomNum4)
+                        return (
+                            <MotiView
+                                key={index}
+                                transition={{
+                                    delay: index*(50),
+                                    damping: 10,
+                                    mass: 1,
+                                    type: 'timing',
+                                    duration: 1000,
+                                }}
+                                from={{
+                                    opacity: 1,
+                                    left: randomNum1,
+                                    top: -200
+                                }}
+                                animate={{
+                                    opacity: randomNum4,
+                                    left: randomNum1,
+                                    top:height,
+                                }}
+                                exit={{
+                                    opacity: 0,
+                                    top:height,
+                                }}
+                                exitTransition={{
+                                    type: 'timing',
+                                    duration: 300,
+                                }}
+                                style={{position: 'absolute', zIndex: 100}}
+                            >
+                                <Text style={{fontSize: randomNum3}}>{x}</Text>
+                            </MotiView>
+                        )
+                    })
+                }
+            </AnimatePresence>
+
         <ScrollView contentContainerStyle={{ paddingHorizontal: 30,}}>
+
             <Text style={styles.mainTitle}>Simple Message Analysis</Text>
+            <View style={{paddingVertical: 20}}>
+                <Button title={'EMOJI BOMB'} onPress={handleEmojiButtonPress}/>
+                <Text style={{color: COLORS.white, fontSize: 12, fontWeight: 'bold'}}>Tap to see the EMOJI CONFETTI of the most used emojis again</Text>
+            </View>
+            <View style={{width: 50, height: 50, backgroundColor: COLORS.lightGreen, borderRadius: 100}}></View>
+            <View style={{marginTop: -10, paddingVertical: 10, paddingHorizontal: 10, borderRadius:25, alignItems: 'center', gap: 5 }}>
+                <Text style={{color: COLORS.white, fontSize: 17, fontWeight: 'bold'}}>{names[0] + ' - ' + names[1]}</Text>
+                <Text style={{color: COLORS.white, fontSize: 17, fontWeight: 'bold'}}>{timeInterval}</Text>
+
+            </View>
             <AnalysisLabel title={'Toplam Mesaj'} value={sumCounts(messageSending)}/>
             <AnalysisLabel title={'En Çok Mesajlaşılan Tarih'} value={mostRepeatedDate}/>
             <DualBoxView title={'Mesajlaşılan Zamanlar'} data={messagingByTime} titleArr={['morning','night']} total={false}/>
@@ -86,13 +172,16 @@ const SimpleMessageAnalysis = ({analyzedData}) => {
             </View>
 
         </ScrollView>
+        </View>
     );
 };
 
 export default SimpleMessageAnalysis;
 
 const styles = StyleSheet.create({
-
+    container: {
+        flex: 1
+    },
     textStyle: {
         color: COLORS.white,
         fontSize: 17
