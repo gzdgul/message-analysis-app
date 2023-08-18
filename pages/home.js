@@ -1,13 +1,16 @@
 import React, {useEffect} from 'react';
-import {Button, Pressable, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {Button, Dimensions, Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {COLORS} from "../config/constants";
 import AnalysisBox from "../components/AnalysisBox";
 import {AnimatePresence, MotiView} from "moti";
+const { width, height } = Dimensions.get('window');
 
 
 const Home = ({navigation}) => {
     const [dateFormat, setDateFormat] = React.useState('DD/MM/YY');
     const [language, setLanguage] = React.useState('Türkçe');
+    const [page, setPage] = React.useState(0);
+    const totalPage= 2
     const [dropDownMenu, setDropDownMenu] = React.useState({data: [], desc: "", opened: false});
     const handleDateFormatPress = () => {
         if (dropDownMenu.desc === "DateFormat") {
@@ -39,7 +42,7 @@ const Home = ({navigation}) => {
             })
         }
     }
-    const DropDownMenu = ({dropDownMenu,setFunc}) => {
+    const DropDownMenu = ({dropDownMenu, setFunc}) => {
         const handlePress = (x) => {
             setFunc(x)
             setDropDownMenu({
@@ -72,7 +75,7 @@ const Home = ({navigation}) => {
                                 type: 'timing',
                                 duration: 300,
                             }}
-                            style={{}}
+                            style={{borderRadius: 25}}
                         >
 
                             <TouchableOpacity style={{
@@ -83,7 +86,7 @@ const Home = ({navigation}) => {
                                 borderColor: COLORS.white,
                                 borderRadius: 10
                             }} onPress={() => handlePress(x)}>
-                                <Text style={{color: COLORS.white}}>{x}</Text>
+                                <Text style={{color: COLORS.white, fontSize: 14}}>{x}</Text>
                             </TouchableOpacity>
                         </MotiView>
 
@@ -94,13 +97,19 @@ const Home = ({navigation}) => {
             </View>
         )
     }
+    const handlePageScroll = (x) => {
+        console.log(x.nativeEvent.contentOffset)
+        const pageNum = Math.round(x.nativeEvent.contentOffset.x/width)
+        console.log(pageNum)
+        setPage(pageNum)
+    }
     return (
         <View style={styles.container}>
             <View style={{
                 backgroundColor: COLORS.darkPurple,
                 zIndex: 100,
                 width: '90%',
-                height: 100,
+                height: 80,
                 padding: 10,
                 borderRadius: 25,
                 marginBottom: 20
@@ -109,12 +118,13 @@ const Home = ({navigation}) => {
                     <TouchableOpacity
                         style={{flexDirection: 'row', alignItems: 'center', gap: 10, height: 30, paddingHorizontal: 5}}
                         onPress={handleLanguagePress}>
-                        <Text style={{color: COLORS.white}}>{language}</Text>
+                        <Text style={{color: COLORS.white}}>{language} ▼</Text>
                         <Text style={{color: COLORS.white, opacity: 0.7, fontSize: 10}}>LANGUAGE</Text>
                     </TouchableOpacity>
                     <AnimatePresence>
                         {
-                            (dropDownMenu.desc === "Language" && dropDownMenu.opened) && <DropDownMenu dropDownMenu={dropDownMenu} setFunc={setLanguage}/>
+                            (dropDownMenu.desc === "Language" && dropDownMenu.opened) &&
+                            <DropDownMenu dropDownMenu={dropDownMenu} setFunc={setLanguage}/>
                         }
                     </AnimatePresence>
                 </View>
@@ -123,30 +133,59 @@ const Home = ({navigation}) => {
                     <TouchableOpacity
                         style={{flexDirection: 'row', alignItems: 'center', gap: 10, height: 30, paddingHorizontal: 5}}
                         onPress={handleDateFormatPress}>
-                        <Text style={{color: COLORS.white}}>{dateFormat}</Text>
+                        <Text style={{color: COLORS.white}}>{dateFormat} ▼</Text>
                         <Text style={{color: COLORS.white, opacity: 0.7, fontSize: 10}}>DATE FORMAT</Text>
                     </TouchableOpacity>
                     <AnimatePresence>
                         {
-                            (dropDownMenu.desc === "DateFormat" && dropDownMenu.opened) && <DropDownMenu dropDownMenu={dropDownMenu} setFunc={setDateFormat}/>
+                            (dropDownMenu.desc === "DateFormat" && dropDownMenu.opened) &&
+                            <DropDownMenu dropDownMenu={dropDownMenu} setFunc={setDateFormat}/>
                         }
                     </AnimatePresence>
                 </View>
             </View>
-            <View style={{gap: 10, marginTop: 0,}}>
-                <AnalysisBox position={'left'} colors={[COLORS.green, COLORS.lightGreen]}
-                             title={'Message Analysis Simple'}
-                             description={'Total message count and messaging statistics for each sender.'}
-                             navigation={navigation} id={'simple'} dateFormat={dateFormat}/>
-                <AnalysisBox position={'right'} colors={[COLORS.purple, COLORS.white]}
-                             title={'Message Analysis Advanced '}
-                             description={'Rank users based on messaging habits and host a fun tournament.'}
-                             navigation={navigation} id={'advanced'} dateFormat={dateFormat}/>
-                <AnalysisBox position={'left'} colors={[COLORS.darkBlue, COLORS.purple]}
-                             title={'Message Analysis Timeline'}
-                             description={'Visualize messaging activities over time for better recall.'}
-                             navigation={navigation} id={'timeline'} dateFormat={dateFormat}/>
+            <View style={{width: '100%', height: 5, marginVertical: 10, backgroundColor: COLORS.darkPurple}}>
+                <MotiView
+                    transition={{delay:0, damping: 15, mass: 1}}
+                    from={{
+                        left: 0,
+
+                    }}
+                    animate={{
+                        left: width/totalPage*page,
+
+                    }}
+                    exit={{
+                        left: width/totalPage*page,
+
+
+                    }}
+                style={{width: width/totalPage, height: '100%', backgroundColor: COLORS.white}}>
+
+                </MotiView>
             </View>
+            <ScrollView pagingEnabled={true} horizontal={true} contentContainerStyle={{gap: 10}}
+                        scrollEventThrottle={16}
+                        onScroll={(x) => handlePageScroll(x)}>
+                <View style={{width: width}}>
+                    <AnalysisBox position={'left'} colors={[COLORS.green, COLORS.lightGreen]}
+                                 title={'Message Analysis Simple'}
+                                 description={'Total messaging statistics for each sender.Most used words, emojis and more...'}
+                                 navigation={navigation} id={'simple'} dateFormat={dateFormat}/>
+                    <AnalysisBox position={'right'} colors={[COLORS.purple, COLORS.white]}
+                                 title={'Message Analysis Advanced '}
+                                 description={'Messaging statistics by months and days for each sender. See the message statistics for the day you want'}
+                                 navigation={navigation} id={'advanced'} dateFormat={dateFormat}/>
+                    <AnalysisBox position={'left'} colors={[COLORS.babyCyan, COLORS.deneme]}
+                                 title={'Message Analysis Visualized'}
+                                 description={'Visualize messaging activities over time for better recall.'}
+                                 navigation={navigation} id={'visualized'} dateFormat={dateFormat}/>
+                </View>
+                <View style={{width: width}}>
+                    <Text style={{color: 'white'}}>1</Text>
+                </View>
+
+            </ScrollView>
             <View style={{marginTop: 20, width: '100%'}}>
             </View>
         </View>

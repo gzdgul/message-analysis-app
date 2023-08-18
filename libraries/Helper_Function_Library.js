@@ -355,8 +355,8 @@ export async function findAnalysis(messages) {
         for (const mediaType of mediaTypes) {
             if (mediaType.keywords.some(keyword => message.includes(keyword))) {
                 switch (mediaType.type) {
-                    case "picture":
-                        media = "picture";
+                    case "image":
+                        media = "image";
                         break;
                     case "video":
                         media = "video";

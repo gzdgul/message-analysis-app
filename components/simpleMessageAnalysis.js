@@ -20,7 +20,7 @@ const SimpleMessageAnalysis = ({analyzedData}) => {
     const mostUsedEmojisAndSenders = analyzedData.mostUsedEmojisAndSenders
     const messageSending = analyzedData.allSendings.messageCounts
     const emojiSending = analyzedData.allSendings.emojiCounts
-    const pictureSending = analyzedData.allSendings.mediaCounts.picture
+    const ImageSending = analyzedData.allSendings.mediaCounts.image
     const videoSending = analyzedData.allSendings.mediaCounts.video
     const audioSending = analyzedData.allSendings.mediaCounts.audio
     const documentSending = analyzedData.allSendings.mediaCounts.document
@@ -76,7 +76,7 @@ const SimpleMessageAnalysis = ({analyzedData}) => {
            setTimeout(() => {
                setPressAllowed(true)
 
-           }, 12000);
+           }, 13000);
        }
     }
 
@@ -196,7 +196,7 @@ const SimpleMessageAnalysis = ({analyzedData}) => {
                     </View>
                 ))}
             </View>
-            <DualBoxView totalTitle={'Toplam Fotoğraf'} title={'Fotoğraf Gönderimi'} data={pictureSending} titleArr={names} total={true}/>
+            <DualBoxView totalTitle={'Toplam Fotoğraf'} title={'Fotoğraf Gönderimi'} data={ImageSending} titleArr={names} total={true}/>
             <DualBoxView totalTitle={'Toplam Video'} title={'Video Gönderimi'} data={videoSending} titleArr={names} total={true}/>
             <DualBoxView totalTitle={'Toplam Ses Kaydı'} title={'Ses Kaydı Gönderimi'} data={audioSending} titleArr={names} total={true}/>
             <DualBoxView totalTitle={'Toplam Belge'} title={'Belge Gönderimi'} data={documentSending} titleArr={names} total={true}/>

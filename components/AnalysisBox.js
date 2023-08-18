@@ -11,6 +11,7 @@ const AnalysisBox = ({navigation,position,title, description, colors, id, dateFo
     const [isAnalysisStarted, setIsAnalysisStarted] = React.useState(false)
     const [circleText, setCircleText] = React.useState('START')
 
+
     const handlePickDocument = async () => {
         const fileUri =  await pickDocument()
         if (fileUri !== undefined) {
@@ -37,7 +38,6 @@ const AnalysisBox = ({navigation,position,title, description, colors, id, dateFo
                 const fileContent = await readFileContent(fileUri,dateFormat)
                 if (fileContent === null) {
                     setIsAnalysisStarted(false)
-                    console.log('DENEME')
                     Alert.alert('Oops..','The date format seems to be incorrect. please check👆')
                     return;
                 }
@@ -78,6 +78,7 @@ const AnalysisBox = ({navigation,position,title, description, colors, id, dateFo
     };
     return (
         <View style={[styles.box,
+            {overflow: 'hidden'},
             position === 'left'
                 ? {borderTopRightRadius: 100, borderBottomRightRadius: 100}
                 : {borderTopLeftRadius: 100, borderBottomLeftRadius: 100}
@@ -87,7 +88,7 @@ const AnalysisBox = ({navigation,position,title, description, colors, id, dateFo
                 <View style={styles.desArea}>
                     <GradientText style={[styles.titleText]} colors={colors}>{title}</GradientText>
                     <Text style={styles.desText}>{description}</Text>
-                    <TouchableOpacity style={[styles.button, {backgroundColor: colors[0]}]} onPress={handlePickDocument}>
+                    <TouchableOpacity disabled={id === 'visualized'} style={[styles.button, {backgroundColor: colors[0]}]} onPress={handlePickDocument}>
                         <LinearGradient
                             style={{ width: '100%', height: '100%', borderRadius: 10, position: 'absolute'}}
                             colors={[colors[0], colors[1]]}
@@ -95,9 +96,8 @@ const AnalysisBox = ({navigation,position,title, description, colors, id, dateFo
                             end={{ x: 1, y: 0 }}
                             pointerEvents="none"
                         />
-                        <Text style={styles.buttonText}>Select Document</Text>
+                        <Text style={styles.buttonText}>{id === 'visualized' ? 'Select Document🔒' : "Select Document"}</Text>
                     </TouchableOpacity>
-                    {/*<Button title="STOP" onPress={() =>  setIsAnalysisStarted(false)}/>*/}
                 </View>
             }
             <MotiView
@@ -122,14 +122,14 @@ const AnalysisBox = ({navigation,position,title, description, colors, id, dateFo
                     />
                 </MotiView>
 
-                <Pressable onPress={handleCirclePress}>
+                <Pressable disabled={id === 'visualized'} onPress={handleCirclePress}>
                     <MotiView
                         transition={{ delay: 0, damping: 15, mass: 1,type: 'timing', duration: 800 ,loop: isAnalysisStarted}}
                         animate={{
                             scale: isAnalysisStarted ? 0.9 : 1,
                         }}
                         style={[styles.innerCircle]}>
-                        <GradientText style={[styles.circleText]} colors={colors}>{circleText}</GradientText>
+                        <GradientText style={[styles.circleText]} colors={colors}>{id === 'visualized' ? 'LOCKED🔒' : circleText}</GradientText>
                     </MotiView>
                 </Pressable>
             </MotiView>
@@ -146,10 +146,8 @@ const AnalysisBox = ({navigation,position,title, description, colors, id, dateFo
                             end={{ x: 1, y: 0 }}
                             pointerEvents="none"
                         />
-
                         <Text style={styles.buttonText}>Select Document</Text>
                     </TouchableOpacity>
-                    {/*<Button title="STOP" onPress={() =>  setIsAnalysisStarted(false)}/>*/}
                 </View>
             }
         </View>
@@ -160,9 +158,9 @@ export default AnalysisBox;
 
 const styles = StyleSheet.create({
     box: {
-        width: '95%',
+        width: '100%',
         height: 180,
-        backgroundColor: COLORS.darkPurple,
+        // backgroundColor: COLORS.darkPurple,
         alignItems: 'center',
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -182,7 +180,7 @@ const styles = StyleSheet.create({
     innerCircle: {
         width: '85%',
         aspectRatio: 1,
-        backgroundColor:  COLORS.darkPurple,
+        backgroundColor:  COLORS.darkBG,
         borderRadius: 100,
         justifyContent: 'center',
         alignItems: 'center',

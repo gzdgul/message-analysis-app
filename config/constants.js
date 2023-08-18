@@ -11,6 +11,7 @@ export const COLORS = {
     darkBG: '#0d0e16',
     blue: '#8edaf2',
     pink: '#ff4a74',
+    deneme: '#ff56b0',
     lightPink: '#fdcdcc',
     green: '#19de96',
     lightGreen: '#8efd7c',
@@ -18,8 +19,8 @@ export const COLORS = {
     purple: '#847bec',
     darkBlue: '#0f4a80',
     lightPurple: '#aba1fa',
-    deneme: 'rgba(255,242,0,0.22)',
-    // color1: '#3c388a',
+    babyCyan: '#50ffcc',
+    shadow: 'rgba(0,0,0,0.5)',
     // color3: '#ddd9ff',
 
 }
@@ -39,7 +40,7 @@ export const medya =
     ];
 
 export const mediaTypes = [
-    { type: 'picture', keywords: [medya[0], medya[1]] },
+    { type: 'image', keywords: [medya[0], medya[1]] },
     { type: 'video', keywords: [medya[2], medya[3]] },
     { type: 'audio', keywords: [medya[4], medya[5]] },
     { type: 'document', keywords: [medya[6], medya[7]] },
@@ -160,13 +161,13 @@ export const htmlMaker = (names, dateDataforPDF, data) => {
                 </div>
             </div>
             ${generateDataRow('', { fontSize: '10px', backgroundColor: 'white', borderColor: COLORS.lightGray} ,'names')}
-            ${generateSendingsDataRow('Mesaj Gönderimi', sendingsCountData.messageCounts)}
-            ${generateSendingsDataRow('Emoji Gönderimi', sendingsCountData.emojiCounts)}
-            ${generateSendingsDataRow('Fotoğraf Gönderimi', sendingsCountData.mediaCounts.picture)}
-            ${generateSendingsDataRow('Video Gönderimi', sendingsCountData.mediaCounts.video)}
-            ${generateSendingsDataRow('Ses Kaydı Gönderimi', sendingsCountData.mediaCounts.audio)}
-            ${generateSendingsDataRow('Belge Gönderimi', sendingsCountData.mediaCounts.document)}
-            ${generateSendingsDataRow('GIF Gönderimi', sendingsCountData.mediaCounts.gif)}
+            ${generateSendingsDataRow('Message Sending', sendingsCountData.messageCounts)}
+            ${generateSendingsDataRow('Emoji Sending', sendingsCountData.emojiCounts)}
+            ${generateSendingsDataRow('Image Sending', sendingsCountData.mediaCounts.image)}
+            ${generateSendingsDataRow('Video Sending', sendingsCountData.mediaCounts.video)}
+            ${generateSendingsDataRow('Audio Record Sending', sendingsCountData.mediaCounts.audio)}
+            ${generateSendingsDataRow('Document Sending', sendingsCountData.mediaCounts.document)}
+            ${generateSendingsDataRow('GIF Sending', sendingsCountData.mediaCounts.gif)}
             <div style="display: flex; flex-direction: row; justify-content: space-between; margin-top: 10px">
                 <div style="width: 350px;">
                     <p style="color: ${COLORS.darkGreen};">En Çok Gönderilen Kelimeler ✏️</p>

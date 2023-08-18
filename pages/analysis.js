@@ -16,7 +16,7 @@ const Analysis = ({navigation, route}) => {
                <SimpleMessageAnalysis analyzedData={analyzedData}/>
            }
            {
-               pageID === 'timeline' &&
+               pageID === 'visualized' &&
                <TimelineMessageAnalysis analyzedData={analyzedData}/>
            }
            {

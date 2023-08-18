@@ -79,7 +79,7 @@ const AnalysisTable = ({dataset, names, setPressAllowed, pressAllowed}) => {
                     [
                         {title: 'Message', key: 'message', patch: null},
                         {title: 'Emoji', key: 'emoji', patch: null},
-                        {title: 'Photo', key: 'media', patch: 'picture'},
+                        {title: 'Photo', key: 'media', patch: 'image'},
                         {title: 'Video', key: 'media', patch: 'video'},
                         {title: 'Audio', key: 'media', patch: 'audio'},
                         {title: 'Document', key: 'others', patch: 'document'},
