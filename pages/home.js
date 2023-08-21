@@ -4,6 +4,8 @@ import {COLORS, UsageInstructions, UsageSecurity} from "../config/constants";
 import AnalysisBox from "../components/AnalysisBox";
 import {AnimatePresence, MotiView} from "moti";
 import ScrollableInfoModal from "../components/ScrollableInfoModal";
+import {LinearGradient} from "expo-linear-gradient";
+import {ButtonGradient} from "../libraries/UI_Component_Library";
 const { width, height } = Dimensions.get('window');
 
 
@@ -19,7 +21,7 @@ const Home = ({navigation}) => {
     const [infoModalData, setInfoModalData] = React.useState([]);
     const [isSettingsVisible, setSettingsVisible] = React.useState(false);
 
-    const toggleBottomSheet = (data) => {
+    const toggleInfoModal = (data) => {
         setInfoModalData(data)
         setInfoModalVisible(!isInfoModalVisible);
     };
@@ -229,12 +231,8 @@ const Home = ({navigation}) => {
                     <ScrollView>
                     <Text style={{color: 'white'}}>1</Text>
                     <View style={{gap: 20, alignItems: 'center'}}>
-                        <TouchableOpacity style={{width: '90%', height: 50, backgroundColor: 'red', borderRadius: 15}} onPress={() => toggleBottomSheet(UsageInstructions)}>
-                            <Text>How To Use?</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={{width: '90%', height: 50, backgroundColor: 'red', borderRadius: 15}} onPress={() => toggleBottomSheet(UsageSecurity)}>
-                            <Text>Security</Text>
-                        </TouchableOpacity>
+                        <ButtonGradient title={'Step-By-Step How To Use?'} color={[COLORS.babyCyan, COLORS.deneme]} buttonStyle={{width: '90%'}} textStyle={{fontSize: 16,  fontWeight: '600'}} onPress={() => toggleInfoModal(UsageInstructions)}/>
+                        <ButtonGradient title={'Learn About Security'} color={[COLORS.babyCyan, COLORS.deneme]} buttonStyle={{width: '90%'}} textStyle={{fontSize: 16,  fontWeight: '600'}} onPress={() => toggleInfoModal(UsageSecurity)}/>
                     </View>
                     </ScrollView>
                 </View>
