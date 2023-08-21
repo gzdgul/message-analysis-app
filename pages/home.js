@@ -18,7 +18,7 @@ const Home = ({navigation}) => {
     const totalItem= 4
     const [dropDownMenu, setDropDownMenu] = React.useState({data: [], desc: "", opened: false});
     const [isInfoModalVisible, setInfoModalVisible] = React.useState(false);
-    const [infoModalData, setInfoModalData] = React.useState([]);
+    const [infoModalData, setInfoModalData] = React.useState(UsageInstructions);
     const [isSettingsVisible, setSettingsVisible] = React.useState(false);
 
     const toggleInfoModal = (data) => {
@@ -230,9 +230,9 @@ const Home = ({navigation}) => {
                 <View style={{width: width}}>
                     <ScrollView>
                     <Text style={{color: 'white'}}>1</Text>
-                    <View style={{gap: 20, alignItems: 'center'}}>
-                        <ButtonGradient title={'Step-By-Step How To Use?'} color={[COLORS.babyCyan, COLORS.deneme]} buttonStyle={{width: '90%'}} textStyle={{fontSize: 16,  fontWeight: '600'}} onPress={() => toggleInfoModal(UsageInstructions)}/>
-                        <ButtonGradient title={'Learn About Security'} color={[COLORS.babyCyan, COLORS.deneme]} buttonStyle={{width: '90%'}} textStyle={{fontSize: 16,  fontWeight: '600'}} onPress={() => toggleInfoModal(UsageSecurity)}/>
+                    <View style={{gap: 15, alignItems: 'center'}}>
+                        <ButtonGradient title={'Step-By-Step How To Use?'} color={[COLORS.red, COLORS.red]} buttonStyle={{width: '90%'}} textStyle={{fontSize: 16,  fontWeight: '600', color: 'white'}} onPress={() => toggleInfoModal(UsageInstructions)}/>
+                        <ButtonGradient title={'Learn About Security'} color={[COLORS.darkPurple, COLORS.darkPurple]} buttonStyle={{width: '90%'}} textStyle={{fontSize: 16,  fontWeight: '600', color: 'white'}} onPress={() => toggleInfoModal(UsageSecurity)}/>
                     </View>
                     </ScrollView>
                 </View>

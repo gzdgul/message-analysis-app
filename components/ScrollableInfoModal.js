@@ -42,8 +42,8 @@ function ScrollableInfoModal({data,isVisible,setVisible}) {
                     {/*    <Text style={{color: 'white'}}>Close</Text>*/}
                     {/*</TouchableOpacity>*/}
                 </View>
-                <View style={{alignItems: 'center'}}>
-                    <View style={{width: '100%', height: height/2}}>
+                <View style={{alignItems: 'center', justifyContent:  'space-between'}}>
+                    <View style={{width: '100%', alignItems: 'center', height: data[0].type === 'UsageInstructions' ? height/1.5 :  height/2}}>
                         <ScrollView
                             horizontal={true}
                             pagingEnabled={true}
@@ -68,8 +68,8 @@ function ScrollableInfoModal({data,isVisible,setVisible}) {
                                                 <Image
                                                     source={image}
                                                     style={{
-                                                        width: 150,
-                                                        height: 150,
+                                                        width: x.type === 'UsageInstructions'  ?  width/1.4 : 150,
+                                                        height: x.type === 'UsageInstructions'  ?  width/1.4 : 150,
                                                     }}
                                                 />
                                             </View>
