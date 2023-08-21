@@ -1,6 +1,7 @@
 
 export const COLORS = {
     darkPurple: '#1f2438',
+    darkPurple0: 'rgba(0,0,0,0.5)',
     // purple: '#4e4e80',
     black: '#000000',
     white: '#FFFFFF',
@@ -56,7 +57,25 @@ export const missedCalls = [
     'cevapsız sesli grup araması', 'missed group voice call',
     'cevapsız görüntülü grup araması', 'missed group video call',
 ]
-
+import messageLock from "../assets/message-lock.png"
+import messageCross from "../assets/message-cross.png"
+import messageThief from "../assets/message-thief.png"
+import messageMoreInfo from "../assets/message-moreInfo.png"
+import messageSecure from "../assets/message-sec.png"
+export const UsageInstructions = [
+    {title: 'Özel Mesajlarınız Koruma Altında', desc: 'Verilerinizin güvenliği bizim en öncelikli görevimizdir. Özel konuşmalarınız ve size özel tasarlanmış mesaj analizleriniz tamamen güvende tutulur. Size verilerinizin nasıl korunduğunu daha yakından anlatalım.', img: messageLock},
+    {title: 'Bağımsız ve Güvende', desc: 'Uygulamamız bağımsızdır ve internet bağlantısına ihtiyaç duymaz. Mesajlarınız sadece kendi cihazınızda analiz edilir. Bu sayede verileriniz hiçbir zaman internet üzerinden iletilmez, böylece gizliliğiniz her zaman korunur.', img: messageSecure},
+    {title: 'Verileriniz Hızla ve Tamamen Silinir', desc: 'Mesajlarınızın analiz sürecinde hiçbir şekilde okunmaz veya kopyalanmaz. Analiz süreci tamamlandığında, verileriniz anında ve tamamen silinir. Bu, verilerinizin gizliliğini her zaman korumamıza olanak tanır.', img: messageCross},
+    {title: 'Üçüncü Kişilerle Paylaşılmaz', desc: 'Size özel mesaj analizinize sadece siz ve paylaştığınız kişi veya kişiler erişebilir. Verileriniz asla üçüncü taraflarla paylaşılmaz veya satılmaz.', img: messageThief},
+    {title: 'Bizimle İletişime Geçin', desc: 'Uygulamamızı kullanırken herhangi bir sorunuz, öneriniz veya geri bildiriminiz varsa, lütfen bizimle iletişime geçmekten çekinmeyin. Kullanıcılarımızın deneyimini daha iyi hale getirmek için buradayız ve sizden gelecek geri bildirimleri değerli buluyoruz.', img: messageMoreInfo},
+]
+export const UsageSecurity = [
+    {title: 'Özel Mesajlarınız Koruma Altında', desc: 'Verilerinizin güvenliği bizim en öncelikli görevimizdir. Özel konuşmalarınız ve size özel tasarlanmış mesaj analizleriniz tamamen güvende tutulur. Size verilerinizin nasıl korunduğunu daha yakından anlatalım.', img: messageLock},
+    {title: 'Bağımsız ve Güvende', desc: 'Uygulamamız bağımsızdır ve internet bağlantısına ihtiyaç duymaz. Mesajlarınız sadece kendi cihazınızda analiz edilir. Bu sayede verileriniz hiçbir zaman internet üzerinden iletilmez, böylece gizliliğiniz her zaman korunur.', img: messageSecure},
+    {title: 'Verileriniz Hızla ve Tamamen Silinir', desc: 'Mesajlarınızın analiz sürecinde hiçbir şekilde okunmaz veya kopyalanmaz. Analiz süreci tamamlandığında, verileriniz anında ve tamamen silinir. Bu, verilerinizin gizliliğini her zaman korumamıza olanak tanır.', img: messageCross},
+    {title: 'Üçüncü Kişilerle Paylaşılmaz', desc: 'Size özel mesaj analizinize sadece siz ve paylaştığınız kişi veya kişiler erişebilir. Verileriniz asla üçüncü taraflarla paylaşılmaz veya satılmaz.', img: messageThief},
+    {title: 'Bizimle İletişime Geçin', desc: 'Uygulamamızı kullanırken herhangi bir sorunuz, öneriniz veya geri bildiriminiz varsa, lütfen bizimle iletişime geçmekten çekinmeyin. Kullanıcılarımızın deneyimini daha iyi hale getirmek için buradayız ve sizden gelecek geri bildirimleri değerli buluyoruz.', img: messageMoreInfo},
+]
 export const htmlMaker = (names, dateDataforPDF, data) => {
     const sendingsCountData = data.allSendings;
     const mostRepeatedWordsAndSenders = data.mostRepeatedWordsAndSenders;

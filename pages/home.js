@@ -1,9 +1,11 @@
 import React, {useEffect} from 'react';
-import {Button, Dimensions, Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
-import {COLORS} from "../config/constants";
+import {Button, Dimensions, Modal, Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {COLORS, UsageInstructions, UsageSecurity} from "../config/constants";
 import AnalysisBox from "../components/AnalysisBox";
 import {AnimatePresence, MotiView} from "moti";
+import ScrollableInfoModal from "../components/ScrollableInfoModal";
 const { width, height } = Dimensions.get('window');
+
 
 
 const Home = ({navigation}) => {
@@ -11,7 +13,20 @@ const Home = ({navigation}) => {
     const [language, setLanguage] = React.useState('Türkçe');
     const [page, setPage] = React.useState(0);
     const totalPage= 2
+    const totalItem= 4
     const [dropDownMenu, setDropDownMenu] = React.useState({data: [], desc: "", opened: false});
+    const [isInfoModalVisible, setInfoModalVisible] = React.useState(false);
+    const [infoModalData, setInfoModalData] = React.useState([]);
+    const [isSettingsVisible, setSettingsVisible] = React.useState(false);
+
+    const toggleBottomSheet = (data) => {
+        setInfoModalData(data)
+        setInfoModalVisible(!isInfoModalVisible);
+    };
+    const toggleSettings = () => {
+        setSettingsVisible(!isSettingsVisible);
+    };
+
     const handleDateFormatPress = () => {
         if (dropDownMenu.desc === "DateFormat") {
             setDropDownMenu({
@@ -103,6 +118,7 @@ const Home = ({navigation}) => {
         console.log(pageNum)
         setPage(pageNum)
     }
+
     return (
         <View style={styles.container}>
             <View style={{
@@ -112,39 +128,67 @@ const Home = ({navigation}) => {
                 height: 80,
                 padding: 10,
                 borderRadius: 25,
-                marginBottom: 20
+                marginBottom: 20,
+                flexDirection: 'row',
+                justifyContent: 'space-between'
             }}>
-                <View style={{zIndex: 90}}>
-                    <TouchableOpacity
-                        style={{flexDirection: 'row', alignItems: 'center', gap: 10, height: 30, paddingHorizontal: 5}}
-                        onPress={handleLanguagePress}>
-                        <Text style={{color: COLORS.white}}>{language} ▼</Text>
-                        <Text style={{color: COLORS.white, opacity: 0.7, fontSize: 10}}>LANGUAGE</Text>
-                    </TouchableOpacity>
-                    <AnimatePresence>
-                        {
-                            (dropDownMenu.desc === "Language" && dropDownMenu.opened) &&
-                            <DropDownMenu dropDownMenu={dropDownMenu} setFunc={setLanguage}/>
-                        }
-                    </AnimatePresence>
+                <View>
+                    <View style={{zIndex: 90}}>
+                        <TouchableOpacity
+                            style={{flexDirection: 'row', alignItems: 'center', gap: 10, height: 30, paddingHorizontal: 5}}
+                            onPress={handleLanguagePress}>
+                            <Text style={{color: COLORS.white}}>{language} ▼</Text>
+                            <Text style={{color: COLORS.white, opacity: 0.7, fontSize: 10}}>LANGUAGE</Text>
+                        </TouchableOpacity>
+                        <AnimatePresence>
+                            {
+                                (dropDownMenu.desc === "Language" && dropDownMenu.opened) &&
+                                <DropDownMenu dropDownMenu={dropDownMenu} setFunc={setLanguage}/>
+                            }
+                        </AnimatePresence>
+                    </View>
+
+                    <View style={{zIndex: 80}}>
+                        <TouchableOpacity
+                            style={{flexDirection: 'row', alignItems: 'center', gap: 10, height: 30, paddingHorizontal: 5}}
+                            onPress={handleDateFormatPress}>
+                            <Text style={{color: COLORS.white}}>{dateFormat} ▼</Text>
+                            <Text style={{color: COLORS.white, opacity: 0.7, fontSize: 10}}>DATE FORMAT</Text>
+                        </TouchableOpacity>
+                        <AnimatePresence>
+                            {
+                                (dropDownMenu.desc === "DateFormat" && dropDownMenu.opened) &&
+                                <DropDownMenu dropDownMenu={dropDownMenu} setFunc={setDateFormat}/>
+                            }
+                        </AnimatePresence>
+                    </View>
+                </View>
+                <View>
+                    <TouchableOpacity onPress={toggleSettings}><Text style={{color: 'white'}}>Settings</Text></TouchableOpacity>
                 </View>
 
-                <View style={{zIndex: 80}}>
-                    <TouchableOpacity
-                        style={{flexDirection: 'row', alignItems: 'center', gap: 10, height: 30, paddingHorizontal: 5}}
-                        onPress={handleDateFormatPress}>
-                        <Text style={{color: COLORS.white}}>{dateFormat} ▼</Text>
-                        <Text style={{color: COLORS.white, opacity: 0.7, fontSize: 10}}>DATE FORMAT</Text>
-                    </TouchableOpacity>
-                    <AnimatePresence>
-                        {
-                            (dropDownMenu.desc === "DateFormat" && dropDownMenu.opened) &&
-                            <DropDownMenu dropDownMenu={dropDownMenu} setFunc={setDateFormat}/>
-                        }
-                    </AnimatePresence>
-                </View>
             </View>
-            <View style={{width: '100%', height: 5, marginVertical: 10, backgroundColor: COLORS.darkPurple}}>
+            <View style={{ flexDirection: 'row'}}>
+                {
+                    ['Message Analysis','Explore'].map((x, index) => {
+                        return (
+                            <MotiView
+                                key={index}
+                                transition={{delay:0, damping: 15, mass: 1}}
+
+                                animate={{
+                                    scale: page === index ? 1 : 0.8,
+                                    opacity:  page === index ? 1 : 0.5,
+
+                                }}
+                                style={{width: width/totalPage, justifyContent: 'center', alignItems: 'center', paddingHorizontal: 5}}>
+                                <Text style={{color: 'white', textAlign: 'center'}}>{x}</Text>
+                            </MotiView>
+                        )
+                    })
+                }
+            </View>
+            <View style={{width: '100%', height: 3, marginVertical: 10, backgroundColor: COLORS.darkPurple}}>
                 <MotiView
                     transition={{delay:0, damping: 15, mass: 1}}
                     from={{
@@ -164,9 +208,9 @@ const Home = ({navigation}) => {
 
                 </MotiView>
             </View>
-            <ScrollView pagingEnabled={true} horizontal={true} contentContainerStyle={{gap: 10}}
+            <ScrollView pagingEnabled={true} horizontal={true}
                         scrollEventThrottle={16}
-                        onScroll={(x) => handlePageScroll(x)}>
+                        onMomentumScrollEnd={(x) => handlePageScroll(x)}>
                 <View style={{width: width}}>
                     <AnalysisBox position={'left'} colors={[COLORS.green, COLORS.lightGreen]}
                                  title={'Message Analysis Simple'}
@@ -182,12 +226,48 @@ const Home = ({navigation}) => {
                                  navigation={navigation} id={'visualized'} dateFormat={dateFormat}/>
                 </View>
                 <View style={{width: width}}>
+                    <ScrollView>
                     <Text style={{color: 'white'}}>1</Text>
+                    <View style={{gap: 20, alignItems: 'center'}}>
+                        <TouchableOpacity style={{width: '90%', height: 50, backgroundColor: 'red', borderRadius: 15}} onPress={() => toggleBottomSheet(UsageInstructions)}>
+                            <Text>How To Use?</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={{width: '90%', height: 50, backgroundColor: 'red', borderRadius: 15}} onPress={() => toggleBottomSheet(UsageSecurity)}>
+                            <Text>Security</Text>
+                        </TouchableOpacity>
+                    </View>
+                    </ScrollView>
                 </View>
 
+
             </ScrollView>
-            <View style={{marginTop: 20, width: '100%'}}>
-            </View>
+           <ScrollableInfoModal data={infoModalData} isVisible={isInfoModalVisible} setVisible={setInfoModalVisible}/>
+
+
+
+{/*/////////////////////TOGGLE SETTINGS*/}
+
+            <MotiView
+                transition={{delay:0, damping: 15, mass: 1}}
+                from={{
+                    bottom: 0,
+
+                }}
+                animate={{
+                    bottom: isSettingsVisible ? -20 : -200,
+
+                }}
+                exit={{
+                    bottom: 0,
+
+
+                }}
+                style={{ backgroundColor: COLORS.darkPurple, height: 270, width: '100%', position: 'absolute' }}>
+                <Text>Bottom Sheet Content</Text>
+                <TouchableOpacity onPress={toggleSettings}>
+                    <Text>Close</Text>
+                </TouchableOpacity>
+            </MotiView>
         </View>
     );
 };
