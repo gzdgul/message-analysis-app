@@ -21,6 +21,7 @@ export const COLORS = {
     darkGreen: '#183b12',
     purple: '#847bec',
     darkBlue: '#0f4a80',
+    lightBlue: '#1c7eff',
     lightPurple: '#aba1fa',
     babyCyan: '#50ffcc',
     shadow: 'rgba(0,0,0,0.5)',
@@ -59,6 +60,8 @@ export const missedCalls = [
     'cevapsız sesli grup araması', 'missed group voice call',
     'cevapsız görüntülü grup araması', 'missed group video call',
 ]
+import uiDesign from "../assets/ui-design.png"
+import codding from "../assets/codding.png"
 import messageLock from "../assets/message-lock.png"
 import messageCross from "../assets/message-cross.png"
 import messageThief from "../assets/message-thief.png"
@@ -73,14 +76,14 @@ import U6 from "../assets/U6.png"
 import U7 from "../assets/U7.png"
 import U8 from "../assets/U8.png"
 export const UsageInstructions = [
-    {title: 'Özel Mesajlarınız Koruma Altında', desc: 'whatsappe gir kişiye dokun', img: U1, type: 'UsageInstructions'},
-    {title: 'Bağımsız ve Güvende', desc: 'kişiye dokunarak kişi bilgisi sekmesine gel', img: U2, type: 'UsageInstructions'},
-    {title: 'Verileriniz Hızla ve Tamamen Silinir', desc: 'aşağıda sohbeti dışa aktara bas', img: U3, type: 'UsageInstructions'},
-    {title: 'Üçüncü Kişilerle Paylaşılmaz', desc: 'medya ekleme', img: U4, type: 'UsageInstructions'},
-    {title: 'Bizimle İletişime Geçin', desc: 'dosyalara kaydet', img: U5, type: 'UsageInstructions'},
-    {title: 'Bizimle İletişime Geçin', desc: 'dosyalara gir zip dosyasını ayıklamak için bir kere dokun', img: U6, type: 'UsageInstructions'},
-    {title: 'Bizimle İletişime Geçin', desc: 'uygulama üzerinden istediğin bir analiz methodu seç Dosya Seç e tıkla ve mesaj dosyanı seç ', img: U7, type: 'UsageInstructions'},
-    {title: 'Bizimle İletişime Geçin', desc: 'Başla ya tıkla', img: U8, type: 'UsageInstructions'},
+    {title: 'Step 1: Kişiye Dokun', desc: 'Whatsapp üzerinden bir kişiye dokunarak başlayın.', img: U1, type: 'UsageInstructions'},
+    {title: 'Step 2: Kişi Bilgisi Sekmesine Git', desc: 'Kişi bilgilerini görmek için kişiye dokunun.', img: U2, type: 'UsageInstructions'},
+    {title: 'Step 3: Sohbeti Dışa Aktar', desc: 'Sohbeti dışa aktarmak için aşağıya inin ve "Sohbeti Dışa Aktar" seçeneğine dokunun.', img: U3, type: 'UsageInstructions'},
+    {title: 'Step 4: Medya Ekleme', desc: '"Medya ekleme" seçeneğine tıklayın.', img: U4, type: 'UsageInstructions'},
+    {title: 'Step 5:  Dosyalara Kaydet', desc: ' "Dosyalara kaydet" seçeneğine tıklayın.', img: U5, type: 'UsageInstructions'},
+    {title: 'Step 6: Zip Dosyasını Ayıkla', desc: 'Dosyalarınıza gidin. mesaj dosyanızı çıkarmak için zip dosyasına bir kez dokunun.', img: U6, type: 'UsageInstructions'},
+    {title: 'Step 7: Analiz Yöntemi Seçin', desc: 'Uygulama üzerinden istediğiniz analiz yöntemini seçin. "Dosya Seç" seçeneğine dokunun ve mesaj dosyanızı seçin.', img: U7, type: 'UsageInstructions'},
+    {title: 'Step 8:  Analize Başlayın', desc: 'Analize başlamak için "Başla" düğmesine tıklayın.', img: U8, type: 'UsageInstructions'},
 ]
 export const UsageSecurity = [
     {title: 'Özel Mesajlarınız Koruma Altında', desc: 'Verilerinizin güvenliği bizim en öncelikli görevimizdir. Özel konuşmalarınız ve size özel tasarlanmış mesaj analizleriniz tamamen güvende tutulur. Size verilerinizin nasıl korunduğunu daha yakından anlatalım.', img: messageLock, type: 'UsageSecurity'},
@@ -88,6 +91,10 @@ export const UsageSecurity = [
     {title: 'Verileriniz Hızla ve Tamamen Silinir', desc: 'Mesajlarınızın analiz sürecinde hiçbir şekilde okunmaz veya kopyalanmaz. Analiz süreci tamamlandığında, verileriniz anında ve tamamen silinir. Bu, verilerinizin gizliliğini her zaman korumamıza olanak tanır.', img: messageCross, type: 'UsageSecurity'},
     {title: 'Üçüncü Kişilerle Paylaşılmaz', desc: 'Size özel mesaj analizinize sadece siz ve paylaştığınız kişi veya kişiler erişebilir. Verileriniz asla üçüncü taraflarla paylaşılmaz veya satılmaz.', img: messageThief, type: 'UsageSecurity'},
     {title: 'Bizimle İletişime Geçin', desc: 'Uygulamamızı kullanırken herhangi bir sorunuz, öneriniz veya geri bildiriminiz varsa, lütfen bizimle iletişime geçmekten çekinmeyin. Kullanıcılarımızın deneyimini daha iyi hale getirmek için buradayız ve sizden gelecek geri bildirimleri değerli buluyoruz.', img: messageMoreInfo, type: 'UsageSecurity'},
+]
+export const AboutUs = [
+    {title: 'Front-end Developer', desc: 'Gözde Gül \n\n Computer Engineer', img: codding, url: [{title: 'Github', url: 'https://github.com/gzdgul'}], type: 'AboutUs'},
+    {title: 'UI - UX Designer', desc: 'Bekir Gerçek \n\n Graphic Designer', img: uiDesign,  url: [{title: 'Behance', url: 'https://www.behance.net/bkrgrck'}],type: 'AboutUs'},
 ]
 export const htmlMaker = (names, dateDataforPDF, data) => {
     const sendingsCountData = data.allSendings;

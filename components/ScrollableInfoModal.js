@@ -2,11 +2,14 @@ import React from 'react';
 import {Dimensions, Image, Modal, ScrollView, Text, TouchableOpacity, View} from "react-native";
 import {COLORS} from "../config/constants";
 import {MotiView} from "moti";
+import OpenLink from "./openLink";
 
 function ScrollableInfoModal({data,isVisible,setVisible}) {
     const [itemNum, setItemNum] = React.useState(0);
     const [itemContentOffset, setItemContentOffset] = React.useState(0);
     const { width, height } = Dimensions.get('window');
+    const customWidth = data[0].type === 'UsageInstructions' ? width/1.5 : 150;
+    const customHeight = data[0].type === 'UsageInstructions' ? height/1.7 : height/2;
 
     React.useEffect(() => {
         setItemNum(0)
@@ -18,8 +21,8 @@ function ScrollableInfoModal({data,isVisible,setVisible}) {
         // const itemContentOffset = x.nativeEvent.contentOffset.x/width
         const itemNum = Math.round(itemContentOffset)
 
-        console.log(itemNum)
-        console.log(itemContentOffset)
+        // console.log(itemNum)
+        // console.log(itemContentOffset)
 
         setItemNum(itemNum)
         setItemContentOffset(itemContentOffset)
@@ -43,18 +46,17 @@ function ScrollableInfoModal({data,isVisible,setVisible}) {
                     {/*</TouchableOpacity>*/}
                 </View>
                 <View style={{alignItems: 'center', justifyContent:  'space-between'}}>
-                    <View style={{width: '100%', alignItems: 'center', height: data[0].type === 'UsageInstructions' ? height/1.5 :  height/2}}>
+                    <View style={{width: '100%', alignItems: 'center', height: customHeight}}>
                         <ScrollView
                             horizontal={true}
                             pagingEnabled={true}
                             showsHorizontalScrollIndicator={false}
-                            scrollEventThrottle={16}
+                            scrollEventThrottle={100}
                             onScroll={(x) => handleItemScroll(x)}
                         >
                             {
                                 data.map((x, index) => {
                                     const image = x.img;
-                                    console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!',image)
                                     return (
                                         <MotiView
                                             key={index}
@@ -68,14 +70,22 @@ function ScrollableInfoModal({data,isVisible,setVisible}) {
                                                 <Image
                                                     source={image}
                                                     style={{
-                                                        width: x.type === 'UsageInstructions'  ?  width/1.4 : 150,
-                                                        height: x.type === 'UsageInstructions'  ?  width/1.4 : 150,
+                                                        width: customWidth,
+                                                        height: customWidth,
                                                     }}
                                                 />
                                             </View>
-                                            <View style={{width:  width/1.2, gap: 25}}>
+                                            <View style={{width:  width/1.2, gap: 25, justifyContent: 'center', alignItems: 'center'}}>
                                             <Text style={{color: COLORS.white, fontSize: 17, fontWeight: 'bold', textAlign: 'center'}}>{x.title}</Text>
                                             <Text style={{color: COLORS.white, fontSize: 14, textAlign: 'center'}}>{x.desc}</Text>
+                                                { x.url &&
+                                                    x.url.map((y, index) => {
+                                                        return (
+                                                            <OpenLink key={index} title={y.title} url={y.url}/>
+                                                        )
+                                                    })
+
+                                                }
                                             </View>
                                         </MotiView>
                                     )

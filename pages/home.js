@@ -1,11 +1,12 @@
 import React, {useEffect} from 'react';
 import {Button, Dimensions, Modal, Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
-import {COLORS, UsageInstructions, UsageSecurity} from "../config/constants";
+import {AboutUs, COLORS, UsageInstructions, UsageSecurity} from "../config/constants";
 import AnalysisBox from "../components/AnalysisBox";
 import {AnimatePresence, MotiView} from "moti";
 import ScrollableInfoModal from "../components/ScrollableInfoModal";
 import {LinearGradient} from "expo-linear-gradient";
 import {ButtonGradient} from "../libraries/UI_Component_Library";
+import OpenLink from "../components/openLink";
 const { width, height } = Dimensions.get('window');
 
 
@@ -216,11 +217,11 @@ const Home = ({navigation}) => {
                 <View style={{width: width}}>
                     <AnalysisBox position={'left'} colors={[COLORS.green, COLORS.lightGreen]}
                                  title={'Message Analysis Simple'}
-                                 description={'Total messaging statistics for each sender.Most used words, emojis and more...'}
+                                 description={'Total messaging statistics for each sender. Most used words, emojis and more...'}
                                  navigation={navigation} id={'simple'} dateFormat={dateFormat}/>
                     <AnalysisBox position={'right'} colors={[COLORS.purple, COLORS.white]}
                                  title={'Message Analysis Advanced '}
-                                 description={'Messaging statistics by months and days for each sender. See the message statistics for the day you want'}
+                                 description={'Messaging statistics by months and days for each sender. See the message statistics for the day you want.'}
                                  navigation={navigation} id={'advanced'} dateFormat={dateFormat}/>
                     <AnalysisBox position={'left'} colors={[COLORS.babyCyan, COLORS.deneme]}
                                  title={'Message Analysis Visualized'}
@@ -229,11 +230,12 @@ const Home = ({navigation}) => {
                 </View>
                 <View style={{width: width}}>
                     <ScrollView>
-                    <Text style={{color: 'white'}}>1</Text>
-                    <View style={{gap: 15, alignItems: 'center'}}>
+                    <View style={{gap: 15, alignItems: 'center', marginVertical: 10}}>
                         <ButtonGradient title={'Step-By-Step How To Use?'} color={[COLORS.red, COLORS.red]} buttonStyle={{width: '90%'}} textStyle={{fontSize: 16,  fontWeight: '600', color: 'white'}} onPress={() => toggleInfoModal(UsageInstructions)}/>
                         <ButtonGradient title={'Learn About Security'} color={[COLORS.darkPurple, COLORS.darkPurple]} buttonStyle={{width: '90%'}} textStyle={{fontSize: 16,  fontWeight: '600', color: 'white'}} onPress={() => toggleInfoModal(UsageSecurity)}/>
+                        <ButtonGradient title={'About Us'} color={[COLORS.darkPurple, COLORS.darkPurple]} buttonStyle={{width: '90%'}} textStyle={{fontSize: 16,  fontWeight: '600', color: 'white'}} onPress={() => toggleInfoModal(AboutUs)}/>
                     </View>
+                        <OpenLink title={'Github'} url={'https://github.com/gzdgul'}/>
                     </ScrollView>
                 </View>
 
