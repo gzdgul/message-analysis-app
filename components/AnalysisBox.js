@@ -6,9 +6,8 @@ import {COLORS} from "../config/constants";
 import {findAnalysis, readFileContent, pickDocument} from "../libraries/Helper_Function_Library";
 import MaskedView from "@react-native-masked-view/masked-view";
 
-const AnalysisBox = ({navigation,position,title, description, colors, id, dateFormat}) => {
+const AnalysisBox = ({navigation,position,title, description, colors, id, dateFormat, selectedAnalysis, setSelectedAnalysis}) => {
     const [fileUri, setFileUri] = React.useState('')
-    const [isAnalysisStarted, setIsAnalysisStarted] = React.useState(false)
     const [circleText, setCircleText] = React.useState('START')
 
 
@@ -21,7 +20,7 @@ const AnalysisBox = ({navigation,position,title, description, colors, id, dateFo
     }
 
     React.useEffect(() => {
-        if (isAnalysisStarted) {
+        if (selectedAnalysis === id) {
             setTimeout(() => {
                 setCircleText('Analyzing...')
             },500)
@@ -30,14 +29,18 @@ const AnalysisBox = ({navigation,position,title, description, colors, id, dateFo
                 setCircleText('START')
             },500)
         }
-    },[isAnalysisStarted])
+    },[selectedAnalysis])
     const handleCirclePress = async () => {
         if (fileUri) {
-            setIsAnalysisStarted(true)
+            if (selectedAnalysis) {
+                Alert.alert('','You have analysis in progress, please wait a moment')
+                return;
+            }
+            setSelectedAnalysis(id);
 
                 const fileContent = await readFileContent(fileUri,dateFormat)
                 if (fileContent === null) {
-                    setIsAnalysisStarted(false)
+                    setSelectedAnalysis(null);
                     Alert.alert('Oops..','The date format seems to be incorrect. please check👆')
                     return;
                 }
@@ -51,7 +54,7 @@ const AnalysisBox = ({navigation,position,title, description, colors, id, dateFo
 
                 } = await findAnalysis(fileContent);
             setTimeout(() => {
-                setIsAnalysisStarted(false)
+                setSelectedAnalysis(null);
                 navigation.navigate('Analysis', {analyzedData: {
                         longestMessage,
                         activeDays,
@@ -103,14 +106,14 @@ const AnalysisBox = ({navigation,position,title, description, colors, id, dateFo
             <MotiView
                 transition={{ delay: 0, damping: 15, mass: 1,type: 'timing', duration: 500 }}
                 animate={{
-                    scale: isAnalysisStarted ? 1 : 0.9,
+                    scale: selectedAnalysis === id ? 1 : 0.9,
                 }}
                 style={styles.circle}>
                 <MotiView
-                    transition={{ delay: 0, damping: 15, mass: 1,type: 'timing', duration: 800 ,loop: isAnalysisStarted}}
+                    transition={{ delay: 0, damping: 15, mass: 1,type: 'timing', duration: 800 ,loop: selectedAnalysis === id}}
                     animate={{
-                        scale: isAnalysisStarted ? 1 : 0.9,
-                        transform: [{ rotate: isAnalysisStarted ? '360deg' : '0deg' }]
+                        scale: selectedAnalysis === id ? 1 : 0.9,
+                        transform: [{ rotate: selectedAnalysis === id ? '360deg' : '0deg' }]
                     }}
                     style={[styles.circle, {width: '100%'}, {position: 'absolute'}]}>
                     <LinearGradient
@@ -124,9 +127,9 @@ const AnalysisBox = ({navigation,position,title, description, colors, id, dateFo
 
                 <Pressable disabled={id === 'visualized'} onPress={handleCirclePress}>
                     <MotiView
-                        transition={{ delay: 0, damping: 15, mass: 1,type: 'timing', duration: 800 ,loop: isAnalysisStarted}}
+                        transition={{ delay: 0, damping: 15, mass: 1,type: 'timing', duration: 800 ,loop: selectedAnalysis === id}}
                         animate={{
-                            scale: isAnalysisStarted ? 0.9 : 1,
+                            scale: selectedAnalysis === id ? 0.9 : 1,
                         }}
                         style={[styles.innerCircle]}>
                         <GradientText style={[styles.circleText]} colors={colors}>{id === 'visualized' ? 'LOCKED🔒' : circleText}</GradientText>

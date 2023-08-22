@@ -24,6 +24,7 @@ const {width, height} = Dimensions.get('window');
 
 
 const Home = ({navigation}) => {
+    const [selectedAnalysis, setSelectedAnalysis] = React.useState(null)
     const [dateFormat, setDateFormat] = React.useState('DD/MM/YY');
     const [language, setLanguage] = React.useState('Türkçe');
     const [page, setPage] = React.useState(0);
@@ -210,15 +211,15 @@ const Home = ({navigation}) => {
                         <AnalysisBox position={'left'} colors={[COLORS.green, COLORS.lightGreen]}
                                      title={'Message Analysis Simple'}
                                      description={'Total messaging statistics for each sender. Most used words, emojis and more...'}
-                                     navigation={navigation} id={'simple'} dateFormat={dateFormat}/>
+                                     navigation={navigation} id={'simple'} dateFormat={dateFormat} selectedAnalysis={selectedAnalysis} setSelectedAnalysis={setSelectedAnalysis}/>
                         <AnalysisBox position={'right'} colors={[COLORS.purple, COLORS.white]}
                                      title={'Message Analysis Advanced '}
                                      description={'Messaging statistics by months and days for each sender. See the message statistics for the day you want.'}
-                                     navigation={navigation} id={'advanced'} dateFormat={dateFormat}/>
+                                     navigation={navigation} id={'advanced'} dateFormat={dateFormat} selectedAnalysis={selectedAnalysis} setSelectedAnalysis={setSelectedAnalysis}/>
                         <AnalysisBox position={'left'} colors={[COLORS.babyCyan, COLORS.deneme]}
                                      title={'Message Analysis Visualized'}
                                      description={'Visualize messaging activities over time for better recall.'}
-                                     navigation={navigation} id={'visualized'} dateFormat={dateFormat}/>
+                                     navigation={navigation} id={'visualized'} dateFormat={dateFormat} selectedAnalysis={selectedAnalysis} setSelectedAnalysis={setSelectedAnalysis}/>
 
                     </ScrollView>
                 </View>

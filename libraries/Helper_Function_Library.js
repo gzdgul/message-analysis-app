@@ -2,7 +2,7 @@ import {COLORS, mediaTypes, medya, missedCalls} from "../config/constants";
 import emojiRegex from "emoji-regex";
 import * as FileSystem from "expo-file-system";
 import * as DocumentPicker from "expo-document-picker";
-import {Platform} from "react-native";
+import {Alert, Platform} from "react-native";
 
 export function numberCheck(number) {
     if (number >= 10000) {
@@ -26,6 +26,7 @@ export const pickDocument = async () => {
         }
     } catch (error) {
         console.log('Hata:', error);
+        Alert.alert('Dosya Seçilmedi')
     }
 };
 
