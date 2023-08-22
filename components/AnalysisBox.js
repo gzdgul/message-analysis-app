@@ -19,28 +19,30 @@ const AnalysisBox = ({navigation,position,title, description, colors, id, dateFo
         }
     }
 
-    React.useEffect(() => {
-        if (selectedAnalysis === id) {
-            setTimeout(() => {
-                setCircleText('Analyzing...')
-            },500)
-        } else {
-            setTimeout(() => {
-                setCircleText('START')
-            },500)
-        }
-    },[selectedAnalysis])
+    // React.useEffect(() => {
+    //     if (selectedAnalysis === id) {
+    //         setTimeout(() => {
+    //             setCircleText('Analyzing...')
+    //         },500)
+    //     } else {
+    //         setTimeout(() => {
+    //             setCircleText('START')
+    //         },500)
+    //     }
+    // },[selectedAnalysis])
     const handleCirclePress = async () => {
         if (fileUri) {
             if (selectedAnalysis) {
-                Alert.alert('','You have analysis in progress, please wait a moment')
+                Alert.alert('☁️','You have analysis in progress, please wait a moment')
                 return;
             }
+            setCircleText('Analyzing...')
             setSelectedAnalysis(id);
 
                 const fileContent = await readFileContent(fileUri,dateFormat)
                 if (fileContent === null) {
                     setSelectedAnalysis(null);
+                    setCircleText('START')
                     Alert.alert('Oops..','The date format seems to be incorrect. please check👆')
                     return;
                 }
@@ -54,7 +56,6 @@ const AnalysisBox = ({navigation,position,title, description, colors, id, dateFo
 
                 } = await findAnalysis(fileContent);
             setTimeout(() => {
-                setSelectedAnalysis(null);
                 navigation.navigate('Analysis', {analyzedData: {
                         longestMessage,
                         activeDays,
@@ -64,6 +65,8 @@ const AnalysisBox = ({navigation,position,title, description, colors, id, dateFo
                         dataObjsByDate,
                         id
                     }});
+                setSelectedAnalysis(null);
+                setCircleText('START')
             },5000)
         }else Alert.alert('Geçerli bir dosya giriniz')
     }
@@ -79,30 +82,27 @@ const AnalysisBox = ({navigation,position,title, description, colors, id, dateFo
             </MaskedView>
         );
     };
+    const renderCommonContent = (position) => (
+        <View style={styles.desArea}>
+            <GradientText style={[styles.titleText, position === 'right' && {textAlign: 'right'}]} colors={colors}>{title}</GradientText>
+            <Text style={[styles.desText,position === 'right' && {textAlign: 'right'}]}>{description}</Text>
+            <TouchableOpacity style={[styles.button, {backgroundColor: colors[0]}]} onPress={handlePickDocument}>
+                <LinearGradient
+                    style={{ width: '100%', height: '100%', borderRadius: 10, position: 'absolute'}}
+                    colors={[colors[0], colors[1]]}
+                    start={{ x: 0, y: 0 }}
+                    end={{ x: 1, y: 0 }}
+                    pointerEvents="none"
+                />
+                <Text style={styles.buttonText}>Select Document</Text>
+            </TouchableOpacity>
+        </View>
+    );
     return (
         <View style={[styles.box,
-            {overflow: 'hidden'},
-            position === 'left'
-                ? {borderTopRightRadius: 100, borderBottomRightRadius: 100}
-                : {borderTopLeftRadius: 100, borderBottomLeftRadius: 100}
+            {overflow: 'hidden'}
         ]}>
-            {
-                position === 'left' &&
-                <View style={styles.desArea}>
-                    <GradientText style={[styles.titleText]} colors={colors}>{title}</GradientText>
-                    <Text style={styles.desText}>{description}</Text>
-                    <TouchableOpacity disabled={id === 'visualized'} style={[styles.button, {backgroundColor: colors[0]}]} onPress={handlePickDocument}>
-                        <LinearGradient
-                            style={{ width: '100%', height: '100%', borderRadius: 10, position: 'absolute'}}
-                            colors={[colors[0], colors[1]]}
-                            start={{ x: 0, y: 0 }}
-                            end={{ x: 1, y: 0 }}
-                            pointerEvents="none"
-                        />
-                        <Text style={styles.buttonText}>{id === 'visualized' ? 'Select Document🔒' : "Select Document"}</Text>
-                    </TouchableOpacity>
-                </View>
-            }
+            {position === 'left' && renderCommonContent('left')}
             <MotiView
                 transition={{ delay: 0, damping: 15, mass: 1,type: 'timing', duration: 500 }}
                 animate={{
@@ -110,9 +110,9 @@ const AnalysisBox = ({navigation,position,title, description, colors, id, dateFo
                 }}
                 style={styles.circle}>
                 <MotiView
-                    transition={{ delay: 0, damping: 15, mass: 1,type: 'timing', duration: 800 ,loop: selectedAnalysis === id}}
+                    transition={{ delay: 0, damping: 15, mass: 1,type: 'timing', duration: 800, loop: (selectedAnalysis === id)}}
                     animate={{
-                        scale: selectedAnalysis === id ? 1 : 0.9,
+                        scale: selectedAnalysis === id ? 1 : 0.95,
                         transform: [{ rotate: selectedAnalysis === id ? '360deg' : '0deg' }]
                     }}
                     style={[styles.circle, {width: '100%'}, {position: 'absolute'}]}>
@@ -127,32 +127,16 @@ const AnalysisBox = ({navigation,position,title, description, colors, id, dateFo
 
                 <Pressable disabled={id === 'visualized'} onPress={handleCirclePress}>
                     <MotiView
-                        transition={{ delay: 0, damping: 15, mass: 1,type: 'timing', duration: 800 ,loop: selectedAnalysis === id}}
+                        transition={{ delay: 0, damping: 15, mass: 1,type: 'timing', duration: 800, loop: (selectedAnalysis === id)}}
                         animate={{
-                            scale: selectedAnalysis === id ? 0.9 : 1,
+                            scale: selectedAnalysis === id ? 0.95 : 1,
                         }}
                         style={[styles.innerCircle]}>
                         <GradientText style={[styles.circleText]} colors={colors}>{id === 'visualized' ? 'LOCKED🔒' : circleText}</GradientText>
                     </MotiView>
                 </Pressable>
             </MotiView>
-            {
-                position === 'right' &&
-                <View style={styles.desArea}>
-                    <GradientText style={[styles.titleText, {textAlign: 'right'}]} colors={colors}>{title}</GradientText>
-                    <Text style={[styles.desText, {textAlign: 'right'}]}>{description}</Text>
-                    <TouchableOpacity style={[styles.button, {backgroundColor: colors[0]}]} onPress={handlePickDocument}>
-                        <LinearGradient
-                            style={{ width: '100%', height: '100%', borderRadius: 10, position: 'absolute'}}
-                            colors={[colors[0], colors[1]]}
-                            start={{ x: 0, y: 0 }}
-                            end={{ x: 1, y: 0 }}
-                            pointerEvents="none"
-                        />
-                        <Text style={styles.buttonText}>Select Document</Text>
-                    </TouchableOpacity>
-                </View>
-            }
+            {position === 'right' && renderCommonContent('right')}
         </View>
     );
 };
@@ -163,12 +147,10 @@ const styles = StyleSheet.create({
     box: {
         width: '100%',
         height: 180,
-        // backgroundColor: COLORS.darkPurple,
         alignItems: 'center',
         flexDirection: 'row',
         justifyContent: 'space-between',
         paddingHorizontal: 10,
-        borderRadius: 30,
 
     },
     circle: {
@@ -176,9 +158,6 @@ const styles = StyleSheet.create({
         aspectRatio: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        // borderRadius: 100,
-        // overflow: 'hidden',
-        // backgroundColor: 'red'
     },
     innerCircle: {
         width: '85%',

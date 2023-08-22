@@ -11,7 +11,7 @@ import {
     TouchableOpacity, TouchableWithoutFeedback,
     View
 } from "react-native";
-import {AboutUs, COLORS, UsageInstructions, UsageSecurity} from "../config/constants";
+import {AboutUs, AnalysisMethods, COLORS, UsageInstructions, UsageSecurity} from "../config/constants";
 import AnalysisBox from "../components/AnalysisBox";
 import {AnimatePresence, MotiView} from "moti";
 import ScrollableInfoModal from "../components/ScrollableInfoModal";
@@ -107,49 +107,60 @@ const Home = ({navigation}) => {
 
 
             }}>
-                <View style={{flexDirection: 'row', justifyContent: 'space-between',alignItems: 'center',paddingHorizontal: 15, marginBottom: 15}}>
+                <View style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    paddingHorizontal: 15,
+                    marginBottom: 15
+                }}>
 
 
-                <View style={{flexDirection: 'row', gap: 20,alignItems: 'center', opacity: 0.5}}>
-                    <View>
-                        <View
-                            style={{
-                                flexDirection: 'row',
-                                alignItems: 'center',
-                                gap: 10,
-                            }}>
-                            <Text style={{color: COLORS.white, fontSize: 13}}>Language :</Text>
-                            <Text style={{color: COLORS.white,fontWeight: 'bold', fontSize: 13}}>{language === 'Türkçe' ? 'TR' : 'EN'}</Text>
+                    <View style={{flexDirection: 'row', gap: 20, alignItems: 'center', opacity: 0.5}}>
+                        <View>
+                            <View
+                                style={{
+                                    flexDirection: 'row',
+                                    alignItems: 'center',
+                                    gap: 10,
+                                }}>
+                                <Text style={{color: COLORS.white, fontSize: 13}}>Language :</Text>
+                                <Text style={{
+                                    color: COLORS.white,
+                                    fontWeight: 'bold',
+                                    fontSize: 13
+                                }}>{language === 'Türkçe' ? 'TR' : 'EN'}</Text>
 
+                            </View>
+                        </View>
+
+                        <View>
+                            <View
+                                style={{
+                                    flexDirection: 'row',
+                                    alignItems: 'center',
+                                    gap: 10,
+
+                                }}>
+                                <Text style={{color: COLORS.white, fontSize: 13}}>Date Format :</Text>
+                                <Text
+                                    style={{color: COLORS.white, fontWeight: 'bold', fontSize: 13}}>{dateFormat}</Text>
+
+                            </View>
                         </View>
                     </View>
-
                     <View>
-                        <View
-                            style={{
-                                flexDirection: 'row',
-                                alignItems: 'center',
-                                gap: 10,
-
-                            }}>
-                            <Text style={{color: COLORS.white, fontSize: 13}}>Date Format :</Text>
-                            <Text style={{color: COLORS.white,fontWeight: 'bold', fontSize: 13}}>{dateFormat}</Text>
-
-                        </View>
+                        <TouchableOpacity onPress={toggleSettings}>
+                            <Image
+                                source={require('../assets/settings_icon.png')}
+                                style={{
+                                    width: 20,
+                                    height: 20,
+                                    tintColor: COLORS.red
+                                }}
+                            />
+                        </TouchableOpacity>
                     </View>
-                </View>
-                <View>
-                    <TouchableOpacity onPress={toggleSettings}>
-                        <Image
-                            source={require('../assets/settings_icon.png')}
-                            style={{
-                                width: 20,
-                                height: 20,
-                                tintColor: COLORS.red
-                            }}
-                        />
-                    </TouchableOpacity>
-                </View>
                 </View>
             </View>
             <View style={{flexDirection: 'row'}}>
@@ -208,18 +219,22 @@ const Home = ({navigation}) => {
                 onMomentumScrollEnd={(x) => handlePageScroll(x)}>
                 <View style={{width: width}}>
                     <ScrollView>
-                        <AnalysisBox position={'left'} colors={[COLORS.green, COLORS.lightGreen]}
-                                     title={'Message Analysis Simple'}
-                                     description={'Total messaging statistics for each sender. Most used words, emojis and more...'}
-                                     navigation={navigation} id={'simple'} dateFormat={dateFormat} selectedAnalysis={selectedAnalysis} setSelectedAnalysis={setSelectedAnalysis}/>
-                        <AnalysisBox position={'right'} colors={[COLORS.purple, COLORS.white]}
-                                     title={'Message Analysis Advanced '}
-                                     description={'Messaging statistics by months and days for each sender. See the message statistics for the day you want.'}
-                                     navigation={navigation} id={'advanced'} dateFormat={dateFormat} selectedAnalysis={selectedAnalysis} setSelectedAnalysis={setSelectedAnalysis}/>
-                        <AnalysisBox position={'left'} colors={[COLORS.babyCyan, COLORS.deneme]}
-                                     title={'Message Analysis Visualized'}
-                                     description={'Visualize messaging activities over time for better recall.'}
-                                     navigation={navigation} id={'visualized'} dateFormat={dateFormat} selectedAnalysis={selectedAnalysis} setSelectedAnalysis={setSelectedAnalysis}/>
+                        {
+                            AnalysisMethods.map((x, index) => {
+                                return (
+                                    <AnalysisBox key={index}
+                                                 id={x.id}
+                                                 position={index % 2 === 0 ? 'left' : 'right'}
+                                                 colors={x.colors}
+                                                 title={x.title}
+                                                 description={x.description}
+                                                 navigation={navigation}
+                                                 dateFormat={dateFormat}
+                                                 selectedAnalysis={selectedAnalysis}
+                                                 setSelectedAnalysis={setSelectedAnalysis}/>
+                                )
+                            })
+                        }
 
                     </ScrollView>
                 </View>

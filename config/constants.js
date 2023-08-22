@@ -96,6 +96,12 @@ export const AboutUs = [
     {title: 'Front-end Developer', desc: 'Gözde Gül \n\n Computer Engineer', img: codding, url: [{title: 'Github', url: 'https://github.com/gzdgul'}], type: 'AboutUs'},
     {title: 'UI - UX Designer', desc: 'Bekir Gerçek \n\n Graphic Designer', img: uiDesign,  url: [{title: 'Behance', url: 'https://www.behance.net/bkrgrck'}],type: 'AboutUs'},
 ]
+
+export const AnalysisMethods =  [
+    {id:'simple', colors: [COLORS.green, COLORS.lightGreen], title:'Message Analysis Simple', description:'Total messaging statistics for each sender. Most used words, emojis and more...'},
+    {id:'advanced', colors: [COLORS.purple, COLORS.white], title:'Message Analysis Advanced', description:'Messaging statistics by months and days for each sender. See the message statistics for the day you want.'},
+    {id:'visualized', colors: [COLORS.babyCyan, COLORS.deneme], title:'Message Analysis Visualized', description:'Visualize messaging activities over time for better recall.'}
+]
 export const htmlMaker = (names, dateDataforPDF, data) => {
     const sendingsCountData = data.allSendings;
     const mostRepeatedWordsAndSenders = data.mostRepeatedWordsAndSenders;
