@@ -24,7 +24,7 @@ export const COLORS = {
     lightBlue: '#1c7eff',
     lightPurple: '#aba1fa',
     babyCyan: '#50ffcc',
-    shadow: 'rgba(0,0,0,0.5)',
+    shadow: 'rgba(0,0,0,0.6)',
     // color3: '#ddd9ff',
 
 }

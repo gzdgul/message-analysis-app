@@ -70,7 +70,14 @@ function manipulateTimeString(input) {
 }
 
 const dateFormatter = (date, dateFormat) => {
-    let output = date.replaceAll("/", ".").replaceAll(",", "").trim();
+    let output = date.replaceAll("/", ".").replaceAll("-", ".").replaceAll(",", "").trim();
+    if (dateFormat === 'DD/MM/YY') {
+        const dateParts = output.split('.');
+        const day = dateParts[0];
+        const month = dateParts[1].padStart(2, "0");
+        const year = dateParts[2].padStart(4, "20");
+        output = [day,month,year].join(".");
+    }
     if (dateFormat === 'MM/DD/YY') {
         const dateParts = output.split('.');
         const day = dateParts[1];
@@ -78,13 +85,21 @@ const dateFormatter = (date, dateFormat) => {
         const year = dateParts[2].padStart(4, "20");
         output = [day,month,year].join(".");
     }
-    if (output.split('.')[1] > 12) {
+    if (dateFormat === 'YY/MM/DD') {
+        const dateParts = output.split('.');
+        const day = dateParts[2];
+        const month = dateParts[1].padStart(2, "0");
+        const year = dateParts[0].padStart(4, "20");
+        output = [day,month,year].join(".");
+    }
+    const controlOutput = output.split('.');
+    if ((controlOutput[1] > 12) ||  (controlOutput[2] < 2009) || (controlOutput[0] > 31)) { //ay 12 den büyükse yıl 2009 dan küçükse gün 31 den büyükse
         console.log('Date Error: Please check your date format')
         return null; // İşlemi durdur ve null döndür
     }
     return output;
 }
-const parseData = (data,dateFormat) => {
+export const parseData = (data,dateFormat) => {
 
     const regex = /\[(.*?)\] (.*?): (.*)/g;
     const newData = [];
@@ -106,17 +121,6 @@ const parseData = (data,dateFormat) => {
 
     return newData;
 }
-// const deneme1 = "[06.13.2023 14:03:31] emily: selammmmm"
-// const deneme2 = "[06.13.2023 ÖS 02:03:31] emily: selammmmm"
-// const deneme3 = "[06.13.2023 PM 02:03:31] emily: selammmmm"
-// const deneme4 = "[6/3/2023 ÖS 02:03:31] emily: selammmmm"
-// const deneme5 = "[06/3/23 PM 02:03:31] emily: selammmmm"
-// console.log('DENEME1',parseData(deneme1))
-// console.log('DENEME2',parseData(deneme2))
-// console.log('DENEME3',parseData(deneme3))
-// console.log('DENEME4',parseData(deneme4))
-// console.log('DENEME5',parseData(deneme5))
-// console.log('*************************************************************')
 export const findMaxCountKey = (obj) => {
     let maxKey = null;
     let maxValue = -Infinity;
