@@ -38,7 +38,7 @@ function ScrollableInfoModal({data,isVisible,setVisible}) {
                 setVisible(!isVisible);
             }}
         >
-            <View style={{ flex: 1, justifyContent: 'space-between', alignItems: 'center', backgroundColor: COLORS.darkPurple }}>
+            <View style={{ flex: 1, justifyContent: 'space-between', alignItems: 'center', backgroundColor: COLORS.darkBG }}>
                 <View style={{ width: '100%', justifyContent: 'center', alignItems: 'center', padding: 15}}>
                     <View style={{width: width/3, height: 4, backgroundColor: COLORS.white, borderRadius: 100}}></View>
                     {/*<TouchableOpacity onPress={toggleBottomSheet}>*/}
@@ -111,7 +111,7 @@ function ScrollableInfoModal({data,isVisible,setVisible}) {
 
                 </View>
 
-                <View style={{ backgroundColor: COLORS.darkPurple,  width: '100%', height: 50 }}>
+                <View style={{ backgroundColor: COLORS.darkBG,  width: '100%', height: 50 }}>
                     <View style={{paddingHorizontal: 15, opacity: 0.5, alignItems: 'center'}}>
                         <Text style={{color: COLORS.white, fontSize: 12}}>Bir sonraki madde için sola kaydırın</Text>
                         <Text style={{color: COLORS.white, fontSize: 12}}>Bilgilendirme ekranından çıkmak için aşağı kaydırın</Text>
