@@ -233,7 +233,7 @@ const styles = StyleSheet.create({
     box: {
         flex: 1,
         height: '100%',
-        backgroundColor: COLORS.darkPurple,
+        backgroundColor: COLORS.stone,
         borderRadius: 15,
         paddingHorizontal: 10,
         paddingVertical: 10,
@@ -243,7 +243,7 @@ const styles = StyleSheet.create({
     arrow: {
         width: 35,
         height: 35,
-        backgroundColor: COLORS.darkPurple,
+        backgroundColor: COLORS.stone,
         borderRadius: 100,
         justifyContent: 'center',
         alignItems: 'center'

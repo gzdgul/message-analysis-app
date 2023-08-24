@@ -19,6 +19,7 @@ import {LinearGradient} from "expo-linear-gradient";
 import {ButtonGradient} from "../libraries/UI_Component_Library";
 import OpenLink from "../components/openLink";
 import {findAnalysis, parseData, pickDocument, readFileContent} from "../libraries/Helper_Function_Library";
+import MaskedView from "@react-native-masked-view/masked-view";
 
 const {width, height} = Dimensions.get('window');
 const innerWidth = width - 30
@@ -42,7 +43,7 @@ const Home = ({navigation}) => {
             setFileUri(fileUri)
         }
     }
-    const handleStartPress = async (id,color) => {
+    const handleStartPress = async (id, color) => {
         if (fileUri) {
             if (selectedAnalysis) {
                 Alert.alert('☁️', 'You have analysis in progress, please wait a moment')
@@ -146,6 +147,18 @@ const Home = ({navigation}) => {
             animated: true,
         });
     };
+    const GradientImg = props => {
+        return (
+            <MaskedView maskElement={<Image {...props} />}>
+                <LinearGradient
+                    colors={props.colors}
+                    start={{x: 0, y: 0}}
+                    end={{x: 1, y: 0}}>
+                    <Image {...props} source={props.source} style={[props.style]}/>
+                </LinearGradient>
+            </MaskedView>
+        );
+    };
     return (
         <View style={styles.container}>
             <View style={{width: width, height: height * 40 / 100, paddingTop: 60, justifyContent: 'space-between'}}>
@@ -176,15 +189,52 @@ const Home = ({navigation}) => {
                     </TouchableOpacity>
                 </View>
                 <View style={{width: width, alignItems: 'center', gap: 15, justifyContent: 'flex-end'}}>
+                    <MaskedView style={{ }}
+                                maskElement={
+                                    <Image
+                                        source={require('../assets/logo.png')} // PNG görselinizin yolu
+                                        style={{
+                                            width: 170,
+                                            height: 'auto',
+                                            aspectRatio: 801 / 276,
+                                            // tintColor: COLORS.white
+                                        }}
+                                    />
+                                }>
                     <Image
-                        source={require('../assets/logo.png')}
+                        source={require('../assets/logo.png')} // PNG görselinizin yolu
                         style={{
                             width: 170,
                             height: 'auto',
-                            aspectRatio: 147 / 50,
+                            aspectRatio: 801 / 276,
                             tintColor: COLORS.white
                         }}
                     />
+                        <MotiView
+                            transition={{
+                                type: 'timing',
+                                duration: 5000
+                            }}
+                            animate={{
+                                top: selectedAnalysis?.id ? -180 : 0
+                        }}
+                            style={{position: 'absolute'}}>
+                            <LinearGradient
+                                colors={[COLORS.white,COLORS.stone, selectedAnalysis?.color ? selectedAnalysis.color : COLORS.stone]} // İstediğiniz gradient renkleri
+                                start={{x: 0, y: 0}}
+                                end={{x: 0, y: 1}}
+                                style={{
+                                    // position: 'absolute',
+                                    top: 0,
+                                    left: 0,
+                                    width: 170,
+                                    height: 240,
+                                    aspectRatio: 801 / 276,
+                                }}
+                            />
+                        </MotiView>
+
+                    </MaskedView>
                     <View style={{gap: 10, alignItems: 'center', marginTop: 5}}>
                         <TouchableOpacity style={{
                             backgroundColor: COLORS.stone,
@@ -194,7 +244,8 @@ const Home = ({navigation}) => {
                             justifyContent: 'center',
                             alignItems: 'center'
                         }}>
-                            <Text style={{color: COLORS.white, fontSize: 15}} onPress={handlePickDocument}>Select Doc</Text>
+                            <Text style={{color: COLORS.white, fontSize: 15}} onPress={handlePickDocument}>Select
+                                Doc</Text>
                         </TouchableOpacity>
                         <Text style={{color: COLORS.white, fontSize: 12, opacity: 0.5}}>Selected Document: _chat </Text>
                     </View>
@@ -278,65 +329,46 @@ const Home = ({navigation}) => {
                 onMomentumScrollEnd={(x) => handlePageScroll(x)}>
                 <View style={{width: width}}>
                     <ScrollView>
-                        {/*{*/}
-                        {/*    AnalysisMethods.map((x, index) => {*/}
-                        {/*        return (*/}
-                        {/*            <AnalysisBox key={index}*/}
-                        {/*                         id={x.id}*/}
-                        {/*                         position={index % 2 === 0 ? 'left' : 'right'}*/}
-                        {/*                         colors={x.colors}*/}
-                        {/*                         title={x.title}*/}
-                        {/*                         description={x.description}*/}
-                        {/*                         navigation={navigation}*/}
-                        {/*                         dateFormat={dateFormat}*/}
-                        {/*                         selectedAnalysis={selectedAnalysis}*/}
-                        {/*                         setSelectedAnalysis={setSelectedAnalysis}/>*/}
-                        {/*        )*/}
-                        {/*    })*/}
-                        {/*}*/}
-                        {/*<TouchableOpacity style={{flex: 1, height: 40, backgroundColor: COLORS.stone,borderRadius: 15, marginVertical: 15, marginHorizontal: 15, justifyContent: 'center', alignItems: 'center'}} onPress={handlePickDocument}>*/}
-                        {/*    <Text style={styles.buttonText}>Select Document</Text>*/}
-                        {/*</TouchableOpacity>*/}
                         <View style={{flexDirection: 'row', flexWrap: 'wrap', gap: 15, paddingHorizontal: 15}}>
 
                             {
                                 AnalysisMethods.map((x, index) => {
                                     return (
-                                        <TouchableOpacity  key={index} onPress={() => handleStartPress(x.id, x.color)}>
-                                        <MotiView
-                                            animate={{
-                                                borderRadius: selectedAnalysis?.id === x.id ? 100 : 35,
-                                                transform: [{ rotate: selectedAnalysis?.id === x.id ? '360deg' : '0deg' }]
-                                            }}
-                                            style={{
-                                                width: (innerWidth / 2) - 8,
-                                                height: (innerWidth / 2) - 8,
-                                                backgroundColor: x.color,
-                                                justifyContent: 'center',
-                                                alignItems: 'center'
-                                            }}
-                                        >
+                                        <TouchableOpacity key={index} onPress={() => handleStartPress(x.id, x.color)}>
                                             <MotiView
                                                 animate={{
-                                                    borderRadius: selectedAnalysis?.id === x.id ? 100 : 30,
+                                                    borderRadius: selectedAnalysis?.id === x.id ? 100 : 35,
+                                                    transform: [{rotate: selectedAnalysis?.id === x.id ? '360deg' : '0deg'}]
                                                 }}
                                                 style={{
-                                                width: '90%',
-                                                height: '90%',
-                                                borderRadius: 30,
-                                                backgroundColor: COLORS.darkBG,
-                                                justifyContent: 'center',
-                                                alignItems: 'center'
-                                            }}>
-                                                <Text style={{color: COLORS.white, fontSize: 12}}>Message
-                                                    Analysis</Text>
-                                                <Text style={{
-                                                    color: x.color,
-                                                    fontSize: 22,
-                                                    fontWeight: '600'
-                                                }}>{selectedAnalysis?.id === x.id ? 'Started' : x.title}</Text>
+                                                    width: (innerWidth / 2) - 8,
+                                                    height: (innerWidth / 2) - 8,
+                                                    backgroundColor: x.color,
+                                                    justifyContent: 'center',
+                                                    alignItems: 'center'
+                                                }}
+                                            >
+                                                <MotiView
+                                                    animate={{
+                                                        borderRadius: selectedAnalysis?.id === x.id ? 100 : 30,
+                                                    }}
+                                                    style={{
+                                                        width: '90%',
+                                                        height: '90%',
+                                                        borderRadius: 30,
+                                                        backgroundColor: COLORS.darkBG,
+                                                        justifyContent: 'center',
+                                                        alignItems: 'center'
+                                                    }}>
+                                                    <Text style={{color: COLORS.white, fontSize: 12}}>Message
+                                                        Analysis</Text>
+                                                    <Text style={{
+                                                        color: x.color,
+                                                        fontSize: 22,
+                                                        fontWeight: '600'
+                                                    }}>{selectedAnalysis?.id === x.id ? 'Started' : x.title}</Text>
+                                                </MotiView>
                                             </MotiView>
-                                        </MotiView>
                                         </TouchableOpacity>
                                     )
                                 })
@@ -349,22 +381,22 @@ const Home = ({navigation}) => {
                                 gap: 20,
                             }}>
                                 {
-                                    [1,2,3,4,5].map((x, index) => {
+                                    [1, 2, 3, 4, 5].map((x, index) => {
                                         return (
                                             <MotiView
                                                 key={index}
                                                 transition={{
-                                                    delay: index*1000
+                                                    delay: index * 1000
                                                 }}
 
                                                 animate={{
-                                                    backgroundColor: selectedAnalysis?.color ? selectedAnalysis.color :  COLORS.stone
+                                                    backgroundColor: selectedAnalysis?.color ? selectedAnalysis.color : COLORS.stone
                                                 }}
                                                 style={{
-                                                width: '100%',
-                                                flex: 1,
-                                                borderRadius: 15
-                                            }}></MotiView>
+                                                    width: '100%',
+                                                    flex: 1,
+                                                    borderRadius: 15
+                                                }}></MotiView>
                                         )
                                     })
                                 }
@@ -515,7 +547,10 @@ const Home = ({navigation}) => {
                                                         }}
                                                                           onPress={() => handleOptionPress(y, x.title)}
                                                         >
-                                                            <Text style={{color: (dateFormat === y || language === y) ? COLORS.darkBG : COLORS.white, fontSize: 13}}>{y}</Text>
+                                                            <Text style={{
+                                                                color: (dateFormat === y || language === y) ? COLORS.darkBG : COLORS.white,
+                                                                fontSize: 13
+                                                            }}>{y}</Text>
                                                         </TouchableOpacity>
                                                     )
                                                 })
