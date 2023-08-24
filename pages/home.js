@@ -18,9 +18,10 @@ import ScrollableInfoModal from "../components/ScrollableInfoModal";
 import {LinearGradient} from "expo-linear-gradient";
 import {ButtonGradient} from "../libraries/UI_Component_Library";
 import OpenLink from "../components/openLink";
-import {parseData} from "../libraries/Helper_Function_Library";
+import {findAnalysis, parseData, pickDocument, readFileContent} from "../libraries/Helper_Function_Library";
 
 const {width, height} = Dimensions.get('window');
+const innerWidth = width - 30
 
 
 const Home = ({navigation}) => {
@@ -33,7 +34,60 @@ const Home = ({navigation}) => {
     const [isInfoModalVisible, setInfoModalVisible] = React.useState(false);
     const [infoModalData, setInfoModalData] = React.useState(UsageInstructions);
     const [isSettingsVisible, setSettingsVisible] = React.useState(false);
+    const [fileUri, setFileUri] = React.useState('')
+    const handlePickDocument = async () => {
+        const fileUri = await pickDocument()
+        if (fileUri !== undefined) {
+            console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!', fileUri)
+            setFileUri(fileUri)
+        }
+    }
+    const handleStartPress = async (id) => {
+        if (fileUri) {
+            if (selectedAnalysis) {
+                Alert.alert('☁️', 'You have analysis in progress, please wait a moment')
+                return;
+            }
+            // setCircleText('Analyzing...')
+            setSelectedAnalysis(id);
+            console.log('STARTEDDDDDDDDDDDDDDDDDDDDDDDD')
 
+            const fileContent = await readFileContent(fileUri, dateFormat)
+            if (fileContent === null) {
+                setSelectedAnalysis(null);
+                // setCircleText('START')
+                Alert.alert('Oops..', 'The date format seems to be incorrect. please check👆')
+                return;
+            }
+            const {
+                longestMessage,
+                activeDays,
+                mostRepeatedWordsAndSenders,
+                mostUsedEmojisAndSenders,
+                dataObjsByDate,
+                allSendings,
+
+            } = await findAnalysis(fileContent);
+            setTimeout(() => {
+                navigation.navigate('Analysis', {
+                    analyzedData: {
+                        longestMessage,
+                        activeDays,
+                        mostRepeatedWordsAndSenders,
+                        mostUsedEmojisAndSenders,
+                        allSendings,
+                        dataObjsByDate,
+                        id
+                    }
+                });
+
+                // setCircleText('START')
+            }, 5000)
+            setTimeout(() => {
+                setSelectedAnalysis(null);
+            }, 6000)
+        } else Alert.alert('Geçerli bir dosya giriniz')
+    }
     const toggleInfoModal = (data) => {
         setInfoModalData(data)
         setInfoModalVisible(!isInfoModalVisible);
@@ -94,122 +148,127 @@ const Home = ({navigation}) => {
     };
     return (
         <View style={styles.container}>
-            <View style={{
-                backgroundColor: COLORS.darkPurple,
-                zIndex: 100,
-                width: '100%',
-                height: 100,
-                // padding: 10,
-                // borderRadius: 15,
-                marginBottom: 20,
-                // flexDirection: 'row',
-                justifyContent: 'flex-end'
-
-
-            }}>
+            <View style={{width: width, height: height * 40 / 100, paddingTop: 60, justifyContent: 'space-between'}}>
                 <View style={{
+                    width: '100%',
                     flexDirection: 'row',
                     justifyContent: 'space-between',
                     alignItems: 'center',
                     paddingHorizontal: 15,
-                    marginBottom: 15
                 }}>
-
-
-                    <View style={{flexDirection: 'row', gap: 20, alignItems: 'center', opacity: 0.5}}>
-                        <View>
-                            <View
-                                style={{
-                                    flexDirection: 'row',
-                                    alignItems: 'center',
-                                    gap: 10,
-                                }}>
-                                <Text style={{color: COLORS.white, fontSize: 13}}>Language :</Text>
-                                <Text style={{
-                                    color: COLORS.white,
-                                    fontWeight: 'bold',
-                                    fontSize: 13
-                                }}>{language === 'Türkçe' ? 'TR' : 'EN'}</Text>
-
-                            </View>
-                        </View>
-
-                        <View>
-                            <View
-                                style={{
-                                    flexDirection: 'row',
-                                    alignItems: 'center',
-                                    gap: 10,
-
-                                }}>
-                                <Text style={{color: COLORS.white, fontSize: 13}}>Date Format :</Text>
-                                <Text
-                                    style={{color: COLORS.white, fontWeight: 'bold', fontSize: 13}}>{dateFormat}</Text>
-
-                            </View>
-                        </View>
+                    <View style={{opacity: 0.5}}>
+                        <Text style={{
+                            color: COLORS.white,
+                            fontSize: 11
+                        }}>Language: {language === 'Türkçe' ? 'TR' : 'EN'} Date Format :{dateFormat}</Text>
                     </View>
-                    <View>
-                        <TouchableOpacity onPress={toggleSettings}>
-                            <Image
-                                source={require('../assets/settings_icon.png')}
-                                style={{
-                                    width: 20,
-                                    height: 20,
-                                    tintColor: COLORS.red
-                                }}
-                            />
+                    <TouchableOpacity
+                        style={{padding: 15, borderRadius: 15, backgroundColor: COLORS.stone, zIndex: 100,}}
+                        onPress={toggleSettings}>
+                        <Image
+                            source={require('../assets/settings_icon.png')}
+                            style={{
+                                width: 20,
+                                height: 20,
+                                tintColor: COLORS.white
+                            }}
+                        />
+                    </TouchableOpacity>
+                </View>
+                <View style={{width: width, alignItems: 'center', gap: 15, justifyContent: 'flex-end'}}>
+                    <Image
+                        source={require('../assets/logo.png')}
+                        style={{
+                            width: 170,
+                            height: 'auto',
+                            aspectRatio: 147 / 50,
+                            tintColor: COLORS.white
+                        }}
+                    />
+                    <View style={{gap: 10, alignItems: 'center', marginTop: 5}}>
+                        <TouchableOpacity style={{
+                            backgroundColor: COLORS.stone,
+                            width: 170,
+                            height: 35,
+                            borderRadius: 15,
+                            justifyContent: 'center',
+                            alignItems: 'center'
+                        }}>
+                            <Text style={{color: COLORS.white, fontSize: 15}}>Select Doc</Text>
                         </TouchableOpacity>
+                        <Text style={{color: COLORS.white, fontSize: 12, opacity: 0.5}}>Selected Document: _chat </Text>
                     </View>
                 </View>
+
+                {/*<TouchableOpacity style={[styles.button, {backgroundColor: COLORS.darkPurple}]} onPress={() => handleStartPress("simple")}>*/}
+                {/*    <Text style={styles.buttonText}>Start</Text>*/}
+                {/*</TouchableOpacity>*/}
+
+
             </View>
-            <View style={{flexDirection: 'row'}}>
-                {
-                    ['Message Analysis', 'Explore'].map((x, index) => {
-                        return (
-                            <MotiView
-                                key={index}
-                                transition={{delay: 0, damping: 15, mass: 1}}
+            <View style={{marginVertical: 20, width: width, paddingHorizontal: 15}}>
+                <View style={{flexDirection: 'row'}}>
+                    {
+                        ['Message Analysis', 'Explore'].map((x, index) => {
+                            return (
+                                <TouchableOpacity key={index} onPress={() => scrollToPage(index)}>
+                                    <MotiView
 
-                                animate={{
-                                    scale: page === index ? 1 : 0.8,
-                                    opacity: page === index ? 1 : 0.5,
+                                        transition={{delay: 0, damping: 15, mass: 1}}
 
-                                }}
-                                style={{
-                                    width: width / totalPage,
-                                    justifyContent: 'center',
-                                    alignItems: 'center',
-                                    paddingHorizontal: 5
-                                }}>
-                                <TouchableOpacity onPress={() => scrollToPage(index)}>
-                                    <Text style={{color: 'white', textAlign: 'center'}}>{x}</Text>
+                                        animate={{
+                                            scale: page === index ? 1 : 0.8,
+                                            opacity: page === index ? 1 : 0.5,
+
+                                        }}
+                                        style={{
+                                            width: innerWidth / totalPage,
+                                        }}>
+
+                                        <Text style={{
+                                            color: COLORS.white,
+                                            fontSize: 15,
+                                            textAlign: totalPage === 2 ? (index === 0 ? 'left' : 'right') : 'center'
+                                        }}>{x}</Text>
+
+
+                                    </MotiView>
                                 </TouchableOpacity>
+                            )
+                        })
+                    }
+                </View>
+                <View style={{
+                    width: innerWidth,
+                    height: 4,
+                    borderRadius: 50,
+                    marginVertical: 10,
+                    backgroundColor: COLORS.stone
+                }}>
+                    <MotiView
+                        transition={{delay: 0, damping: 15, mass: 1}}
+                        from={{
+                            left: 0,
 
-                            </MotiView>
-                        )
-                    })
-                }
-            </View>
-            <View style={{width: '100%', height: 3, marginVertical: 10, backgroundColor: COLORS.darkPurple}}>
-                <MotiView
-                    transition={{delay: 0, damping: 15, mass: 1}}
-                    from={{
-                        left: 0,
+                        }}
+                        animate={{
+                            left: innerWidth / totalPage * page,
 
-                    }}
-                    animate={{
-                        left: width / totalPage * page,
-
-                    }}
-                    exit={{
-                        left: width / totalPage * page,
+                        }}
+                        exit={{
+                            left: innerWidth / totalPage * page,
 
 
-                    }}
-                    style={{width: width / totalPage, height: '100%', backgroundColor: COLORS.white}}>
+                        }}
+                        style={{
+                            width: innerWidth / totalPage,
+                            height: '100%',
+                            borderRadius: 50,
+                            backgroundColor: COLORS.white
+                        }}>
 
-                </MotiView>
+                    </MotiView>
+                </View>
             </View>
             <ScrollView
                 ref={scrollViewRef}
@@ -219,40 +278,147 @@ const Home = ({navigation}) => {
                 onMomentumScrollEnd={(x) => handlePageScroll(x)}>
                 <View style={{width: width}}>
                     <ScrollView>
-                        {
-                            AnalysisMethods.map((x, index) => {
-                                return (
-                                    <AnalysisBox key={index}
-                                                 id={x.id}
-                                                 position={index % 2 === 0 ? 'left' : 'right'}
-                                                 colors={x.colors}
-                                                 title={x.title}
-                                                 description={x.description}
-                                                 navigation={navigation}
-                                                 dateFormat={dateFormat}
-                                                 selectedAnalysis={selectedAnalysis}
-                                                 setSelectedAnalysis={setSelectedAnalysis}/>
-                                )
-                            })
-                        }
+                        {/*{*/}
+                        {/*    AnalysisMethods.map((x, index) => {*/}
+                        {/*        return (*/}
+                        {/*            <AnalysisBox key={index}*/}
+                        {/*                         id={x.id}*/}
+                        {/*                         position={index % 2 === 0 ? 'left' : 'right'}*/}
+                        {/*                         colors={x.colors}*/}
+                        {/*                         title={x.title}*/}
+                        {/*                         description={x.description}*/}
+                        {/*                         navigation={navigation}*/}
+                        {/*                         dateFormat={dateFormat}*/}
+                        {/*                         selectedAnalysis={selectedAnalysis}*/}
+                        {/*                         setSelectedAnalysis={setSelectedAnalysis}/>*/}
+                        {/*        )*/}
+                        {/*    })*/}
+                        {/*}*/}
+                        {/*<TouchableOpacity style={{flex: 1, height: 40, backgroundColor: COLORS.stone,borderRadius: 15, marginVertical: 15, marginHorizontal: 15, justifyContent: 'center', alignItems: 'center'}} onPress={handlePickDocument}>*/}
+                        {/*    <Text style={styles.buttonText}>Select Document</Text>*/}
+                        {/*</TouchableOpacity>*/}
+                        <View style={{flexDirection: 'row', flexWrap: 'wrap', gap: 15, paddingHorizontal: 15}}>
 
+                            {
+                                AnalysisMethods.map((x, index) => {
+                                    return (
+                                        <TouchableOpacity
+                                            key={index}
+                                            style={{
+                                                width: (innerWidth / 2) - 8,
+                                                height: (innerWidth / 2) - 8,
+                                                borderRadius: 35,
+                                                backgroundColor: x.color,
+                                                justifyContent: 'center',
+                                                alignItems: 'center'
+                                            }}
+                                            onPress={() => handleStartPress(x.id)}
+                                        >
+                                            <View style={{
+                                                width: '85%',
+                                                height: '85%',
+                                                borderRadius: 30,
+                                                backgroundColor: COLORS.darkBG,
+                                                justifyContent: 'center',
+                                                alignItems: 'center'
+                                            }}>
+                                                <Text style={{color: COLORS.white, fontSize: 12}}>Message Analysis</Text>
+                                                <Text style={{
+                                                    color: x.color,
+                                                    fontSize: 22,
+                                                    fontWeight: '600'
+                                                }}>{x.title}</Text>
+                                            </View>
+                                        </TouchableOpacity>
+                                    )
+                                })
+                            }
+                            <View style={{
+                                width: (innerWidth / 2) - 8,
+                                height: 0,
+                                aspectRatio: 1,
+                                borderRadius: 35,
+                                gap: 20,
+                            }}>
+                                <TouchableOpacity style={{
+                                    width: '100%',
+                                    flex: 1,
+                                    backgroundColor: COLORS.stone,
+                                    borderRadius: 15
+                                }}></TouchableOpacity>
+                                <TouchableOpacity style={{
+                                    width: '100%',
+                                    flex: 1,
+                                    backgroundColor: COLORS.stone,
+                                    borderRadius: 15
+                                }}></TouchableOpacity>
+                                <TouchableOpacity style={{
+                                    width: '100%',
+                                    flex: 1,
+                                    backgroundColor: COLORS.stone,
+                                    borderRadius: 15
+                                }}></TouchableOpacity>
+                                <TouchableOpacity style={{
+                                    width: '100%',
+                                    flex: 1,
+                                    backgroundColor: COLORS.stone,
+                                    borderRadius: 15
+                                }}></TouchableOpacity>
+                            </View>
+                        </View>
                     </ScrollView>
                 </View>
                 <View style={{width: width}}>
                     <ScrollView>
-                        <View style={{gap: 15, alignItems: 'center', marginVertical: 10}}>
-                            <ButtonGradient title={'Step-By-Step How To Use?'} color={[COLORS.red, COLORS.red]}
-                                            buttonStyle={{width: '90%'}}
-                                            textStyle={{fontSize: 16, fontWeight: '600', color: 'white'}}
+                        <View style={{gap: 15, alignItems: 'center',}}>
+                            <ButtonGradient title={'Step-By-Step How To Use?'} color={[COLORS.white, COLORS.white]}
+                                            buttonStyle={{width: innerWidth}}
+                                            textStyle={{fontSize: 16, fontWeight: '600', color: COLORS.stone}}
                                             onPress={() => toggleInfoModal(UsageInstructions)}/>
                             <ButtonGradient title={'Learn About Security'}
-                                            color={[COLORS.darkPurple, COLORS.darkPurple]} buttonStyle={{width: '90%'}}
-                                            textStyle={{fontSize: 16, fontWeight: '600', color: 'white'}}
+                                            color={[COLORS.stone, COLORS.stone]}
+                                            buttonStyle={{width: innerWidth}}
+                                            textStyle={{fontSize: 16, fontWeight: '600', color: COLORS.white}}
                                             onPress={() => toggleInfoModal(UsageSecurity)}/>
-                            <ButtonGradient title={'About Us'} color={[COLORS.darkPurple, COLORS.darkPurple]}
-                                            buttonStyle={{width: '90%'}}
-                                            textStyle={{fontSize: 16, fontWeight: '600', color: 'white'}}
-                                            onPress={() => toggleInfoModal(AboutUs)}/>
+                            {
+                                AnalysisMethods.map((x, index) => {
+                                    return (
+                                        <View style={{flexDirection: 'row', width: innerWidth, gap: 15, alignItems: 'center'}}>
+                                            <View
+                                                key={index}
+                                                style={{
+                                                    width: 70,
+                                                    height: 70,
+                                                    borderRadius: 15,
+                                                    backgroundColor: x.color,
+                                                    justifyContent: 'center',
+                                                    alignItems: 'center'
+                                                }}
+                                            >
+                                                <View style={{
+                                                    width: '85%',
+                                                    height: '85%',
+                                                    borderRadius: 10,
+                                                    backgroundColor: COLORS.darkBG,
+                                                    justifyContent: 'center',
+                                                    alignItems: 'center'
+                                                }}>
+                                                    <Text style={{
+                                                        color: x.color,
+                                                        fontSize: 10,
+                                                        fontWeight: '600'
+                                                    }}>{x.title}</Text>
+                                                </View>
+                                            </View>
+                                            <View style={{flex: 1}}>
+                                                <Text style={{color: COLORS.white, fontSize: 13}}>{x.description}</Text>
+                                            </View>
+                                        </View>
+
+                                    )
+                                })
+                            }
+
                         </View>
 
                     </ScrollView>
@@ -307,7 +473,12 @@ const Home = ({navigation}) => {
                     <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
                         <Text style={{color: COLORS.red, fontSize: 13, fontWeight: 'bold'}}>SETTINGS</Text>
                         <TouchableOpacity onPress={toggleSettings}>
-                            <Text style={{color: 'white', fontSize: 11, opacity: 0.6, fontWeight: 'bold'}}>CLOSE</Text>
+                            <Text style={{
+                                color: COLORS.white,
+                                fontSize: 11,
+                                opacity: 0.6,
+                                fontWeight: 'bold'
+                            }}>CLOSE</Text>
                         </TouchableOpacity>
                     </View>
                     {
@@ -318,7 +489,10 @@ const Home = ({navigation}) => {
                             return (
                                 <View key={index}>
                                     <View style={{}}>
-                                        <Text style={{color: 'white', fontSize: 13}}>{'Select Your ' + x.title}</Text>
+                                        <Text style={{
+                                            color: COLORS.white,
+                                            fontSize: 13
+                                        }}>{'Select Your ' + x.title}</Text>
                                         <View style={{flexDirection: 'row', gap: 10, marginTop: 10}}>
                                             {
                                                 x.data.map((y, index) => {
@@ -332,7 +506,7 @@ const Home = ({navigation}) => {
                                                         }}
                                                                           onPress={() => handleOptionPress(y, x.title)}
                                                         >
-                                                            <Text style={{color: 'white', fontSize: 13}}>{y}</Text>
+                                                            <Text style={{color: COLORS.white, fontSize: 13}}>{y}</Text>
                                                         </TouchableOpacity>
                                                     )
                                                 })
@@ -387,7 +561,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
     },
     buttonText: {
-        color: 'white',
+        color: COLORS.white,
         fontSize: 14,
     },
     steps: {

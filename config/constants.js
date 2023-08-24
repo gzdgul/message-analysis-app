@@ -4,12 +4,12 @@ export const COLORS = {
     darkPurple0: 'rgba(0,0,0,0.5)',
     // purple: '#4e4e80',
     black: '#000000',
-    white: '#FFFFFF',
+    white: '#e1e1ce',
     gray: '#131313',
     lightGray: '#ececec',
     stone: '#2f2f2f',
     ash: '#dcdcdc',
-    darkBG: '#0d0e16',
+    darkBG: '#181817',
     blue: '#8edaf2',
     pink: '#ff4a74',
     red: '#fd5e5d',
@@ -92,15 +92,15 @@ export const UsageSecurity = [
     {title: 'Üçüncü Kişilerle Paylaşılmaz', desc: 'Size özel mesaj analizinize sadece siz ve paylaştığınız kişi veya kişiler erişebilir. Verileriniz asla üçüncü taraflarla paylaşılmaz veya satılmaz.', img: messageThief, type: 'UsageSecurity'},
     {title: 'Bizimle İletişime Geçin', desc: 'Uygulamamızı kullanırken herhangi bir sorunuz, öneriniz veya geri bildiriminiz varsa, lütfen bizimle iletişime geçmekten çekinmeyin. Kullanıcılarımızın deneyimini daha iyi hale getirmek için buradayız ve sizden gelecek geri bildirimleri değerli buluyoruz.', img: messageMoreInfo, type: 'UsageSecurity'},
 ]
-export const AboutUs = [
-    {title: 'Front-end Developer', desc: 'Gözde Gül \n\n Computer Engineer', img: codding, url: [{title: 'Github', url: 'https://github.com/gzdgul'}], type: 'AboutUs'},
-    {title: 'UI - UX Designer', desc: 'Bekir Gerçek \n\n Graphic Designer', img: uiDesign,  url: [{title: 'Behance', url: 'https://www.behance.net/bkrgrck'}],type: 'AboutUs'},
-]
+// export const AboutUs = [
+//     {title: 'Front-end Developer', desc: 'xxx \n\n xxx', img: codding, url: [{title: 'Github', url: ''}], type: 'AboutUs'},
+//     {title: 'UI - UX Designer', desc: 'xxx \n\n xxx', img: uiDesign,  url: [{title: 'Behance', url: ''}],type: 'AboutUs'},
+// ]
 
 export const AnalysisMethods =  [
-    {id:'simple', colors: [COLORS.green, COLORS.lightGreen], title:'Message Analysis Simple', description:'Total messaging statistics for each sender. Most used words, emojis and more...'},
-    {id:'advanced', colors: [COLORS.purple, COLORS.white], title:'Message Analysis Advanced', description:'Messaging statistics by months and days for each sender. See the message statistics for the day you want.'},
-    {id:'visualized', colors: [COLORS.babyCyan, COLORS.deneme], title:'Message Analysis Visualized', description:'Visualize messaging activities over time for better recall.'}
+    {id:'simple', color: COLORS.lightGreen, title:'Simple', description:'Total messaging statistics for each sender. Most used words, emojis and more...'},
+    {id:'advanced', color: COLORS.purple, title:'Advanced', description:'Messaging statistics by months and days for each sender. See the message statistics for the day you want.'},
+    {id:'visualized', color:  COLORS.deneme, title:'Visualized', description:'Visualize messaging activities over time for better recall.'}
 ]
 export const htmlMaker = (names, dateDataforPDF, data) => {
     const sendingsCountData = data.allSendings;
