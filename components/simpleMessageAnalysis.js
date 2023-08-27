@@ -253,7 +253,7 @@ const styles = StyleSheet.create({
     box: {
         flex: 1,
         height: '100%',
-        backgroundColor: COLORS.darkPurple,
+        backgroundColor: COLORS.stone,
         borderRadius: 25,
         paddingHorizontal: 15,
         paddingVertical: 15,

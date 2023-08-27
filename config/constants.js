@@ -8,8 +8,8 @@ export const COLORS = {
     gray: '#131313',
     lightGray: '#ececec',
     stone: '#2f2f2f',
-    ash: '#dcdcdc',
-    darkBG: '#181817',
+    ash: '#545454',
+    darkBG: '#171718',
     blue: '#8edaf2',
     pink: '#ff4a74',
     red: '#fd5e5d',
@@ -42,7 +42,7 @@ export const medya =
         'bu mesajı sildiniz', 'this message was deleted'
 
     ];
-
+//bu mesaj silindi, anket,
 export const mediaTypes = [
     { type: 'image', keywords: [medya[0], medya[1]] },
     { type: 'video', keywords: [medya[2], medya[3]] },
@@ -102,6 +102,17 @@ export const AnalysisMethods =  [
     {id:'advanced', color: COLORS.purple, title:'Advanced', description:'Messaging statistics by months and days for each sender. See the message statistics for the day you want.'},
     {id:'visualized', color:  COLORS.deneme, title:'Visualized', description:'Visualize messaging activities over time for better recall.'}
 ]
+
+export const icons = {
+    image: '🖼️',
+    video: '📹',
+    audio: '🎵',
+    document: '📄',
+    gif: '🎥',
+    sticker: '🌟',
+    location: '📍',
+    deleted: '❌',
+}
 export const htmlMaker = (names, dateDataforPDF, data) => {
     const sendingsCountData = data.allSendings;
     const mostRepeatedWordsAndSenders = data.mostRepeatedWordsAndSenders;

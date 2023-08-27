@@ -36,11 +36,13 @@ const Home = ({navigation}) => {
     const [infoModalData, setInfoModalData] = React.useState(UsageInstructions);
     const [isSettingsVisible, setSettingsVisible] = React.useState(false);
     const [fileUri, setFileUri] = React.useState('')
+    const [fileName, setFileName] = React.useState('')
     const handlePickDocument = async () => {
-        const fileUri = await pickDocument()
+        const {fileUri, name} = await pickDocument()
         if (fileUri !== undefined) {
-            console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!', fileUri)
+            console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!', name)
             setFileUri(fileUri)
+            setFileName(name)
         }
     }
     const handleStartPress = async (id, color) => {
@@ -61,6 +63,7 @@ const Home = ({navigation}) => {
                 return;
             }
             const {
+                messages,
                 longestMessage,
                 activeDays,
                 mostRepeatedWordsAndSenders,
@@ -72,6 +75,7 @@ const Home = ({navigation}) => {
             setTimeout(() => {
                 navigation.navigate('Analysis', {
                     analyzedData: {
+                        messages,
                         longestMessage,
                         activeDays,
                         mostRepeatedWordsAndSenders,
@@ -147,18 +151,11 @@ const Home = ({navigation}) => {
             animated: true,
         });
     };
-    const GradientImg = props => {
-        return (
-            <MaskedView maskElement={<Image {...props} />}>
-                <LinearGradient
-                    colors={props.colors}
-                    start={{x: 0, y: 0}}
-                    end={{x: 1, y: 0}}>
-                    <Image {...props} source={props.source} style={[props.style]}/>
-                </LinearGradient>
-            </MaskedView>
-        );
-    };
+    const fileClearPress = () => {
+        setFileUri('')
+        setFileName('')
+        setSettingsVisible(false)
+    }
     return (
         <View style={styles.container}>
             <View style={{width: width, height: height * 40 / 100, paddingTop: 60, justifyContent: 'space-between'}}>
@@ -189,10 +186,21 @@ const Home = ({navigation}) => {
                     </TouchableOpacity>
                 </View>
                 <View style={{width: width, alignItems: 'center', gap: 15, justifyContent: 'flex-end'}}>
-                    <MaskedView style={{ }}
+                    <MotiView
+                        transition={{
+                            type: 'timing',
+                            delay: page === 1 ? 0 : 0,
+                            duration: 500
+                        }}
+                    animate={{
+                        top: page === 1 ? 20 : 0,
+                        scale: page === 1 ? 1.1 : 1
+                    }}
+                    >
+                    <MaskedView style={{}}
                                 maskElement={
                                     <Image
-                                        source={require('../assets/logo.png')} // PNG görselinizin yolu
+                                        source={require('../assets/logo.png')}
                                         style={{
                                             width: 170,
                                             height: 'auto',
@@ -201,26 +209,27 @@ const Home = ({navigation}) => {
                                         }}
                                     />
                                 }>
-                    <Image
-                        source={require('../assets/logo.png')} // PNG görselinizin yolu
-                        style={{
-                            width: 170,
-                            height: 'auto',
-                            aspectRatio: 801 / 276,
-                            tintColor: COLORS.white
-                        }}
-                    />
+                        <Image
+                            source={require('../assets/logo.png')}
+                            style={{
+                                width: 170,
+                                height: 'auto',
+                                aspectRatio: 801 / 276,
+                                tintColor: COLORS.white
+                            }}
+                        />
                         <MotiView
                             transition={{
                                 type: 'timing',
-                                duration: 5000
+                                duration: selectedAnalysis?.id ? 5000 : 800
                             }}
                             animate={{
-                                top: selectedAnalysis?.id ? -180 : 0
-                        }}
+                                top: selectedAnalysis?.id ? -180 : 0,
+                                backgroundColor: (isSettingsVisible) ? COLORS.stone : 'transparent'
+                            }}
                             style={{position: 'absolute'}}>
                             <LinearGradient
-                                colors={[COLORS.white,COLORS.stone, selectedAnalysis?.color ? selectedAnalysis.color : COLORS.stone]} // İstediğiniz gradient renkleri
+                                colors={['transparent', COLORS.stone, selectedAnalysis?.color ? selectedAnalysis.color : COLORS.stone]}
                                 start={{x: 0, y: 0}}
                                 end={{x: 0, y: 1}}
                                 style={{
@@ -233,10 +242,19 @@ const Home = ({navigation}) => {
                                 }}
                             />
                         </MotiView>
-
                     </MaskedView>
-                    <View style={{gap: 10, alignItems: 'center', marginTop: 5}}>
-                        <TouchableOpacity style={{
+                    </MotiView>
+                    <MotiView
+                        transition={{
+                            type: 'timing',
+                            duration: isSettingsVisible ? 300 : 800
+                        }}
+                        animate={{
+                            scale: page === 1 ? 0 : isSettingsVisible ? 0.9 : 1,
+                            opacity: isSettingsVisible ? 0.4 : 1
+                        }}
+                        style={{gap: 10, alignItems: 'center', marginTop: 5}}>
+                        <TouchableOpacity disabled={page === 1} onPress={handlePickDocument} style={{
                             backgroundColor: COLORS.stone,
                             width: 170,
                             height: 35,
@@ -244,11 +262,14 @@ const Home = ({navigation}) => {
                             justifyContent: 'center',
                             alignItems: 'center'
                         }}>
-                            <Text style={{color: COLORS.white, fontSize: 15}} onPress={handlePickDocument}>Select
-                                Doc</Text>
+                            <Text style={{color: COLORS.white, fontSize: 15}}>Select Doc</Text>
                         </TouchableOpacity>
-                        <Text style={{color: COLORS.white, fontSize: 12, opacity: 0.5}}>Selected Document: _chat </Text>
-                    </View>
+                        <View style={{flexDirection: 'row'}}>
+                            <Text style={{color: COLORS.white, fontSize: 12, opacity: 0.5}}>{fileName.length > 0 ? 'Selected Document: ' + fileName : 'No file selected'} </Text>
+                            <Text style={{color: fileName.length > 0 ? COLORS.green : COLORS.red, fontSize: 12, fontWeight: 'bold', opacity: 0.5}}>{fileName.length > 0 ? '✓' : 'x'}</Text>
+                        </View>
+
+                    </MotiView>
                 </View>
 
                 {/*<TouchableOpacity style={[styles.button, {backgroundColor: COLORS.darkPurple}]} onPress={() => handleStartPress("simple")}>*/}
@@ -336,7 +357,12 @@ const Home = ({navigation}) => {
                                     return (
                                         <TouchableOpacity key={index} onPress={() => handleStartPress(x.id, x.color)}>
                                             <MotiView
+                                                transition={{
+                                                    delay: selectedAnalysis?.id? 0 : index * 100
+                                                }}
                                                 animate={{
+                                                    scale: isSettingsVisible ? 0.9 : 1,
+                                                    opacity: isSettingsVisible ? 0.4 : 1,
                                                     borderRadius: selectedAnalysis?.id === x.id ? 100 : 35,
                                                     transform: [{rotate: selectedAnalysis?.id === x.id ? '360deg' : '0deg'}]
                                                 }}
@@ -349,6 +375,9 @@ const Home = ({navigation}) => {
                                                 }}
                                             >
                                                 <MotiView
+                                                    transition={{
+                                                        delay: selectedAnalysis?.id? 0 : index * 100
+                                                    }}
                                                     animate={{
                                                         borderRadius: selectedAnalysis?.id === x.id ? 100 : 30,
                                                     }}
@@ -386,11 +415,13 @@ const Home = ({navigation}) => {
                                             <MotiView
                                                 key={index}
                                                 transition={{
-                                                    delay: index * 1000
+                                                    delay: selectedAnalysis?.id ? index * 1000 : index * 100
                                                 }}
 
                                                 animate={{
-                                                    backgroundColor: selectedAnalysis?.color ? selectedAnalysis.color : COLORS.stone
+                                                    backgroundColor: selectedAnalysis?.color ? selectedAnalysis.color : COLORS.stone,
+                                                    scale: isSettingsVisible ? 0.9 : 1,
+                                                    opacity: isSettingsVisible ? 0.4 : (1 / 5 * (index + 1)),
                                                 }}
                                                 style={{
                                                     width: '100%',
@@ -406,18 +437,47 @@ const Home = ({navigation}) => {
                 </View>
                 <View style={{width: width}}>
                     <ScrollView>
-                        <View style={{gap: 15, alignItems: 'center',}}>
-                            <ButtonGradient title={'Step-By-Step How To Use?'} color={[COLORS.white, COLORS.white]}
-                                            buttonStyle={{width: innerWidth}}
-                                            textStyle={{fontSize: 16, fontWeight: '600', color: COLORS.stone}}
-                                            onPress={() => toggleInfoModal(UsageInstructions)}/>
-                            <ButtonGradient title={'Learn About Security'}
-                                            color={[COLORS.stone, COLORS.stone]}
-                                            buttonStyle={{width: innerWidth}}
-                                            textStyle={{fontSize: 16, fontWeight: '600', color: COLORS.white}}
-                                            onPress={() => toggleInfoModal(UsageSecurity)}/>
+                        <View style={{gap: 15, alignItems: 'center'}}>
                             {
-                                AnalysisMethods.map((x, index) => {
+                                [
+                                    {
+                                        title: 'Step-By-Step How To Use?',
+                                        color: COLORS.white,
+                                        textColor: COLORS.stone,
+                                        data: UsageInstructions
+                                    },
+                                    {
+                                        title: 'Learn About Security',
+                                        color: COLORS.stone,
+                                        textColor: COLORS.white,
+                                        data: UsageSecurity
+                                    },
+                                ].map((x, index) => {
+                                    return (
+                                        <MotiView
+                                            key={index}
+                                            transition={{
+                                                delay: index * 100
+                                            }}
+                                            animate={{
+                                                scale: (isSettingsVisible || isInfoModalVisible) ? 0.9 : 1
+                                            }}>
+                                            <ButtonGradient title={x.title} color={[x.color, x.color]}
+                                                            buttonStyle={{width: innerWidth}}
+                                                            textStyle={{
+                                                                fontSize: 16,
+                                                                fontWeight: '600',
+                                                                color: x.textColor
+                                                            }}
+                                                            onPress={() => toggleInfoModal(x.data)}/>
+                                        </MotiView>
+                                    )
+                                })
+                            }
+
+
+                            {
+                                AnalysisMethods.map((x,index) => {
                                     return (
                                         <View key={index} style={{
                                             flexDirection: 'row',
@@ -494,7 +554,7 @@ const Home = ({navigation}) => {
 
                 }}
                 animate={{
-                    bottom: isSettingsVisible ? -20 : -270,
+                    bottom: isSettingsVisible ? -20 : -280,
 
                 }}
                 exit={{
@@ -503,8 +563,8 @@ const Home = ({navigation}) => {
 
                 }}
                 style={{
-                    backgroundColor: COLORS.stone,
-                    height: 270,
+                    backgroundColor: COLORS.darkBG,
+                    height: 280,
                     width: '100%',
                     position: 'absolute',
                     borderTopLeftRadius: 30,
@@ -541,14 +601,14 @@ const Home = ({navigation}) => {
                                                         <TouchableOpacity key={index} style={{
                                                             flex: 1,
                                                             paddingVertical: 10,
-                                                            backgroundColor: (dateFormat === y || language === y) ? COLORS.white : COLORS.darkBG,
+                                                            backgroundColor: (dateFormat === y || language === y) ? COLORS.white : COLORS.stone,
                                                             borderRadius: 10,
                                                             alignItems: 'center'
                                                         }}
                                                                           onPress={() => handleOptionPress(y, x.title)}
                                                         >
                                                             <Text style={{
-                                                                color: (dateFormat === y || language === y) ? COLORS.darkBG : COLORS.white,
+                                                                color: (dateFormat === y || language === y) ? COLORS.stone : COLORS.white,
                                                                 fontSize: 13
                                                             }}>{y}</Text>
                                                         </TouchableOpacity>
@@ -562,6 +622,10 @@ const Home = ({navigation}) => {
                             )
                         })
                     }
+                    <TouchableOpacity>
+                        <Text style={{color: COLORS.red, textAlign: 'center'}} onPress={fileClearPress}>Clear Selected Document</Text>
+                    </TouchableOpacity>
+
                 </View>
             </MotiView>
         </View>

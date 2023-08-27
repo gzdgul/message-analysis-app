@@ -153,7 +153,7 @@ const styles = StyleSheet.create({
     advancedBox: {
         flex: 1,
         height: '100%',
-        backgroundColor: COLORS.darkPurple,
+        backgroundColor: COLORS.stone,
         borderRadius: 15,
         paddingHorizontal: 10,
         paddingVertical: 10,

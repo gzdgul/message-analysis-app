@@ -19,7 +19,7 @@ export const pickDocument = async () => {
 
         if (result) {
             // Dosya seçildiyse
-            return result.assets[0].uri;
+            return {fileUri: result.assets[0].uri, name: result.assets[0].name};
         } else {
             console.log('Dosya seçilmedi');
             return null;
@@ -141,12 +141,30 @@ export const findMaxCountKey = (obj) => {
     }
     return maxKey;
 }
+export const findMinCountKey = (obj) => {
+    let minKey = null;
+    let minValue = Infinity;
 
+    for (const key in obj) {
+        if (obj.hasOwnProperty(key) && typeof obj[key] === 'number' && obj[key] !== 0) {
+            if (obj[key] < minValue) {
+                minKey = key;
+                minValue = obj[key];
+            }
+        } else if (Array.isArray(obj[key])) {
+            if (obj[key].length < minValue) {
+                minKey = key;
+                minValue = obj[key].length;
+            }
+        }
+    }
+    return minKey;
+}
 export const colorCorrector = (data, i, titleArr) => {
     if (findMaxCountKey(data) === titleArr[i]) {
         return {
             backgroundColor: COLORS.lightGreen,
-            color: COLORS.darkPurple,
+            color: COLORS.stone,
         }
     } else return null;
 }
@@ -420,6 +438,7 @@ export async function findAnalysis(messages) {
     const dataObjsByDate = Object.values(dataObjsByDateCount)
 
     return {
+        messages: messages,
         longestMessage: longestMessage,
         activeDays: activeDays,
         mostRepeatedWordsAndSenders: mostRepeatedWordsAndSenders,
