@@ -192,57 +192,57 @@ const Home = ({navigation}) => {
                             delay: page === 1 ? 0 : 0,
                             duration: 500
                         }}
-                    animate={{
-                        top: page === 1 ? 20 : 0,
-                        scale: page === 1 ? 1.1 : 1
-                    }}
+                        animate={{
+                            top: page === 1 ? 20 : 0,
+                            scale: page === 1 ? 1.1 : 1
+                        }}
                     >
-                    <MaskedView style={{}}
-                                maskElement={
-                                    <Image
-                                        source={require('../assets/logo.png')}
-                                        style={{
-                                            width: 170,
-                                            height: 'auto',
-                                            aspectRatio: 801 / 276,
-                                            // tintColor: COLORS.white
-                                        }}
-                                    />
-                                }>
-                        <Image
-                            source={require('../assets/logo.png')}
-                            style={{
-                                width: 170,
-                                height: 'auto',
-                                aspectRatio: 801 / 276,
-                                tintColor: COLORS.white
-                            }}
-                        />
-                        <MotiView
-                            transition={{
-                                type: 'timing',
-                                duration: selectedAnalysis?.id ? 5000 : 800
-                            }}
-                            animate={{
-                                top: selectedAnalysis?.id ? -180 : 0,
-                                backgroundColor: (isSettingsVisible) ? COLORS.stone : 'transparent'
-                            }}
-                            style={{position: 'absolute'}}>
-                            <LinearGradient
-                                colors={['transparent', COLORS.stone, selectedAnalysis?.color ? selectedAnalysis.color : COLORS.stone]}
-                                start={{x: 0, y: 0}}
-                                end={{x: 0, y: 1}}
+                        <MaskedView style={{}}
+                                    maskElement={
+                                        <Image
+                                            source={require('../assets/logo.png')}
+                                            style={{
+                                                width: 170,
+                                                height: 'auto',
+                                                aspectRatio: 801 / 276,
+                                                // tintColor: COLORS.white
+                                            }}
+                                        />
+                                    }>
+                            <Image
+                                source={require('../assets/logo.png')}
                                 style={{
-                                    // position: 'absolute',
-                                    top: 0,
-                                    left: 0,
                                     width: 170,
-                                    height: 240,
+                                    height: 'auto',
                                     aspectRatio: 801 / 276,
+                                    tintColor: COLORS.white
                                 }}
                             />
-                        </MotiView>
-                    </MaskedView>
+                            <MotiView
+                                transition={{
+                                    type: 'timing',
+                                    duration: selectedAnalysis?.id ? 5000 : 800
+                                }}
+                                animate={{
+                                    top: selectedAnalysis?.id ? -180 : 0,
+                                    backgroundColor: (isSettingsVisible) ? COLORS.stone : 'transparent'
+                                }}
+                                style={{position: 'absolute'}}>
+                                <LinearGradient
+                                    colors={['transparent', COLORS.stone, selectedAnalysis?.color ? selectedAnalysis.color : COLORS.stone]}
+                                    start={{x: 0, y: 0}}
+                                    end={{x: 0, y: 1}}
+                                    style={{
+                                        // position: 'absolute',
+                                        top: 0,
+                                        left: 0,
+                                        width: 170,
+                                        height: 240,
+                                        aspectRatio: 801 / 276,
+                                    }}
+                                />
+                            </MotiView>
+                        </MaskedView>
                     </MotiView>
                     <MotiView
                         transition={{
@@ -265,8 +265,17 @@ const Home = ({navigation}) => {
                             <Text style={{color: COLORS.white, fontSize: 15}}>Select Doc</Text>
                         </TouchableOpacity>
                         <View style={{flexDirection: 'row'}}>
-                            <Text style={{color: COLORS.white, fontSize: 12, opacity: 0.5}}>{fileName.length > 0 ? 'Selected Document: ' + fileName : 'No file selected'} </Text>
-                            <Text style={{color: fileName.length > 0 ? COLORS.green : COLORS.red, fontSize: 12, fontWeight: 'bold', opacity: 0.5}}>{fileName.length > 0 ? '✓' : 'x'}</Text>
+                            <Text style={{
+                                color: COLORS.white,
+                                fontSize: 12,
+                                opacity: 0.5
+                            }}>{fileName.length > 0 ? 'Selected Document: ' + fileName : 'No file selected'} </Text>
+                            <Text style={{
+                                color: fileName.length > 0 ? COLORS.green : COLORS.red,
+                                fontSize: 12,
+                                fontWeight: 'bold',
+                                opacity: 0.5
+                            }}>{fileName.length > 0 ? '✓' : 'x'}</Text>
                         </View>
 
                     </MotiView>
@@ -358,7 +367,7 @@ const Home = ({navigation}) => {
                                         <TouchableOpacity key={index} onPress={() => handleStartPress(x.id, x.color)}>
                                             <MotiView
                                                 transition={{
-                                                    delay: selectedAnalysis?.id? 0 : index * 100
+                                                    delay: selectedAnalysis?.id ? 0 : index * 100
                                                 }}
                                                 animate={{
                                                     scale: isSettingsVisible ? 0.9 : 1,
@@ -376,7 +385,7 @@ const Home = ({navigation}) => {
                                             >
                                                 <MotiView
                                                     transition={{
-                                                        delay: selectedAnalysis?.id? 0 : index * 100
+                                                        delay: selectedAnalysis?.id ? 0 : index * 100
                                                     }}
                                                     animate={{
                                                         borderRadius: selectedAnalysis?.id === x.id ? 100 : 30,
@@ -389,13 +398,28 @@ const Home = ({navigation}) => {
                                                         justifyContent: 'center',
                                                         alignItems: 'center'
                                                     }}>
-                                                    <Text style={{color: COLORS.white, fontSize: 12}}>Message
-                                                        Analysis</Text>
-                                                    <Text style={{
-                                                        color: x.color,
-                                                        fontSize: 22,
-                                                        fontWeight: '600'
-                                                    }}>{selectedAnalysis?.id === x.id ? 'Started' : x.title}</Text>
+                                                    {
+                                                        x.title === 'Chat'
+                                                        ?   <Image
+                                                                source={require('../assets/logo_chat.png')}
+                                                                style={{
+                                                                    width: 90,
+                                                                    height: 'auto',
+                                                                    aspectRatio: 1200 / 492,
+                                                                }}
+                                                            />
+                                                            : (
+                                                                <>
+                                                                    <Text style={{color: COLORS.white, fontSize: 12}}>Message Analysis</Text>
+                                                                    <Text style={{
+                                                                        color: x.color,
+                                                                        fontSize: 22,
+                                                                        fontWeight: '600'
+                                                                    }}>{selectedAnalysis?.id === x.id ? 'Started' : x.title}</Text>
+                                                                </>
+                                                            )
+                                                    }
+
                                                 </MotiView>
                                             </MotiView>
                                         </TouchableOpacity>
@@ -477,7 +501,7 @@ const Home = ({navigation}) => {
 
 
                             {
-                                AnalysisMethods.map((x,index) => {
+                                AnalysisMethods.map((x, index) => {
                                     return (
                                         <View key={index} style={{
                                             flexDirection: 'row',
@@ -623,7 +647,8 @@ const Home = ({navigation}) => {
                         })
                     }
                     <TouchableOpacity>
-                        <Text style={{color: COLORS.red, textAlign: 'center'}} onPress={fileClearPress}>Clear Selected Document</Text>
+                        <Text style={{color: COLORS.red, textAlign: 'center'}} onPress={fileClearPress}>Clear Selected
+                            Document</Text>
                     </TouchableOpacity>
 
                 </View>

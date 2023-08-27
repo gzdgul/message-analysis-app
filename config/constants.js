@@ -100,7 +100,7 @@ export const UsageSecurity = [
 export const AnalysisMethods =  [
     {id:'simple', color: COLORS.lightGreen, title:'Simple', description:'Total messaging statistics for each sender. Most used words, emojis and more...'},
     {id:'advanced', color: COLORS.purple, title:'Advanced', description:'Messaging statistics by months and days for each sender. See the message statistics for the day you want.'},
-    {id:'visualized', color:  COLORS.deneme, title:'Visualized', description:'Visualize messaging activities over time for better recall.'}
+    {id:'chat', color:  COLORS.deneme, title:'Chat', description:'chat......'}
 ]
 
 export const icons = {
