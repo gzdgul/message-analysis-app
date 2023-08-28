@@ -22,11 +22,12 @@ export const pickDocument = async () => {
             return {fileUri: result.assets[0].uri, name: result.assets[0].name};
         } else {
             console.log('Dosya seçilmedi');
-            return null;
+            return {fileUri: null};
         }
     } catch (error) {
         console.log('Hata:', error);
         Alert.alert('Dosya Seçilmedi')
+        return {fileUri: null};
     }
 };
 
@@ -436,6 +437,7 @@ export async function findAnalysis(messages) {
     });
 
     const dataObjsByDate = Object.values(dataObjsByDateCount)
+    console.log(nameCount)
 
     return {
         messages: messages,

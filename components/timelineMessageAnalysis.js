@@ -17,6 +17,7 @@ import {findMinCountKey} from "../libraries/Helper_Function_Library";
 import {MotiView} from "moti";
 import BottomSheet from "./bottomSheet";
 import {FadeIn} from "react-native-reanimated";
+import * as Haptics from "expo-haptics";
 
 const {width, height} = Dimensions.get('window');
 const TimelineMessageAnalysis = ({analyzedData}) => {
@@ -31,7 +32,6 @@ const TimelineMessageAnalysis = ({analyzedData}) => {
     const [isMessageTyping, setMessageTyping] = React.useState(false)
     const [data, setData] = React.useState([])
     const [isSettingsVisible, setSettingsVisible] = React.useState(false);
-    console.log('fgfdgdfgfdgdf',)
     React.useEffect(() => {
         if (newMessage.length === 1) {
             setMessageTyping(true)
@@ -109,13 +109,15 @@ const TimelineMessageAnalysis = ({analyzedData}) => {
                     } else data.media = mediaType.type;
                 }
             }
-            setTimeout(() => {
+            setTimeout(async () => {
                 setData(prevState => [...prevState, data])
+                await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
             }, 1000 * (index + 1))
         })
 
     }
-    const onPersonChangeInSettings = (x) => {
+    const onPersonChangeInSettings = async (x) => {
+        await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
         if (selectedPerson === x) {
             return;
         }
@@ -157,7 +159,12 @@ const TimelineMessageAnalysis = ({analyzedData}) => {
                         })
                     }
                 </View>
-                <TouchableOpacity onPress={() => setData([])}>
+                <TouchableOpacity onPress={ async()  => {
+                    setData([])
+                    await Haptics.notificationAsync(
+                        Haptics.NotificationFeedbackType.Success
+                    )
+                }}>
                     <Text style={{color: COLORS.red, alignSelf: 'center'}}>Konuşmayı Sıfırla</Text>
                 </TouchableOpacity>
 
@@ -183,7 +190,11 @@ const TimelineMessageAnalysis = ({analyzedData}) => {
                             }}
                         />
                     </View>
-                    <TouchableOpacity style={{padding: 10, backgroundColor: COLORS.stone, borderRadius: 15}} onPress={() => setSettingsVisible(!isSettingsVisible)}>
+                    <TouchableOpacity style={{padding: 10, backgroundColor: COLORS.stone, borderRadius: 15}} onPress={ async () => {
+                        await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy)
+                        Keyboard.dismiss()
+                        setSettingsVisible(!isSettingsVisible)
+                    }}>
                         <Image
                             source={require('../assets/settings_icon.png')}
                             style={{
@@ -261,7 +272,10 @@ const TimelineMessageAnalysis = ({analyzedData}) => {
                                                         justifyContent: 'center',
                                                         alignItems: 'center'
                                                     }}
-                                                    onPress={() => setSelectedPerson(x)}
+                                                    onPress={ async () => {
+                                                        await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
+                                                        setSelectedPerson(x)
+                                                    }}
                                                 >
                                                     <Text style={{fontWeight: 'bold', color: COLORS.white}}>{x}</Text>
                                                 </TouchableOpacity>

@@ -1,10 +1,11 @@
 import React, {useEffect, useState} from 'react';
-import {Dimensions, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {Dimensions, StyleSheet, Text, TouchableOpacity, Vibration, View} from "react-native";
 import {COLORS} from "../../config/constants";
 import {View as MotiView} from "moti/build/components/view";
 import {AnalysisBoxRow} from "../../libraries/UI_Component_Library";
 import {countArray} from "../../libraries/Helper_Function_Library";
 import {AnimatePresence} from "moti";
+import * as Haptics from "expo-haptics";
 
 const AnalysisTable = ({dataset, names, setPressAllowed, pressAllowed}) => {
     const emojiObj = countArray('emoji',null, dataset,names)
@@ -20,7 +21,7 @@ const AnalysisTable = ({dataset, names, setPressAllowed, pressAllowed}) => {
     useEffect(() => {
 
     },[])
-    const handlePress = (emojiData) => {
+    const handlePress = async (emojiData) => {
 
         if (!pressAllowed || emojiData?.length < 1) {
             return; // Fonksiyon hemen sonlanır ve tekrar çalışmaz
@@ -29,6 +30,9 @@ const AnalysisTable = ({dataset, names, setPressAllowed, pressAllowed}) => {
         setPressAllowed(false); // Basılmasını engelle
         setEmojiData(emojiData)
         setShowEmoji(true);
+        await Haptics.notificationAsync(
+            Haptics.NotificationFeedbackType.Success
+        )
 
         setTimeout(() => {
             setShowEmoji(false);

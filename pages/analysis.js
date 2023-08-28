@@ -1,13 +1,13 @@
 import React from 'react';
-import {StyleSheet, View, Text, ScrollView} from "react-native";
+import {StyleSheet, View, Text, ScrollView, Alert} from "react-native";
 import {COLORS} from "../config/constants";
 import SimpleMessageAnalysis from "../components/simpleMessageAnalysis";
 import TimelineMessageAnalysis from "../components/timelineMessageAnalysis";
 import AdvancedMessageAnalysis from "../components/advancedMessageAnalysis";
 
 const Analysis = ({navigation, route}) => {
-    const analyzedData = route.params.analyzedData
-    const pageID = analyzedData.id
+    const analyzedData = route.params.analyzedData;
+    const pageID = analyzedData.id;
 
     return (
        <View style={styles.container}>

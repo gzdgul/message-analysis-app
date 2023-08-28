@@ -11,7 +11,13 @@ import {
     TouchableOpacity, TouchableWithoutFeedback,
     View
 } from "react-native";
-import {AboutUs, AnalysisMethods, COLORS, UsageInstructions, UsageSecurity} from "../config/constants";
+import {
+    AboutUs,
+    AnalysisMethods, AnalysisMethodsByLanguage,
+    COLORS, translations,
+     UsageInstructionsData,
+     UsageSecurityData
+} from "../config/constants";
 import AnalysisBox from "../components/AnalysisBox";
 import {AnimatePresence, MotiView} from "moti";
 import ScrollableInfoModal from "../components/ScrollableInfoModal";
@@ -20,38 +26,47 @@ import {ButtonGradient} from "../libraries/UI_Component_Library";
 import OpenLink from "../components/openLink";
 import {findAnalysis, parseData, pickDocument, readFileContent} from "../libraries/Helper_Function_Library";
 import MaskedView from "@react-native-masked-view/masked-view";
+import * as Haptics from 'expo-haptics';
 
 const {width, height} = Dimensions.get('window');
 const innerWidth = width - 30
 
 
 const Home = ({navigation}) => {
+
     const [selectedAnalysis, setSelectedAnalysis] = React.useState(null)
     const [dateFormat, setDateFormat] = React.useState('DD/MM/YY');
-    const [language, setLanguage] = React.useState('Türkçe');
+    const [language, setLanguage] = React.useState('TR');
     const [page, setPage] = React.useState(0);
     const totalPage = 2
     const totalItem = 4
     const [isInfoModalVisible, setInfoModalVisible] = React.useState(false);
-    const [infoModalData, setInfoModalData] = React.useState(UsageInstructions);
+    const [infoModalData, setInfoModalData] = React.useState(UsageInstructionsData[language]);
     const [isSettingsVisible, setSettingsVisible] = React.useState(false);
     const [fileUri, setFileUri] = React.useState('')
     const [fileName, setFileName] = React.useState('')
+
     const handlePickDocument = async () => {
+        await Haptics.selectionAsync()
         const {fileUri, name} = await pickDocument()
-        if (fileUri !== undefined) {
+        if (fileUri !== null) {
             console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!', name)
             setFileUri(fileUri)
             setFileName(name)
         }
     }
     const handleStartPress = async (id, color) => {
+
         if (fileUri) {
             if (selectedAnalysis) {
+                await Haptics.notificationAsync(
+                    Haptics.NotificationFeedbackType.Warning
+                )
                 Alert.alert('☁️', 'You have analysis in progress, please wait a moment')
                 return;
             }
             // setCircleText('Analyzing...')
+            await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy)
             setSelectedAnalysis({id: id, color: color});
             console.log('STARTEDDDDDDDDDDDDDDDDDDDDDDDD')
 
@@ -72,6 +87,12 @@ const Home = ({navigation}) => {
                 allSendings,
 
             } = await findAnalysis(fileContent);
+            if (allSendings.nameCount.length !== 2) {
+                setSelectedAnalysis(null);
+                // setCircleText('START')
+                Alert.alert('Oops..', 'Synto, şu an için sadece 2 kişi arasındaki konuşmaları destekler.')
+                return;
+            }
             setTimeout(() => {
                 navigation.navigate('Analysis', {
                     analyzedData: {
@@ -85,6 +106,9 @@ const Home = ({navigation}) => {
                         id
                     }
                 });
+                Haptics.notificationAsync(
+                    Haptics.NotificationFeedbackType.Success
+                )
 
                 // setCircleText('START')
             }, 5000)
@@ -97,7 +121,11 @@ const Home = ({navigation}) => {
         setInfoModalData(data)
         setInfoModalVisible(!isInfoModalVisible);
     };
-    const toggleSettings = () => {
+    const toggleSettings = async () => {
+        if (selectedAnalysis) {
+            return;
+        }
+        await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy)
         setSettingsVisible(!isSettingsVisible);
     };
 
@@ -106,6 +134,7 @@ const Home = ({navigation}) => {
         const pageNum = Math.round(x.nativeEvent.contentOffset.x / width)
         console.log(pageNum)
         setPage(pageNum)
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
     }
     // CONTROL DATE FORMAT
     // const handleDeneme = () => {
@@ -170,7 +199,7 @@ const Home = ({navigation}) => {
                         <Text style={{
                             color: COLORS.white,
                             fontSize: 11
-                        }}>Language: {language === 'Türkçe' ? 'TR' : 'EN'} Date Format :{dateFormat}</Text>
+                        }}>Language: {language} Date Format :{dateFormat}</Text>
                     </View>
                     <TouchableOpacity
                         style={{padding: 15, borderRadius: 15, backgroundColor: COLORS.stone, zIndex: 100,}}
@@ -254,7 +283,7 @@ const Home = ({navigation}) => {
                             opacity: isSettingsVisible ? 0.4 : 1
                         }}
                         style={{gap: 10, alignItems: 'center', marginTop: 5}}>
-                        <TouchableOpacity disabled={page === 1} onPress={handlePickDocument} style={{
+                        <TouchableOpacity disabled={page === 1 || selectedAnalysis !== null} onPress={handlePickDocument} style={{
                             backgroundColor: COLORS.stone,
                             width: 170,
                             height: 35,
@@ -262,14 +291,14 @@ const Home = ({navigation}) => {
                             justifyContent: 'center',
                             alignItems: 'center'
                         }}>
-                            <Text style={{color: COLORS.white, fontSize: 15}}>Select Doc</Text>
+                            <Text style={{color: COLORS.white, fontSize: 15}}>{translations[language]['select_doc']}</Text>
                         </TouchableOpacity>
                         <View style={{flexDirection: 'row'}}>
                             <Text style={{
                                 color: COLORS.white,
                                 fontSize: 12,
                                 opacity: 0.5
-                            }}>{fileName.length > 0 ? 'Selected Document: ' + fileName : 'No file selected'} </Text>
+                            }}>{fileName.length > 0 ? translations[language]['selected_doc'] + ' : ' + fileName : translations[language]['no_file_selected']} </Text>
                             <Text style={{
                                 color: fileName.length > 0 ? COLORS.green : COLORS.red,
                                 fontSize: 12,
@@ -290,7 +319,7 @@ const Home = ({navigation}) => {
             <View style={{marginVertical: 20, width: width, paddingHorizontal: 15}}>
                 <View style={{flexDirection: 'row'}}>
                     {
-                        ['Message Analysis', 'Explore'].map((x, index) => {
+                        [translations[language]['message_analysis'], translations[language]['explore']].map((x, index) => {
                             return (
                                 <TouchableOpacity key={index} onPress={() => scrollToPage(index)}>
                                     <MotiView
@@ -362,7 +391,7 @@ const Home = ({navigation}) => {
                         <View style={{flexDirection: 'row', flexWrap: 'wrap', gap: 15, paddingHorizontal: 15}}>
 
                             {
-                                AnalysisMethods.map((x, index) => {
+                                AnalysisMethodsByLanguage(language).map((x, index) => {
                                     return (
                                         <TouchableOpacity key={index} onPress={() => handleStartPress(x.id, x.color)}>
                                             <MotiView
@@ -410,12 +439,12 @@ const Home = ({navigation}) => {
                                                             />
                                                             : (
                                                                 <>
-                                                                    <Text style={{color: COLORS.white, fontSize: 12}}>Message Analysis</Text>
+                                                                    <Text style={{color: COLORS.white, fontSize: 12}}>{translations[language]['message_analysis']}</Text>
                                                                     <Text style={{
                                                                         color: x.color,
                                                                         fontSize: 22,
                                                                         fontWeight: '600'
-                                                                    }}>{selectedAnalysis?.id === x.id ? 'Started' : x.title}</Text>
+                                                                    }}>{selectedAnalysis?.id === x.id ? translations[language]['started'] : translations[language][x.id]}</Text>
                                                                 </>
                                                             )
                                                     }
@@ -465,16 +494,16 @@ const Home = ({navigation}) => {
                             {
                                 [
                                     {
-                                        title: 'Step-By-Step How To Use?',
+                                        title: translations[language]['step_by_step_how_to_use'],
                                         color: COLORS.white,
                                         textColor: COLORS.stone,
-                                        data: UsageInstructions
+                                        data: UsageInstructionsData[language]
                                     },
                                     {
-                                        title: 'Learn About Security',
+                                        title: translations[language]['learn_about_security'],
                                         color: COLORS.stone,
                                         textColor: COLORS.white,
-                                        data: UsageSecurity
+                                        data: UsageSecurityData[language]
                                     },
                                 ].map((x, index) => {
                                     return (
@@ -501,7 +530,7 @@ const Home = ({navigation}) => {
 
 
                             {
-                                AnalysisMethods.map((x, index) => {
+                                AnalysisMethodsByLanguage(language).map((x, index) => {
                                     return (
                                         <View key={index} style={{
                                             flexDirection: 'row',
@@ -596,28 +625,32 @@ const Home = ({navigation}) => {
                 }}>
                 <View style={{gap: 20, paddingVertical: 20, paddingHorizontal: 20}}>
                     <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
-                        <Text style={{color: COLORS.white, fontSize: 13, fontWeight: 'bold'}}>SETTINGS</Text>
+                        <Text style={{color: COLORS.white, fontSize: 13, fontWeight: 'bold'}}>{translations[language]['settings'].toUpperCase()}</Text>
                         <TouchableOpacity onPress={toggleSettings}>
                             <Text style={{
                                 color: COLORS.white,
                                 fontSize: 11,
                                 opacity: 0.6,
                                 fontWeight: 'bold'
-                            }}>CLOSE</Text>
+                            }}>{translations[language]['close'].toUpperCase()}</Text>
                         </TouchableOpacity>
                     </View>
                     {
-                        [{
-                            data: ["DD/MM/YY", "MM/DD/YY", "YY/MM/DD"],
-                            title: 'Date Format'
-                        }, {data: ["Türkçe", "English"], title: 'Language'}].map((x, index) => {
+                        [
+                            {data: ["DD/MM/YY", "MM/DD/YY", "YY/MM/DD"], title: 'Date Format'},
+                            {data: ["TR", "EN"], title: 'Language'}
+                        ].map((x, index) => {
                             return (
                                 <View key={index}>
                                     <View style={{}}>
                                         <Text style={{
                                             color: COLORS.white,
                                             fontSize: 13
-                                        }}>{'Select Your ' + x.title}</Text>
+                                        }}>
+                                            {x.title === 'Date Format'
+                                            ? translations[language]['select_your_date_format']
+                                            : translations[language]['select_your_language']}
+                                        </Text>
                                         <View style={{flexDirection: 'row', gap: 10, marginTop: 10}}>
                                             {
                                                 x.data.map((y, index) => {
@@ -647,8 +680,7 @@ const Home = ({navigation}) => {
                         })
                     }
                     <TouchableOpacity>
-                        <Text style={{color: COLORS.red, textAlign: 'center'}} onPress={fileClearPress}>Clear Selected
-                            Document</Text>
+                        <Text style={{color: COLORS.red, textAlign: 'center'}} onPress={fileClearPress}>{translations[language]['clear_selected_document']}</Text>
                     </TouchableOpacity>
 
                 </View>

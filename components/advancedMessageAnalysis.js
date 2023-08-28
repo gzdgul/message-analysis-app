@@ -7,6 +7,7 @@ import { AverageLine } from '../libraries/UI_Component_Library';
 import AnalysisBar from './AnalysisBar';
 import AnalysisTable from './Advanced/AnalysisTable';
 import AnalysisMonthly from './Advanced/AnalysisMonthly';
+import * as Haptics from "expo-haptics";
 
 const AdvancedMessageAnalysis = ({analyzedData}) => {
     const dataObjsByDate = analyzedData.dataObjsByDate
@@ -23,11 +24,12 @@ const AdvancedMessageAnalysis = ({analyzedData}) => {
     const maxMessageCount = activeDaysMaxToMin[0][1];
     const [monthlyData, setMonthlyData] = React.useState([...dataGroupsByMonth[dataGroupsByMonth.length - 1]])
 
-    const handlePressBack = () => {
+    const handlePressBack = async () => {
         if (!pressAllowed) {
             return;
         }
         setPressAllowed(false)
+        await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy)
 
         setTimeout(() => {
             setPressAllowed(true)
@@ -38,11 +40,12 @@ const AdvancedMessageAnalysis = ({analyzedData}) => {
             setPressed({})
         }
     }
-    const handlePressNext = () => {
+    const handlePressNext = async () => {
         if (!pressAllowed) {
             return;
         }
         setPressAllowed(false)
+        await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy)
 
         setTimeout(() => {
             setPressAllowed(true)

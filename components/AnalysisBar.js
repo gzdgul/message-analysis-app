@@ -4,6 +4,7 @@ import {LinearGradient} from "expo-linear-gradient";
 import {COLORS} from "../config/constants";
 import {StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import { Dimensions } from 'react-native';
+import * as Haptics from "expo-haptics";
 
 const AnalysisBar = ({  id, percentageOfChange,block, pressed, setPressed, day, elementCount, pressAllowed}) => {
     const { width, height } = Dimensions.get('window');
@@ -13,7 +14,7 @@ const AnalysisBar = ({  id, percentageOfChange,block, pressed, setPressed, day, 
         pressed.block === block
         ? pressed.DAY === id ? areaWidth/elementCount - 5 + 15 : areaWidth/elementCount - 5 -(15/elementCount)
         : areaWidth/elementCount - 5
-    const handleBarPress = () => {
+    const handleBarPress = async () => {
         if (!pressAllowed) {
             return;
         }
@@ -21,6 +22,7 @@ const AnalysisBar = ({  id, percentageOfChange,block, pressed, setPressed, day, 
             setPressed({})
         }
         else setPressed({DAY: id, block: block })
+        await Haptics.selectionAsync()
     }
 
     return (

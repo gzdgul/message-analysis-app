@@ -8,6 +8,7 @@ import { printToFileAsync } from "expo-print";
 import {shareAsync} from "expo-sharing";
 import {View as MotiView} from "moti/build/components/view";
 import {AnimatePresence} from "moti";
+import * as Haptics from "expo-haptics";
 
 const SimpleMessageAnalysis = ({analyzedData}) => {
     const { width, height } = Dimensions.get('window');
@@ -47,13 +48,15 @@ const SimpleMessageAnalysis = ({analyzedData}) => {
     const html = htmlMaker(names,dateDataforPDF,analyzedData)
 
     let generatePdf = async () => {
+
         const file = await  printToFileAsync({
             html: html,
             base64: false,
             useMarkupFormatter: true
         });
-
+        await Haptics.selectionAsync()
         await shareAsync(file.uri);
+
     };
    const DualBoxView = ({title, totalTitle, data, titleArr, total}) => (
        <View>

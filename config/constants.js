@@ -75,33 +75,162 @@ import U5 from "../assets/U5.png"
 import U6 from "../assets/U6.png"
 import U7 from "../assets/U7.png"
 import U8 from "../assets/U8.png"
-export const UsageInstructions = [
-    {title: 'Step 1: Kişiye Dokun', desc: 'Whatsapp üzerinden bir kişiye dokunarak başlayın.', img: U1, type: 'UsageInstructions'},
-    {title: 'Step 2: Kişi Bilgisi Sekmesine Git', desc: 'Kişi bilgilerini görmek için kişiye dokunun.', img: U2, type: 'UsageInstructions'},
-    {title: 'Step 3: Sohbeti Dışa Aktar', desc: 'Sohbeti dışa aktarmak için aşağıya inin ve "Sohbeti Dışa Aktar" seçeneğine dokunun.', img: U3, type: 'UsageInstructions'},
-    {title: 'Step 4: Medya Ekleme', desc: '"Medya ekleme" seçeneğine tıklayın.', img: U4, type: 'UsageInstructions'},
-    {title: 'Step 5:  Dosyalara Kaydet', desc: ' "Dosyalara kaydet" seçeneğine tıklayın.', img: U5, type: 'UsageInstructions'},
-    {title: 'Step 6: Zip Dosyasını Ayıkla', desc: 'Dosyalarınıza gidin. mesaj dosyanızı çıkarmak için zip dosyasına bir kez dokunun.', img: U6, type: 'UsageInstructions'},
-    {title: 'Step 7: Analiz Yöntemi Seçin', desc: 'Uygulama üzerinden istediğiniz analiz yöntemini seçin. "Dosya Seç" seçeneğine dokunun ve mesaj dosyanızı seçin.', img: U7, type: 'UsageInstructions'},
-    {title: 'Step 8:  Analize Başlayın', desc: 'Analize başlamak için "Başla" düğmesine tıklayın.', img: U8, type: 'UsageInstructions'},
-]
-export const UsageSecurity = [
-    {title: 'Özel Mesajlarınız Koruma Altında', desc: 'Verilerinizin güvenliği bizim en öncelikli görevimizdir. Özel konuşmalarınız ve size özel tasarlanmış mesaj analizleriniz tamamen güvende tutulur. Size verilerinizin nasıl korunduğunu daha yakından anlatalım.', img: messageLock, type: 'UsageSecurity'},
-    {title: 'Bağımsız ve Güvende', desc: 'Uygulamamız bağımsızdır ve internet bağlantısına ihtiyaç duymaz. Mesajlarınız sadece kendi cihazınızda analiz edilir. Bu sayede verileriniz hiçbir zaman internet üzerinden iletilmez, böylece gizliliğiniz her zaman korunur.', img: messageSecure, type: 'UsageSecurity'},
-    {title: 'Verileriniz Hızla ve Tamamen Silinir', desc: 'Mesajlarınızın analiz sürecinde hiçbir şekilde okunmaz veya kopyalanmaz. Analiz süreci tamamlandığında, verileriniz anında ve tamamen silinir. Bu, verilerinizin gizliliğini her zaman korumamıza olanak tanır.', img: messageCross, type: 'UsageSecurity'},
-    {title: 'Üçüncü Kişilerle Paylaşılmaz', desc: 'Size özel mesaj analizinize sadece siz ve paylaştığınız kişi veya kişiler erişebilir. Verileriniz asla üçüncü taraflarla paylaşılmaz veya satılmaz.', img: messageThief, type: 'UsageSecurity'},
-    {title: 'Bizimle İletişime Geçin', desc: 'Uygulamamızı kullanırken herhangi bir sorunuz, öneriniz veya geri bildiriminiz varsa, lütfen bizimle iletişime geçmekten çekinmeyin. Kullanıcılarımızın deneyimini daha iyi hale getirmek için buradayız ve sizden gelecek geri bildirimleri değerli buluyoruz.', img: messageMoreInfo, type: 'UsageSecurity'},
-]
-// export const AboutUs = [
-//     {title: 'Front-end Developer', desc: 'xxx \n\n xxx', img: codding, url: [{title: 'Github', url: ''}], type: 'AboutUs'},
-//     {title: 'UI - UX Designer', desc: 'xxx \n\n xxx', img: uiDesign,  url: [{title: 'Behance', url: ''}],type: 'AboutUs'},
-// ]
 
-export const AnalysisMethods =  [
-    {id:'simple', color: COLORS.lightGreen, title:'Simple', description:'Total messaging statistics for each sender. Most used words, emojis and more...'},
-    {id:'advanced', color: COLORS.purple, title:'Advanced', description:'Messaging statistics by months and days for each sender. See the message statistics for the day you want.'},
-    {id:'chat', color:  COLORS.deneme, title:'Chat', description:'chat......'}
-]
+const UsageInstructions = {
+    "TR" : {
+        titles: ['Adım 1: Kişiye Dokun','Adım 2: Kişi Bilgisi Sekmesine Git','Adım 3: Sohbeti Dışa Aktar','Adım 4: Medya Ekleme',
+            'Adım 5:  Dosyalara Kaydet','Adım 6: Zip Dosyasını Ayıkla','Adım 7: Analiz Yöntemi Seçin','Adım 8:  Analize Başlayın'],
+        descriptions: [
+            'Whatsapp üzerinden bir kişiye dokunarak başlayın.',
+            'Kişi bilgilerini görmek için kişiye dokunun.',
+            'Sohbeti dışa aktarmak için aşağıya inin ve "Sohbeti Dışa Aktar" seçeneğine dokunun.',
+            '"Medya ekleme" seçeneğine tıklayın.',
+            '"Dosyalara kaydet" seçeneğine tıklayın.',
+            'Dosyalarınıza gidin. mesaj dosyanızı çıkarmak için zip dosyasına bir kez dokunun.',
+            'Uygulama üzerinden istediğiniz analiz yöntemini seçin. "Dosya Seç" seçeneğine dokunun ve mesaj dosyanızı seçin.',
+            'Analize başlamak için "Başla" düğmesine tıklayın.'
+        ]
+    },
+    "EN": {
+        titles: ['Step 1: Touch the Person','Step 2: Go to Person Info Tab','Step 3: Export the Chat','Step 4: Without Media',
+            'Step 5: Save to Files','Step 6: Extract the Zip File','Step 7: Select Analysis Method','Step 8: Start the Analysis'],
+        descriptions: [
+            'Begin by touching a person on WhatsApp.',
+            'Touch the person to view their information.',
+            'Scroll down and select "Export Chat" to export the chat.',
+            'Click on "Without Media" option.',
+            'Click on "Save to Files" option.',
+            'Go to your files. Tap the zip file to extract your message file.',
+            'Choose the desired analysis method within the application. Tap "Select File" and choose your message file.',
+            'Click "Start" to initiate the analysis.'
+        ]
+    },
+    images: [U1,U2,U3,U4,U5,U6,U7,U8]
+}
+const UsageSecurity = {
+    "TR" : {
+        titles: ['Özel Mesajlarınız Koruma Altında','Bağımsız ve Güvende','Verileriniz Hızla ve Tamamen Silinir','Üçüncü Kişilerle Paylaşılmaz', 'Bizimle İletişime Geçin'],
+        descriptions: [
+            'Verilerinizin güvenliği bizim en öncelikli görevimizdir. Özel konuşmalarınız ve size özel tasarlanmış mesaj analizleriniz tamamen güvende tutulur. Size verilerinizin nasıl korunduğunu daha yakından anlatalım.',
+            'Uygulamamız bağımsızdır ve internet bağlantısına ihtiyaç duymaz. Mesajlarınız sadece kendi cihazınızda analiz edilir. Bu sayede verileriniz hiçbir zaman internet üzerinden iletilmez, böylece gizliliğiniz her zaman korunur.',
+            'Mesajlarınızın analiz sürecinde hiçbir şekilde okunmaz veya kopyalanmaz. Analiz süreci tamamlandığında, verileriniz anında ve tamamen silinir. Bu, verilerinizin gizliliğini her zaman korumamıza olanak tanır.',
+            'Size özel mesaj analizinize sadece siz ve paylaştığınız kişi veya kişiler erişebilir. Verileriniz asla üçüncü taraflarla paylaşılmaz veya satılmaz.',
+            'Uygulamamızı kullanırken herhangi bir sorunuz, öneriniz veya geri bildiriminiz varsa, lütfen bizimle iletişime geçmekten çekinmeyin. Kullanıcılarımızın deneyimini daha iyi hale getirmek için buradayız ve sizden gelecek geri bildirimleri değerli buluyoruz.',
+        ]
+    },
+    "EN" : {
+        titles: ['Your Private Messages are Protected','Independent and Secure','Your Data is Quickly and Completely Deleted','Not Shared with Third Parties', 'Contact Us'],
+        descriptions: [
+            'The security of your data is our top priority. Your private conversations and custom message analyses are kept completely safe. Let us explain in more detail how your data is protected.',
+            'Our application is independent and does not require an internet connection. Your messages are only analyzed on your own device. This means your data is never transmitted over the internet, ensuring your privacy is always safeguarded.',
+            'Your messages are never read or copied during the analysis process. Once the analysis is complete, your data is immediately and completely deleted. This allows us to always protect the privacy of your data.',
+            'Only you and the individuals you share your message analysis with can access your personalized message analysis. Your data is never shared or sold to third parties.',
+            'If you have any questions, suggestions, or feedback while using our application, please do not hesitate to contact us. We are here to improve our users experience, and we value any feedback you provide.',
+        ]
+    },
+    images: [messageLock,messageSecure,messageCross,messageThief,messageMoreInfo]
+}
+
+export const UsageInstructionsData = {
+    "TR": UsageInstructions["TR"].titles.map((title, index) => ({
+        title,
+        desc: UsageInstructions["TR"].descriptions[index],
+        img: UsageInstructions.images[index],
+        type: 'UsageInstructions'
+    })),
+    "EN": UsageInstructions["EN"].titles.map((title, index) => ({
+        title,
+        desc: UsageInstructions["EN"].descriptions[index],
+        img: UsageInstructions.images[index],
+        type: 'UsageInstructions'
+    }))
+};
+export const UsageSecurityData = {
+    "TR": UsageSecurity["TR"].titles.map((title, index) => ({
+        title,
+        desc: UsageSecurity["TR"].descriptions[index],
+        img: UsageSecurity.images[index],
+        type: 'UsageSecurity'
+    })),
+    "EN": UsageSecurity["EN"].titles.map((title, index) => ({
+        title,
+        desc: UsageSecurity["EN"].descriptions[index],
+        img: UsageSecurity.images[index],
+        type: 'UsageSecurity'
+    }))
+};
+export const AnalysisMethodsByLanguage = (language) => {
+    const description = {
+        "TR": [
+            'Her gönderen için toplam mesaj istatistikleri. En çok kullanılan kelimeler, emojiler ve daha fazlası...',
+            'Her gönderen için aylara ve günlere göre mesaj istatistikleri. İstediğiniz günün mesaj istatistiklerini görün.',
+            'Kendi verilerinizden mesajlar kullanarak eğlenceli ve sürpriz sohbetler yapabilirsiniz 😍💬.'
+        ],
+        "EN": [
+            'Total messaging statistics for each sender. Most used words, emojis and more...',
+            'Messaging statistics by months and days for each sender. See the message statistics for the day you want.',
+            'You can have funny and surprise chats using messages from your own data 😍💬.'
+        ]
+    }
+    return (
+        [
+            {id:'simple', color: COLORS.lightGreen, title:'Simple', description:description[language][0]},
+            {id:'advanced', color: COLORS.purple, title:'Advanced', description:description[language][1]},
+            {id:'chat', color:  COLORS.deneme, title:'Chat', description:description[language][2]}
+        ]
+    )
+}
+export const translations = {
+    "TR": {
+        "settings": "Ayarlar",
+        "select_doc": "Dosya Seç",
+        "selected_doc": "Seçili Dosya",
+        "select_your_date_format": "Tarih Formatını Seç",
+        "select_your_language": "Dilini Seç",
+        "close": "Kapat",
+        "clear_selected_document": "Seçili Dosyayı Temizle",
+        "no_file_selected": "Seçili Dosya Yok",
+        "message_analysis": "Mesaj Analiz",
+        "explore": "Keşfet",
+        "language": "Dil",
+        "simple": "Basit",
+        "advanced": "Gelişmiş",
+        "started": "Başladı",
+        "step_by_step_how_to_use": "Adım Adım Nasıl Kullanılır?",
+        "learn_about_security": "Güvenlik Hakkında Bilgi Alın"
+    },
+    "EN": {
+        "settings": "Settings",
+        "select_doc": "Select Doc",
+        "selected_doc": "Selected Document",
+        "select_your_date_format": "Select Your Date Format",
+        "select_your_language": "Select Your Language",
+        "close": "Close",
+        "clear_selected_document": "Clear Selected Document",
+        "no_file_selected": "No file selected",
+        "message_analysis": "Message Analysis",
+        "explore": "Explore",
+        "language": "Language",
+        "simple": "Simple",
+        "advanced": "Advanced",
+        "started": "Started",
+        "step_by_step_how_to_use": "Step-By-Step How To Use?",
+        "learn_about_security": "Learn About Security"
+    }
+};
+export const texts = {
+    buttons : {
+        select_doc: {"TR": 'Dosya Seç', "EN": 'Select Doc'},
+        how_to_use: {"TR": 'Adım Adım Nasıl Kullanılır?', "EN": 'Step-By-Step How To Use?'},
+        learn_security: {"TR": 'Gizlilik Hakkında', "EN": 'Learn About Security'},
+    },
+    settings: {"TR": 'Ayarlar', "EN": 'Settings'},
+    select_your_date_format: {"TR": 'Tarih Formatını Seç', "EN": 'Select Your Date Format'},
+    select_your_language: {"TR": 'Dilini Seç', "EN": 'Select Your Language'},
+    close: {"TR": 'Kapat', "EN": 'Close'},
+    clear_selected_document: {"TR": 'Seçili Dosyayı Temizle', "EN": 'Clear Selected Document'},
+    no_file_selected: {"TR": 'Seçili Dosya Yok', "EN": 'No file selected'},
+}
 
 export const icons = {
     image: '🖼️',
