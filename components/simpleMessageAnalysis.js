@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import {Button, Dimensions, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
-import {COLORS, htmlMaker} from "../config/constants";
+import {COLORS, htmlMaker, translations} from "../config/constants";
 
 import {AnalysisLabel, AnalysisValueBoxContainer, AnalysisValueBoxSmall} from "../libraries/UI_Component_Library";
 import {sumCounts} from "../libraries/Helper_Function_Library";
@@ -10,7 +10,7 @@ import {View as MotiView} from "moti/build/components/view";
 import {AnimatePresence} from "moti";
 import * as Haptics from "expo-haptics";
 
-const SimpleMessageAnalysis = ({analyzedData}) => {
+const SimpleMessageAnalysis = ({analyzedData, language}) => {
     const { width, height } = Dimensions.get('window');
     const [showEmojiBOMB, setShowEmojiBOMB] = React.useState(false)
     const [pressAllowed, setPressAllowed] = React.useState(true)
@@ -33,6 +33,8 @@ const SimpleMessageAnalysis = ({analyzedData}) => {
     // const missedCallCounts = analyzedData.allSendings.missedCallCounts
     // const longestMessageSender = analyzedData.longestMessage.name
     // const longestMessage = analyzedData.longestMessage.message
+
+
     const activeDaysMaxToMin = [...activeDays].sort((a,b) => b[1] - a[1])
     const mostRepeatedDate = activeDaysMaxToMin[0][0];
     // const maxMessageCount = activeDaysMaxToMin[0][1];
@@ -45,7 +47,7 @@ const SimpleMessageAnalysis = ({analyzedData}) => {
     })
     console.log(emojiBOMB)
 
-    const html = htmlMaker(names,dateDataforPDF,analyzedData)
+    const html = htmlMaker(names,dateDataforPDF,analyzedData, language)
 
     let generatePdf = async () => {
 
@@ -147,7 +149,7 @@ const SimpleMessageAnalysis = ({analyzedData}) => {
 
         <ScrollView contentContainerStyle={{ paddingHorizontal: 30,}}>
 
-            <Text style={styles.mainTitle}>Simple Message Analysis</Text>
+            <Text style={styles.mainTitle}>{translations[language]["simple"] + " " + translations[language]["message_analysis"]}</Text>
 
             <View style={{marginTop: -10, paddingVertical: 10, paddingHorizontal: 10, borderRadius:25, alignItems: 'center', gap: 5 }}>
                 <Text style={{color: COLORS.white, fontSize: 17, fontWeight: 'bold'}}>{names[0] + ' - ' + names[1]}</Text>
@@ -167,18 +169,18 @@ const SimpleMessageAnalysis = ({analyzedData}) => {
                         style={{width: 170}}>
                         {
                             countdown !== 0 ? <Text style={{color: COLORS.white,opacity: 0.5, fontSize: 15, fontWeight: 'bold'}}>{countdown}</Text>
-                                :  <Text style={{color: COLORS.white,opacity: 0.5, fontSize: 10, fontWeight: 'bold'}}>Tap to see the EMOJI CONFETTI of the most used emojis again</Text>
+                                :  <Text style={{color: COLORS.white,opacity: 0.5, fontSize: 10, fontWeight: 'bold'}}>{translations[language]["emoji_conf_desc"]}</Text>
                         }
                     </MotiView>
                 </TouchableOpacity>
 
             </View>
-            <AnalysisLabel title={'Toplam Mesaj'} value={sumCounts(messageSending)}/>
-            <AnalysisLabel title={'En Çok Mesajlaşılan Tarih'} value={mostRepeatedDate}/>
-            <DualBoxView title={'Mesajlaşılan Zamanlar'} data={messagingByTime} titleArr={['morning','night']} total={false}/>
-            <DualBoxView title={'Mesaj Gönderimi'} data={messageSending} titleArr={names} total={false}/>
-            <AnalysisLabel title={'Toplam Kelime'} value={totalword}/>
-            <Text style={styles.labelTitleText}>En Çok Gönderilen Kelimeler</Text>
+            <AnalysisLabel title={translations[language]["analysisTitles"][0]} value={sumCounts(messageSending)}/>
+            <AnalysisLabel title={translations[language]["analysisTitles"][1]} value={mostRepeatedDate}/>
+            <DualBoxView title={translations[language]["analysisTitles"][2]} data={messagingByTime} titleArr={['morning','night']} total={false}/>
+            <DualBoxView title={translations[language]["analysisTitles"][3]} data={messageSending} titleArr={names} total={false}/>
+            <AnalysisLabel title={translations[language]["analysisTitles"][4]} value={totalword}/>
+            <Text style={styles.labelTitleText}>{translations[language]["analysisTitles"][5]}</Text>
             <View style={{marginTop: 15}}>
                 {mostRepeatedWordsAndSenders.map((x, index) => (
                     <View key={index} style={[styles.valueBoxContainer,{ marginVertical: 5}, {height: 80}]}>
@@ -188,8 +190,8 @@ const SimpleMessageAnalysis = ({analyzedData}) => {
                     </View>
                 ))}
             </View>
-            <DualBoxView totalTitle={'Toplam Emoji'} title={'Emoji Gönderimi'} data={emojiSending} titleArr={names} total={true}/>
-            <Text style={styles.labelTitleText}>En Çok Gönderilen Emojiler</Text>
+            <DualBoxView totalTitle={translations[language]["analysisTitles"][6]} title={translations[language]["analysisTitles"][7]} data={emojiSending} titleArr={names} total={true}/>
+            <Text style={styles.labelTitleText}>{translations[language]["analysisTitles"][8]}</Text>
             <View style={{marginTop: 15}}>
                 {mostUsedEmojisAndSenders.map((x, index) => (
                     <View key={index} style={[styles.valueBoxContainer,{ marginVertical: 5}, {height: 80}]}>
@@ -199,13 +201,13 @@ const SimpleMessageAnalysis = ({analyzedData}) => {
                     </View>
                 ))}
             </View>
-            <DualBoxView totalTitle={'Toplam Fotoğraf'} title={'Fotoğraf Gönderimi'} data={ImageSending} titleArr={names} total={true}/>
-            <DualBoxView totalTitle={'Toplam Video'} title={'Video Gönderimi'} data={videoSending} titleArr={names} total={true}/>
-            <DualBoxView totalTitle={'Toplam Ses Kaydı'} title={'Ses Kaydı Gönderimi'} data={audioSending} titleArr={names} total={true}/>
-            <DualBoxView totalTitle={'Toplam Belge'} title={'Belge Gönderimi'} data={documentSending} titleArr={names} total={true}/>
-            <DualBoxView totalTitle={'Toplam GIF'} title={'GIF Gönderimi'} data={gifSending} titleArr={names} total={true}/>
+            <DualBoxView totalTitle={translations[language]["analysisTitles"][9]} title={translations[language]["analysisTitles"][10]} data={ImageSending} titleArr={names} total={true}/>
+            <DualBoxView totalTitle={translations[language]["analysisTitles"][11]} title={translations[language]["analysisTitles"][12]} data={videoSending} titleArr={names} total={true}/>
+            <DualBoxView totalTitle={translations[language]["analysisTitles"][13]} title={translations[language]["analysisTitles"][14]} data={audioSending} titleArr={names} total={true}/>
+            <DualBoxView totalTitle={translations[language]["analysisTitles"][15]} title={translations[language]["analysisTitles"][16]} data={documentSending} titleArr={names} total={true}/>
+            <DualBoxView totalTitle={translations[language]["analysisTitles"][17]} title={translations[language]["analysisTitles"][18]} data={gifSending} titleArr={names} total={true}/>
             <View style={{paddingVertical: 20}}>
-                <Button title={'Generate PDF'} onPress={generatePdf}/>
+                <Button title={translations[language]["generate_pdf"]} onPress={generatePdf}/>
             </View>
 
         </ScrollView>

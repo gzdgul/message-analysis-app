@@ -103,7 +103,8 @@ const Home = ({navigation}) => {
                         mostUsedEmojisAndSenders,
                         allSendings,
                         dataObjsByDate,
-                        id
+                        id,
+                        language
                     }
                 });
                 Haptics.notificationAsync(
@@ -117,9 +118,10 @@ const Home = ({navigation}) => {
             }, 6000)
         } else Alert.alert('Geçerli bir dosya giriniz')
     }
-    const toggleInfoModal = (data) => {
+    const toggleInfoModal = async (data) => {
         setInfoModalData(data)
         setInfoModalVisible(!isInfoModalVisible);
+        await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
     };
     const toggleSettings = async () => {
         if (selectedAnalysis) {
@@ -165,7 +167,8 @@ const Home = ({navigation}) => {
     // }
 
     const scrollViewRef = React.useRef(null);
-    const handleOptionPress = (option, type) => {
+    const handleOptionPress = async (option, type) => {
+        await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
         if (type === 'Language') {
             setLanguage(option)
         }
@@ -199,7 +202,7 @@ const Home = ({navigation}) => {
                         <Text style={{
                             color: COLORS.white,
                             fontSize: 11
-                        }}>Language: {language} Date Format :{dateFormat}</Text>
+                        }}>{translations[language]["language"] + ": " + language + " " + translations[language]["date_format"] + ": " + dateFormat}</Text>
                     </View>
                     <TouchableOpacity
                         style={{padding: 15, borderRadius: 15, backgroundColor: COLORS.stone, zIndex: 100,}}
@@ -316,7 +319,7 @@ const Home = ({navigation}) => {
 
 
             </View>
-            <View style={{marginVertical: 20, width: width, paddingHorizontal: 15}}>
+            <View style={{marginTop: 20, width: width, paddingHorizontal: 15}}>
                 <View style={{flexDirection: 'row'}}>
                     {
                         [translations[language]['message_analysis'], translations[language]['explore']].map((x, index) => {
@@ -352,7 +355,7 @@ const Home = ({navigation}) => {
                     width: innerWidth,
                     height: 4,
                     borderRadius: 50,
-                    marginVertical: 10,
+                    marginTop: 10,
                     backgroundColor: COLORS.stone
                 }}>
                     <MotiView
@@ -387,7 +390,7 @@ const Home = ({navigation}) => {
                 scrollEventThrottle={16}
                 onMomentumScrollEnd={(x) => handlePageScroll(x)}>
                 <View style={{width: width}}>
-                    <ScrollView>
+                    <ScrollView contentContainerStyle={{paddingVertical: 25}}>
                         <View style={{flexDirection: 'row', flexWrap: 'wrap', gap: 15, paddingHorizontal: 15}}>
 
                             {
@@ -489,7 +492,7 @@ const Home = ({navigation}) => {
                     </ScrollView>
                 </View>
                 <View style={{width: width}}>
-                    <ScrollView>
+                    <ScrollView contentContainerStyle={{paddingVertical: 25}}>
                         <View style={{gap: 15, alignItems: 'center'}}>
                             {
                                 [
@@ -580,7 +583,7 @@ const Home = ({navigation}) => {
 
 
             </ScrollView>
-            <ScrollableInfoModal data={infoModalData} isVisible={isInfoModalVisible} setVisible={setInfoModalVisible}/>
+            <ScrollableInfoModal data={infoModalData} isVisible={isInfoModalVisible} setVisible={setInfoModalVisible} language={language}/>
 
 
             {/*/////////////////////TOGGLE SETTINGS*/}
@@ -603,7 +606,7 @@ const Home = ({navigation}) => {
             <MotiView
                 transition={{delay: 0, damping: 15, mass: 1}}
                 from={{
-                    bottom: 0,
+                    bottom: -280,
 
                 }}
                 animate={{
@@ -611,7 +614,7 @@ const Home = ({navigation}) => {
 
                 }}
                 exit={{
-                    bottom: 0,
+                    bottom: -280,
 
 
                 }}

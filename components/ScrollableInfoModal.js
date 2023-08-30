@@ -1,10 +1,10 @@
 import React from 'react';
 import {Dimensions, Image, Modal, ScrollView, Text, TouchableOpacity, View} from "react-native";
-import {COLORS} from "../config/constants";
+import {COLORS, translations} from "../config/constants";
 import {MotiView} from "moti";
 import OpenLink from "./openLink";
 
-function ScrollableInfoModal({data,isVisible,setVisible}) {
+function ScrollableInfoModal({data,isVisible,setVisible, language}) {
     const [itemNum, setItemNum] = React.useState(0);
     const [itemContentOffset, setItemContentOffset] = React.useState(0);
     const { width, height } = Dimensions.get('window');
@@ -113,8 +113,8 @@ function ScrollableInfoModal({data,isVisible,setVisible}) {
 
                 <View style={{ backgroundColor: COLORS.darkBG,  width: '100%', height: 50 }}>
                     <View style={{paddingHorizontal: 15, opacity: 0.5, alignItems: 'center'}}>
-                        <Text style={{color: COLORS.white, fontSize: 12}}>Bir sonraki madde için sola kaydırın</Text>
-                        <Text style={{color: COLORS.white, fontSize: 12}}>Bilgilendirme ekranından çıkmak için aşağı kaydırın</Text>
+                        <Text style={{color: COLORS.white, fontSize: 12}}>{translations[language]["swipe_left_for_next_item"]}</Text>
+                        <Text style={{color: COLORS.white, fontSize: 12}}>{translations[language]["swipe_down_to_exit_the_information_screen"]}</Text>
                     </View>
                 </View>
             </View>

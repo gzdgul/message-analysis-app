@@ -1,6 +1,6 @@
 import {Dimensions, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {colorCorrector, colorCorrector2, numberCheck, sumCounts} from "./Helper_Function_Library";
-import {COLORS} from "../config/constants";
+import {COLORS, translations} from "../config/constants";
 import React from "react";
 import {View as MotiView} from "moti/build/components/view";
 import {LinearGradient} from "expo-linear-gradient";
@@ -119,11 +119,11 @@ export const AnalysisBoxRow = ({title, data, id, names, type}) => {
     )
 
 }
-export const AverageLine = ({num}) => (
+export const AverageLine = ({num, language}) => (
     <View style={{width: '100%', height: 80, position: 'absolute', justifyContent: 'flex-end', pointerEvents: 'none'}}>
         <View style={{flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 5}}>
             <Text style={{color: COLORS.white, opacity: 0.6, alignSelf: 'flex-end', fontSize: 10, top: 10}}>{num}</Text>
-            <Text style={{color: COLORS.white, opacity: 0.6, alignSelf: 'flex-end', fontSize: 10, top: 10}}>average</Text>
+            <Text style={{color: COLORS.white, opacity: 0.6, alignSelf: 'flex-end', fontSize: 10, top: 10}}>{translations[language]["average"]}</Text>
         </View>
         <Text numberOfLines={1} ellipsizeMode="clip" style={{color: 'white', opacity: 0.5}}
         >_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ </Text>

@@ -28,7 +28,10 @@ export const COLORS = {
     // color3: '#ddd9ff',
 
 }
-export const monthsArr = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+export const monthsArr = {
+    "TR": ["Ocak","Şubat","Mart","Nisan","Mayıs","Haziran","Temmuz","Ağustos","Eylül","Ekim","Kasım","Aralık"],
+    "EN": ["January","February","March","April","May","June","July","August","September","October","November","December"]
+}
 export const medya =
     [
         'görüntü dahil edilmedi','image omitted',
@@ -180,42 +183,117 @@ export const AnalysisMethodsByLanguage = (language) => {
         ]
     )
 }
+export const AdvancedTableRow = (language) => {
+    const titles = {
+        "TR": {
+            "message": "Mesaj",
+            "emoji": "Emoji",
+            "photo": "Fotoğraf",
+            "video": "Video",
+            "audio": "Ses",
+            "document": "Dosya",
+            "GIF": "GIF",
+            "Sticker": "Sticker",
+            "Link": "Link",
+
+        },
+        "EN": {
+            "message": "Message",
+            "emoji": "Emoji",
+            "photo": "Photo",
+            "video": "Video",
+            "audio": "Audio",
+            "document": "Document",
+            "GIF": "GIF",
+            "Sticker": "Sticker",
+            "Link": "Link",
+
+        }
+    }
+    return (
+
+            [
+                {title: titles[language]["message"], key: 'message', patch: null},
+                {title: titles[language]["emoji"], key: 'emoji', patch: null},
+                {title: titles[language]["photo"], key: 'media', patch: 'image'},
+                {title: titles[language]["video"], key: 'media', patch: 'video'},
+                {title: titles[language]["audio"], key: 'media', patch: 'audio'},
+                {title: titles[language]["document"], key: 'others', patch: 'document'},
+                {title: titles[language]["GIF"], key: 'others', patch: 'gif'},
+                {title: titles[language]["Sticker"], key: 'others', patch: 'sticker'},
+                {title: titles[language]["Link"], key: 'others', patch: 'link'},
+            ]
+
+    )
+}
 export const translations = {
     "TR": {
         "settings": "Ayarlar",
+        "chat_settings": "Chat Ayarları",
         "select_doc": "Dosya Seç",
         "selected_doc": "Seçili Dosya",
         "select_your_date_format": "Tarih Formatını Seç",
         "select_your_language": "Dilini Seç",
+        "choose_who_you_are": "Kim olduğunu seç",
         "close": "Kapat",
         "clear_selected_document": "Seçili Dosyayı Temizle",
         "no_file_selected": "Seçili Dosya Yok",
         "message_analysis": "Mesaj Analiz",
         "explore": "Keşfet",
         "language": "Dil",
+        "date_format": "Tarih Formatı",
         "simple": "Basit",
         "advanced": "Gelişmiş",
         "started": "Başladı",
         "step_by_step_how_to_use": "Adım Adım Nasıl Kullanılır?",
-        "learn_about_security": "Güvenlik Hakkında Bilgi Alın"
+        "learn_about_security": "Güvenlik Hakkında Bilgi Alın",
+        "swipe_left_for_next_item": "Bir sonraki madde için sola kaydırın",
+        "swipe_down_to_exit_the_information_screen": "Bilgilendirme ekranından çıkmak için aşağı kaydırın",
+        "chat_desc": "Burada yer alan veriler gerçek hayatla ilişkilendirilemez.",
+        "type_something": "Bir şeyler yaz...",
+        "send_message_as": "olarak bir mesaj gönder",
+        "change_person": "Kişi Değiştir",
+        "reset_conversation": "Konuşmayı Sıfırla",
+        "generate_pdf": "PDF oluştur",
+        "emoji_conf_desc": "En çok kullanılan emojilerin EMOJİ KONFETİ'sini tekrar görmek için dokunun",
+        "message": "mesaj","photo": "fotoğraf", "audio": "ses", "document": "dosya", "etc": "vb", "total": "Toplam",
+        "average": "ortalama",
+        "advanced_monthly_title": "Daha detaylı veriler için lütfen grafikten bir gün seçin.",
+        "analysisTitles" : ["Toplam Mesaj", "En Çok Mesajlaşılan Tarih", "Mesajlaşılan Zamanlar", "Mesaj Gönderimi", "Toplam Kelime", "En Çok Gönderilen Kelimeler", "Toplam Emoji", "Emoji Gönderimi", "En Çok Gönderilen Emojiler", "Toplam Fotoğraf", "Fotoğraf Gönderimi", "Toplam Video", "Video Gönderimi", "Toplam Ses Kaydı", "Ses Kaydı Gönderimi", "Toplam Belge", "Belge Gönderimi", "Toplam GIF", "GIF Gönderimi", "Toplam Medya", "Toplam Diğerler"],
     },
     "EN": {
         "settings": "Settings",
+        "chat_settings": "Chat Settings",
         "select_doc": "Select Doc",
         "selected_doc": "Selected Document",
         "select_your_date_format": "Select Your Date Format",
         "select_your_language": "Select Your Language",
+        "choose_who_you_are": "Choose who you are",
         "close": "Close",
         "clear_selected_document": "Clear Selected Document",
         "no_file_selected": "No file selected",
         "message_analysis": "Message Analysis",
         "explore": "Explore",
         "language": "Language",
+        "date_format": "Date Format",
         "simple": "Simple",
         "advanced": "Advanced",
         "started": "Started",
         "step_by_step_how_to_use": "Step-By-Step How To Use?",
-        "learn_about_security": "Learn About Security"
+        "learn_about_security": "Learn About Security",
+        "swipe_left_for_next_item": "Swipe left for next item",
+        "swipe_down_to_exit_the_information_screen": "Swipe down to exit the information screen",
+        "chat_desc": "The data contained here cannot be associated with real life.",
+        "type_something": "Type something...",
+        "send_message_as": "Send a message as",
+        "change_person": "Change Person",
+        "reset_conversation": "Reset Conversation",
+        "generate_pdf": "Generate PDF",
+        "emoji_conf_desc": "Tap to see the EMOJI CONFETTI of the most used emojis again",
+        "message": "message","photo": "photo", "audio": "audio", "document": "document", "etc": "etc",  "total": "Total",
+        "average": "average",
+        "advanced_monthly_title": "For more detailed data, please select a day from the chart.",
+       "analysisTitles": ["Total Messages", "Most Messaged Date", "Messaging Times", "Message Sending", "Total Words", "Most Sent Words", "Total Emojis", "Emoji Sending", "Most Sent Emojis", "Total Photos", "Photo Sending", "Total Videos", "Video Sending", "Total Voice Messages", "Voice Message Sending", "Total Documents", "Document Sending", "Total GIFs", "GIF Sending", "Total Media", "Total Others"],
     }
 };
 export const texts = {
@@ -242,7 +320,7 @@ export const icons = {
     location: '📍',
     deleted: '❌',
 }
-export const htmlMaker = (names, dateDataforPDF, data) => {
+export const htmlMaker = (names, dateDataforPDF, data, language) => {
     const sendingsCountData = data.allSendings;
     const mostRepeatedWordsAndSenders = data.mostRepeatedWordsAndSenders;
     const mostUsedEmojisAndSenders = data.mostUsedEmojisAndSenders;
@@ -336,32 +414,32 @@ export const htmlMaker = (names, dateDataforPDF, data) => {
         <body>
             <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: flex-end">
                 <div>
-                    <h1 style="color: ${COLORS.darkGreen}">Simple Message Analysis</h1>
+                    <h1 style="color: ${COLORS.darkGreen}">${translations[language]["simple"] + " " + translations[language]["message_analysis"]}</h1>
                     <p style="color: ${COLORS.darkGreen}; font-size: 25px; margin-top: -15px;">${names[0]} - ${names[1]}</p>
                     <p style="color: ${COLORS.darkGreen}; font-size: 15px; margin-top: -15px;">${dateDataforPDF.timeInterval}</p>
                 </div>
                 <div>
-                    <p style="color: ${COLORS.darkGreen};">En Çok Mesajlaşılan Tarih</p>
+                    <p style="color: ${COLORS.darkGreen};">${translations[language]["analysisTitles"][1]}</p>
                     <p style="color: ${COLORS.darkGreen}; font-size: 30px; font-weight: 900; margin-top: -15px; text-align: end">${dateDataforPDF.mostRepeatedDate}</p>
                 </div>
             </div>
             ${generateDataRow('', { fontSize: '10px', backgroundColor: 'white', borderColor: COLORS.lightGray} ,'names')}
-            ${generateSendingsDataRow('Message Sending', sendingsCountData.messageCounts)}
-            ${generateSendingsDataRow('Emoji Sending', sendingsCountData.emojiCounts)}
-            ${generateSendingsDataRow('Image Sending', sendingsCountData.mediaCounts.image)}
-            ${generateSendingsDataRow('Video Sending', sendingsCountData.mediaCounts.video)}
-            ${generateSendingsDataRow('Audio Record Sending', sendingsCountData.mediaCounts.audio)}
-            ${generateSendingsDataRow('Document Sending', sendingsCountData.mediaCounts.document)}
-            ${generateSendingsDataRow('GIF Sending', sendingsCountData.mediaCounts.gif)}
+            ${generateSendingsDataRow(translations[language]["analysisTitles"][3], sendingsCountData.messageCounts)}
+            ${generateSendingsDataRow(translations[language]["analysisTitles"][7], sendingsCountData.emojiCounts)}
+            ${generateSendingsDataRow(translations[language]["analysisTitles"][10], sendingsCountData.mediaCounts.image)}
+            ${generateSendingsDataRow(translations[language]["analysisTitles"][12], sendingsCountData.mediaCounts.video)}
+            ${generateSendingsDataRow(translations[language]["analysisTitles"][14], sendingsCountData.mediaCounts.audio)}
+            ${generateSendingsDataRow(translations[language]["analysisTitles"][16], sendingsCountData.mediaCounts.document)}
+            ${generateSendingsDataRow(translations[language]["analysisTitles"][18], sendingsCountData.mediaCounts.gif)}
             <div style="display: flex; flex-direction: row; justify-content: space-between; margin-top: 10px">
                 <div style="width: 350px;">
-                    <p style="color: ${COLORS.darkGreen};">En Çok Gönderilen Kelimeler ✏️</p>
+                    <p style="color: ${COLORS.darkGreen};">${translations[language]["analysisTitles"][5]}✏️</p>
                     ${generateDataRow('', { fontSize: '10px', backgroundColor: 'white', borderColor: COLORS.lightGray} ,'names')}
                     ${mostRepeatedWordsAndSenders.slice(0, 10).map(wordData => generateWordsDataRow(wordData)).join('')}
                     
                 </div>
                 <div style="width: 350px;">
-                    <p style="color: ${COLORS.darkGreen};">En Çok Kullanılan Emojiler 🎉</p>
+                    <p style="color: ${COLORS.darkGreen};">${translations[language]["analysisTitles"][8]} 🎉</p>
                     ${generateDataRow('', { fontSize: '10px', backgroundColor: 'white', borderColor: COLORS.lightGray} ,'names')}
                     ${mostUsedEmojisAndSenders.slice(0, 10).map(emojiData => generateEmojisDataRow(emojiData)).join('')}
                 </div>

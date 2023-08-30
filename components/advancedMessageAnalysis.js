@@ -9,7 +9,7 @@ import AnalysisTable from './Advanced/AnalysisTable';
 import AnalysisMonthly from './Advanced/AnalysisMonthly';
 import * as Haptics from "expo-haptics";
 
-const AdvancedMessageAnalysis = ({analyzedData}) => {
+const AdvancedMessageAnalysis = ({analyzedData, language}) => {
     const dataObjsByDate = analyzedData.dataObjsByDate
     const dataGroupsByMonth = React.useMemo(() =>  groupDataByMonths(dataObjsByDate), [dataObjsByDate]);
     const [page, setPage] = React.useState(0)
@@ -76,7 +76,7 @@ const AdvancedMessageAnalysis = ({analyzedData}) => {
         const firstItem = monthlyData[0];
         const splittedDate = firstItem.date.split(".");
         const date = new Date(parseInt(splittedDate[2]), parseInt(splittedDate[1]) - 1);
-        const dateString = monthsArr[date.getMonth()] + " " + date.getFullYear();
+        const dateString = monthsArr[language][date.getMonth()] + " " + date.getFullYear();
 
 
         const getCount = (data, name, property) =>
@@ -158,13 +158,13 @@ const AdvancedMessageAnalysis = ({analyzedData}) => {
                         </AnimatePresence>
                     </View>
                 </View>
-                <AverageLine num={Math.round(maxMessageCount/2)}/>
+                <AverageLine num={Math.round(maxMessageCount/2)} language={language}/>
             </View>
             <ScrollView contentContainerStyle={{}}>
                 {dataset ? (
-                    <AnalysisTable dataset={dataset} names={names} pressAllowed={pressAllowed} setPressAllowed={setPressAllowed} />
+                    <AnalysisTable dataset={dataset} names={names} pressAllowed={pressAllowed} setPressAllowed={setPressAllowed} language={language} />
                 ) : (
-                    monthly !== null && <AnalysisMonthly key={monthly.dateString} monthly={monthly} names={names}  />
+                    monthly !== null && <AnalysisMonthly key={monthly.dateString} monthly={monthly} names={names} language={language}  />
                 )}
             </ScrollView>
         </View>

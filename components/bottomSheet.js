@@ -1,10 +1,10 @@
 import React from 'react';
 import {Dimensions, Text, TouchableOpacity, TouchableWithoutFeedback, View} from "react-native";
 import {MotiView} from "moti";
-import {COLORS} from "../config/constants";
+import {COLORS, translations} from "../config/constants";
 const {width, height} = Dimensions.get('window');
 
-function BottomSheet({isSettingsVisible, setSettingsVisible, title, modalHeight, bottomSheetContent}) {
+function BottomSheet({isSettingsVisible, setSettingsVisible, title, modalHeight, bottomSheetContent, language}) {
 
     const toggleSettings = () => {
         setSettingsVisible(!isSettingsVisible);
@@ -52,7 +52,7 @@ function BottomSheet({isSettingsVisible, setSettingsVisible, title, modalHeight,
                                 fontSize: 11,
                                 opacity: 0.6,
                                 fontWeight: 'bold'
-                            }}>CLOSE</Text>
+                            }}>{translations[language]["close"].toUpperCase()}</Text>
                         </TouchableOpacity>
                     </View>
                     {bottomSheetContent}

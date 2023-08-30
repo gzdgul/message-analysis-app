@@ -1,10 +1,10 @@
 import React from 'react';
 import {View as MotiView} from "moti/build/components/view";
 import {StyleSheet, Text, View} from "react-native";
-import {COLORS} from "../../config/constants";
+import {COLORS, translations} from "../../config/constants";
 import {colorCorrector2, numberCheck} from "../../libraries/Helper_Function_Library";
 
-const AnalysisMonthly = ({monthly, names}) => {
+const AnalysisMonthly = ({monthly, names, language}) => {
     const LineGraphic = ({title, data, description}) => {
         return (
             <View style={{ gap: 5}}>
@@ -51,12 +51,12 @@ const AnalysisMonthly = ({monthly, names}) => {
             }}
         >
             <View style={{paddingHorizontal: 20, gap: 10}}>
-                <Text style={{color: 'white', fontSize: 12, textAlign: 'center', opacity: 0.5}}>For more detailed data, please select a day from the chart.</Text>
+                <Text style={{color: 'white', fontSize: 12, textAlign: 'center', opacity: 0.5}}>{translations[language]["advanced_monthly_title"]}</Text>
                 <Text style={{color: 'white', fontSize: 25}}>{monthly.dateString}</Text>
-                <LineGraphic title={'Total Messages'} data={monthly.messageCount}/>
-                <LineGraphic title={'Total Emoji'} data={monthly.emojiCount}/>
-                <LineGraphic title={'Total Media'}  data={monthly.mediaCount} description={'photo, video, audio'}/>
-                <LineGraphic title={'Total Others'} data={monthly.othersCount} description={'document, GIF, link, sticker etc.'}/>
+                <LineGraphic title={translations[language]["analysisTitles"][0]} data={monthly.messageCount}/>
+                <LineGraphic title={translations[language]["analysisTitles"][6]} data={monthly.emojiCount}/>
+                <LineGraphic title={translations[language]["analysisTitles"][19]}  data={monthly.mediaCount} description={translations[language]["photo"] + ", video, " + translations[language]["audio"]}/>
+                <LineGraphic title={translations[language]["analysisTitles"][20]} data={monthly.othersCount} description={translations[language]["document"] + ", GIF, link, sticker " + translations[language]["etc"]}/>
             </View>
 
         </MotiView>

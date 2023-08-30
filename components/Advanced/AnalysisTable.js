@@ -1,13 +1,13 @@
 import React, {useEffect, useState} from 'react';
 import {Dimensions, StyleSheet, Text, TouchableOpacity, Vibration, View} from "react-native";
-import {COLORS} from "../../config/constants";
+import {AdvancedTableRow, COLORS, translations} from "../../config/constants";
 import {View as MotiView} from "moti/build/components/view";
 import {AnalysisBoxRow} from "../../libraries/UI_Component_Library";
 import {countArray} from "../../libraries/Helper_Function_Library";
 import {AnimatePresence} from "moti";
 import * as Haptics from "expo-haptics";
 
-const AnalysisTable = ({dataset, names, setPressAllowed, pressAllowed}) => {
+const AnalysisTable = ({dataset, names, setPressAllowed, pressAllowed, language}) => {
     const emojiObj = countArray('emoji',null, dataset,names)
     const user1Emojis = [].concat([],...emojiObj[names[0]]).slice(0,50)
     const user2Emojis = [].concat([],...emojiObj[names[1]]).slice(0,50)
@@ -71,7 +71,7 @@ const AnalysisTable = ({dataset, names, setPressAllowed, pressAllowed}) => {
                         <Text style={[styles.advancedBoxTitleText]}>{names[1]}</Text>
                     </TouchableOpacity>
                     <View style={[styles.advancedBox,{borderWidth: 1, borderColor: COLORS.lightPurple, backgroundColor: 'transparent'}]}>
-                        <Text style={[styles.advancedBoxTitleText]}>Total</Text>
+                        <Text style={[styles.advancedBoxTitleText]}>{translations[language]["total"]}</Text>
                     </View>
                 </View>
                 {/*<AnalysisBoxRow id={0} title={'Emoji*'} names={names} type={'emoji'} data={countArray('emoji',null, dataset,names)}/>*/}
@@ -80,17 +80,7 @@ const AnalysisTable = ({dataset, names, setPressAllowed, pressAllowed}) => {
                 {/*<Text>dgdsgfdgdfgsdfgsdf</Text>*/}
                 {/*<Text>{emojiObj[names[1]]}</Text>*/}
                 {
-                    [
-                        {title: 'Message', key: 'message', patch: null},
-                        {title: 'Emoji', key: 'emoji', patch: null},
-                        {title: 'Photo', key: 'media', patch: 'image'},
-                        {title: 'Video', key: 'media', patch: 'video'},
-                        {title: 'Audio', key: 'media', patch: 'audio'},
-                        {title: 'Document', key: 'others', patch: 'document'},
-                        {title: 'GIF', key: 'others', patch: 'gif'},
-                        {title: 'Sticker', key: 'others', patch: 'sticker'},
-                        {title: 'Link', key: 'others', patch: 'link'},
-                    ].map((x,index) => {
+                    AdvancedTableRow(language).map((x,index) => {
                         return  <AnalysisBoxRow key={index + dataset.date} id={index} title={x.title} names={names} data={countArray(x.key,x.patch, dataset,names)}/>
                     })
                 }

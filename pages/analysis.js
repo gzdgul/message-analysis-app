@@ -8,20 +8,21 @@ import AdvancedMessageAnalysis from "../components/advancedMessageAnalysis";
 const Analysis = ({navigation, route}) => {
     const analyzedData = route.params.analyzedData;
     const pageID = analyzedData.id;
+    const language = analyzedData.language;
 
     return (
        <View style={styles.container}>
            {
                pageID === 'simple' &&
-               <SimpleMessageAnalysis analyzedData={analyzedData}/>
+               <SimpleMessageAnalysis analyzedData={analyzedData} language={language}/>
            }
            {
                pageID === 'chat' &&
-               <TimelineMessageAnalysis analyzedData={analyzedData}/>
+               <TimelineMessageAnalysis analyzedData={analyzedData} language={language}/>
            }
            {
                pageID === 'advanced' &&
-               <AdvancedMessageAnalysis analyzedData={analyzedData}/>
+               <AdvancedMessageAnalysis analyzedData={analyzedData} language={language}/>
            }
 
        </View>

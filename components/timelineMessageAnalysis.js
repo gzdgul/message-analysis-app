@@ -12,15 +12,16 @@ import {
     TouchableOpacity,
     View
 } from "react-native";
-import {COLORS, icons, mediaTypes} from "../config/constants";
+import {COLORS, icons, mediaTypes, translations} from "../config/constants";
 import {findMinCountKey} from "../libraries/Helper_Function_Library";
 import {MotiView} from "moti";
 import BottomSheet from "./bottomSheet";
 import {FadeIn} from "react-native-reanimated";
 import * as Haptics from "expo-haptics";
+import ChatArea from "./chatArea";
 
 const {width, height} = Dimensions.get('window');
-const TimelineMessageAnalysis = ({analyzedData}) => {
+const TimelineMessageAnalysis = ({analyzedData, language}) => {
     const AllMessages = analyzedData.messages
     const names = analyzedData.allSendings.nameCount
     const [selectedPerson, setSelectedPerson] = React.useState(null)
@@ -29,18 +30,10 @@ const TimelineMessageAnalysis = ({analyzedData}) => {
     const scrollViewRef = useRef();
     const [isKeyboardOpen, setKeyboardOpen] = React.useState(false)
     const [newMessage, setNewMessage] = React.useState('')
-    const [isMessageTyping, setMessageTyping] = React.useState(false)
+    // const [isMessageTyping, setMessageTyping] = React.useState(false)
     const [data, setData] = React.useState([])
     const [isSettingsVisible, setSettingsVisible] = React.useState(false);
-    React.useEffect(() => {
-        if (newMessage.length === 1) {
-            setMessageTyping(true)
-        }
-        if (newMessage.length === 0) {
-            setMessageTyping(false)
-        }
-
-    }, [newMessage])
+    const isMessageTyping = React.useMemo(() => newMessage.length > 0, [newMessage]);
     const filterByNameAndWord = (AllMessages, NAME, WORD) => {
         return AllMessages
             .filter((y) => y.name === NAME)
@@ -126,17 +119,21 @@ const TimelineMessageAnalysis = ({analyzedData}) => {
             return;
         }
         setSelectedPerson(x)
-        const informationTitle = `Kişi ${x} olarak değiştirildi`
+        const informationTitle = language === 'TR' ? `Kişi ${x} olarak değiştirildi`: `Person changed to ${x}`
         const newInformation = {type: "information", title: informationTitle}
         setData(prevState => [...prevState, newInformation])
     }
 
+    const handleTextChange = (text) => {
+        // Her karakter girişinde bu işlev tetiklenecek
+        setNewMessage(text);
+    };
     const bottomSheetContent = () => {
         return (
             <View style={{
                 gap: 15
             }}>
-                <Text style={{color: COLORS.white}}>Kişi Değiştir</Text>
+                <Text style={{color: COLORS.white}}>{translations[language]["change_person"]}</Text>
                 <View style={{flexDirection: 'row', gap: 10}}>
                     {
                         [...names].map((x, index) => {
@@ -165,7 +162,7 @@ const TimelineMessageAnalysis = ({analyzedData}) => {
                         Haptics.NotificationFeedbackType.Success
                     )
                 }}>
-                    <Text style={{color: COLORS.red, alignSelf: 'center'}}>Konuşmayı Sıfırla</Text>
+                    <Text style={{color: COLORS.red, alignSelf: 'center'}}>{translations[language]["reset_conversation"]}</Text>
                 </TouchableOpacity>
 
             </View>
@@ -214,8 +211,9 @@ const TimelineMessageAnalysis = ({analyzedData}) => {
                     marginTop: 10,
                 }}></View>
                 <View style={{position: 'absolute', width: width, bottom: -20}}>
-                    <Text style={{color: COLORS.stone, fontSize: 11, fontWeight: 'bold', textAlign: 'center'}}>The data
-                        contained here cannot be associated with real life.</Text>
+                    <Text style={{color: COLORS.stone, fontSize: 11, fontWeight: 'bold', textAlign: 'center'}}>
+                        {translations[language]["chat_desc"]}
+                    </Text>
                 </View>
 
             </View>
@@ -257,7 +255,7 @@ const TimelineMessageAnalysis = ({analyzedData}) => {
                                 alignItems: 'center',
                                 gap: 15
                             }}>
-                                <Text style={{color: COLORS.white}}>Kim olduğunu seç</Text>
+                                <Text style={{color: COLORS.white}}>{translations[language]["choose_who_you_are"]}</Text>
                                 <View style={{flexDirection: 'row', gap: 10, paddingHorizontal: 10}}>
                                     {
                                         [...names].map((x, index) => {
@@ -300,71 +298,20 @@ const TimelineMessageAnalysis = ({analyzedData}) => {
                                     top: 0
                                 }}
                             >
-                                <Text style={{color: COLORS.white, alignSelf: 'center'}}><Text
-                                    style={{color: COLORS.deneme}}>{selectedPerson}</Text> olarak bir mesaj gönder 👇 😊
-                                    🩷 </Text>
+                                <View>
+                                    {
+                                        language === "TR"
+                                            ? <Text style={{color: COLORS.white, alignSelf: 'center'}}><Text style={{color: COLORS.deneme}}>{selectedPerson}</Text> olarak bir mesaj gönder 👇 😊 🩷 </Text>
+                                            : <Text style={{color: COLORS.white, alignSelf: 'center'}}> Send a message as <Text style={{color: COLORS.deneme}}>{selectedPerson}</Text> 👇 😊 🩷 </Text>
+                                    }
+
+                                </View>
                             </MotiView>
                         </MotiView>
                     }
 
 
-                    {
-                        data.map((x, index) => {
-                            console.log(x)
-                            if (x.type === "information") {
-                                return <Text style={{color: COLORS.deneme, fontSize: 12, fontStyle: "italic", alignSelf: 'center'}}>{x.title}</Text>
-                            }
-                            return (
-                                <View key={index} style={{
-                                    flexDirection: x.type === 'input' ? 'row-reverse' : 'row'
-                                }}>
-                                    <View style={{
-                                        width: 50,
-                                        height: 50,
-                                        borderRadius: 100,
-                                        justifyContent: 'center',
-                                        alignItems: 'center',
-                                        backgroundColor: x.type === 'input' ? COLORS.ash : COLORS.deneme
-                                    }}>
-                                        <Text style={{
-                                            fontSize: 17,
-                                            fontWeight: 'bold'
-                                        }}>{x.name.split('').shift().toUpperCase()}</Text>
-                                    </View>
-                                    <View style={{
-                                        maxWidth: '60%',
-                                        paddingHorizontal: 10,
-                                        alignItems: x.type === 'input' ? 'flex-end' : 'flex-start'
-                                    }}>
-                                        <Text
-                                            style={{color: x.type === 'input' ? COLORS.ash : COLORS.deneme}}>{x.name}</Text>
-                                        {
-                                            x.media !== null
-                                                ? (
-                                                    <View style={{
-                                                        width: width / 3,
-                                                        height: width / 3,
-                                                        borderWidth: 4,
-                                                        borderColor: COLORS.deneme,
-                                                        borderRadius: 15,
-                                                        justifyContent: 'center',
-                                                        alignItems: 'center',
-                                                        marginTop: 10
-                                                    }}>
-                                                        <Text style={{
-                                                            color: COLORS.deneme,
-                                                            fontSize: 13
-                                                        }}>{icons[x.media]} {x.media}</Text>
-                                                    </View>
-                                                )
-                                                : <Text style={{color: 'white'}}>{x.message}</Text>
-                                        }
-
-                                    </View>
-                                </View>
-                            )
-                        })
-                    }
+                   <ChatArea data={data}/>
                 </ScrollView>
             </View>
 
@@ -385,10 +332,12 @@ const TimelineMessageAnalysis = ({analyzedData}) => {
                                 color: COLORS.white,
                                 paddingHorizontal: 15,
                             }}
-                            onChangeText={(x) => setNewMessage(x)}
+                            onChangeText={handleTextChange}
                             value={newMessage}
-                            placeholder="type something..."
-                            placeholderTextColor={COLORS.stone}
+                            // onContentSizeChange={(x) => console.log('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',x)}
+                            // onEndEditing={(x) => console.log('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',x)}
+                            placeholder={translations[language]["type_something"]}
+                            placeholderTextColor={COLORS.ash}
                             keyboardAppearance="dark"
                             editable={selectedPerson !== null}
                         />
@@ -440,10 +389,10 @@ const TimelineMessageAnalysis = ({analyzedData}) => {
                     pointerEvents: isKeyboardOpen ? 'auto' : 'none'
                 }}>
             </MotiView>
-            <BottomSheet title={"CHAT SETTINGS"}
+            <BottomSheet title={translations[language]["chat_settings"].toUpperCase()}
                          bottomSheetContent={bottomSheetContent()}
                          modalHeight={210}
-                         isSettingsVisible={isSettingsVisible} setSettingsVisible={setSettingsVisible}/>
+                         isSettingsVisible={isSettingsVisible} setSettingsVisible={setSettingsVisible} language={language}/>
         </KeyboardAvoidingView>
     );
 };
