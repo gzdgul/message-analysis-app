@@ -6,17 +6,17 @@ import {View as MotiView} from "moti/build/components/view";
 import {LinearGradient} from "expo-linear-gradient";
 const { width, height } = Dimensions.get('window');
 
-export const ButtonGradient = ({title, color, buttonStyle, textStyle, onPress}) => {
+export const ButtonGradient = ({title, color, buttonStyle, titleStyle, onPress}) => {
     return (
-        <TouchableOpacity style={{width: width, height: 50, borderRadius: 15, justifyContent: 'center', alignItems: 'center', ...buttonStyle}} onPress={onPress}>
+        <TouchableOpacity style={{width: '100%', height: 50, borderRadius: 15, overflow: 'hidden', justifyContent: 'center', alignItems: 'center', ...buttonStyle}} onPress={onPress}>
             <LinearGradient
-                style={{ width: '100%', height: '100%', borderRadius: 10, position: 'absolute'}}
+                style={{ width: '100%', height: '100%', position: 'absolute'}}
                 colors={color}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 0 }}
                 pointerEvents="none"
             />
-            <Text style={{...textStyle}}>{title}</Text>
+            <Text style={{ fontSize: 16, fontWeight: '600',...titleStyle}}>{title}</Text>
         </TouchableOpacity>
     )
 }

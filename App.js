@@ -13,8 +13,8 @@ export default function App() {
   return (
       <NavigationContainer>
         <MainStack.Navigator screenOptions={{headerShown: false}}>
-            <MainStack.Screen name="welcome" component={welcomeScreen} />
           <MainStack.Screen name="Home" component={Home} />
+            <MainStack.Screen name="welcome" component={welcomeScreen} options={{presentation: "modal"}} />
           <MainStack.Screen name="Analysis" component={Analysis} />
         </MainStack.Navigator>
       </NavigationContainer>

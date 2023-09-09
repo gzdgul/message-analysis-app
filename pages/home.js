@@ -46,6 +46,12 @@ const Home = ({navigation}) => {
     const [fileUri, setFileUri] = React.useState('')
     const [fileName, setFileName] = React.useState('')
 
+    React.useEffect(() => {
+        setTimeout(() => {
+            navigation.navigate('welcome')
+        },1000)
+    },[])
+
     const handlePickDocument = async () => {
         await Haptics.selectionAsync()
         const {fileUri, name} = await pickDocument()
@@ -218,6 +224,7 @@ const Home = ({navigation}) => {
                     </TouchableOpacity>
                 </View>
                 <View style={{width: width, alignItems: 'center', gap: 15, justifyContent: 'flex-end'}}>
+                    <Pressable disabled={selectedAnalysis !== null} onPress={() => navigation.navigate("welcome")}>
                     <MotiView
                         transition={{
                             type: 'timing',
@@ -241,6 +248,7 @@ const Home = ({navigation}) => {
                                             }}
                                         />
                                     }>
+
                             <Image
                                 source={require('../assets/logo.png')}
                                 style={{
@@ -250,6 +258,7 @@ const Home = ({navigation}) => {
                                     tintColor: COLORS.white
                                 }}
                             />
+
                             <MotiView
                                 transition={{
                                     type: 'timing',
@@ -276,6 +285,7 @@ const Home = ({navigation}) => {
                             </MotiView>
                         </MaskedView>
                     </MotiView>
+                    </Pressable>
                     <MotiView
                         transition={{
                             type: 'timing',
@@ -520,9 +530,7 @@ const Home = ({navigation}) => {
                                             }}>
                                             <ButtonGradient title={x.title} color={[x.color, x.color]}
                                                             buttonStyle={{width: innerWidth}}
-                                                            textStyle={{
-                                                                fontSize: 16,
-                                                                fontWeight: '600',
+                                                            titleStyle={{
                                                                 color: x.textColor
                                                             }}
                                                             onPress={() => toggleInfoModal(x.data)}/>

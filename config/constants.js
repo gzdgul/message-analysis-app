@@ -4,7 +4,8 @@ export const COLORS = {
     darkPurple0: 'rgba(0,0,0,0.5)',
     // purple: '#4e4e80',
     black: '#000000',
-    white: '#e1e1ce',
+    white: '#ffffff',
+    // white: '#e1e1ce',
     gray: '#131313',
     lightGray: '#ececec',
     stone: '#2f2f2f',
@@ -226,6 +227,32 @@ export const AdvancedTableRow = (language) => {
 
     )
 }
+export const welcomeTranslation = {
+        "TR": {
+            "0": {title:"Synto ya Hoş Geldiniz!", desc:"Lorem ipsum dolor sit amet, consectetur adipisicing elit. Alias error fugiat optio perferendis, quisquam reprehenderit sed sequi soluta vitae voluptatibus."},
+            "1": {title:"Dil", desc:"Kullanmak istediğiniz dili seçin"},
+            "2": {title:"Tarih Formatı", desc:"Kullanmak istediğiniz tarih formatını seçin"},
+            "3": {title:"Synto ya Hoş Geldiniz!", desc:"Synto ile mesajlarınızı derinlemesine analiz edebilir, genel veya günlük etkileşimlerinizi gözden geçirebilir ve arkadaşlarınızla bu veriler içinde sohbet edebilirsiniz. \n\n Synto, sizin için mesajlaşma deneyimini daha anlamlı ve eğlenceli hale getirmeyi amaçlıyor. "},
+            "4": {title:"Mesaj Analizi", desc:"Synto, mesajlarınızı derinlemesine analiz ederek konuşma eğilimleriniz, sık kullanılan ifadeleriniz sık kullanılan kelimeleriniz ve medya gönderimleriniz gibi birçok durumu belirleyerek duygu durumlarınızı anlamanızı sağlar. Bu sayede iletişiminizi daha iyi anlayabilir ve geliştirebilirsiniz."},
+            "5": {title:"Gün Gün İzleme", desc:"Her gününüzü etkileşimlerinize göre görsel olarak izleyin. Hangi günler daha fazla iletişimde bulunduğunuzu ve hangi günler daha az iletişimde olduğunuzu görün."},
+            "6": {title:"Arkadaşlarınızla Sohbet", desc:"Mesajlarınızı analiz ettirdiğiniz arkadaşlarınızla bu veriler üzerinde sohbet edin."},
+            "7": {title:"Güvenlik ve Gizlilik", desc:"Synto, tüm analiz işlemlerini doğrudan cihazınızda gerçekleştirir. Bu, kişisel mesajlarınızın veya verilerinizin internet ortamından geçmediği anlamına gelir. Bu sayede, gizliliğiniz maksimum düzeyde korunur."},
+            "8": {title:"Kullanıcı Dostu Arayüz", desc:"Synto'nun kullanıcı dostu arayüzü, herkesin kolayca kullanabilmesi için tasarlanmıştır. Kullanımı basit ve sezgiseldir, böylece hemen analiz yapmaya başlayabilirsiniz."},
+            "9": {title:"Hazırsın!", desc:"Uygulamayı Kullanmaya Başla"},
+        },
+        "EN": {
+            "0": {title: "Welcome to Synto!", desc: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Alias error fugiat optio perferendis, quisquam reprehenderit sed sequi soluta vitae voluptatibus."},
+            "1": {title: "Language", desc: "Select the language you want to use"},
+            "2": {title: "Date Format", desc: "Select the date format you want to use"},
+            "3": {title: "Welcome to Synto!", desc: "With Synto, you can analyze your messages in depth, review your general or daily interactions, and chat with your friends within this data.\n\nSynto aims to make your messaging experience more meaningful and enjoyable for you."},
+            "4": {title: "Message Analysis", desc: "Synto analyzes your messages in depth, allowing you to understand your conversation trends, frequently used expressions, commonly used words, and media submissions, among other aspects. This enables you to better understand and improve your communication."},
+            "5": {title: "Day-to-Day Tracking", desc: "Visually track each of your days based on your interactions. See which days you had more communication and which days you had less."},
+            "6": {title: "Chat with Friends", desc: "Chat with your friends who have also analyzed their messages based on this data."},
+            "7": {title: "Security and Privacy", desc: "Synto performs all analysis processes directly on your device. This means that your personal messages or data do not pass through the internet. As a result, your privacy is maximally protected."},
+            "8": {title: "User-Friendly Interface", desc: "Synto's user-friendly interface is designed for everyone to use easily. It is simple and intuitive to use, so you can start analyzing right away."},
+            "9": {title: "You're Ready!", desc: "Start Using the Application"}
+        }
+}
 export const translations = {
     "TR": {
         "settings": "Ayarlar",
@@ -245,6 +272,8 @@ export const translations = {
         "simple": "Basit",
         "advanced": "Gelişmiş",
         "started": "Başladı",
+        "start": "Başla",
+        "next": "İleri",
         "step_by_step_how_to_use": "Adım Adım Nasıl Kullanılır?",
         "learn_about_security": "Güvenlik Hakkında Bilgi Alın",
         "swipe_left_for_next_item": "Bir sonraki madde için sola kaydırın",
@@ -279,6 +308,8 @@ export const translations = {
         "simple": "Simple",
         "advanced": "Advanced",
         "started": "Started",
+        "start": "Start",
+        "next": "Next",
         "step_by_step_how_to_use": "Step-By-Step How To Use?",
         "learn_about_security": "Learn About Security",
         "swipe_left_for_next_item": "Swipe left for next item",
