@@ -27,16 +27,15 @@ import OpenLink from "../components/openLink";
 import {findAnalysis, parseData, pickDocument, readFileContent} from "../libraries/Helper_Function_Library";
 import MaskedView from "@react-native-masked-view/masked-view";
 import * as Haptics from 'expo-haptics';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const {width, height} = Dimensions.get('window');
 const innerWidth = width - 30
 
 
-const Home = ({navigation}) => {
-
+const Home = ({navigation, route}) => {
     const [selectedAnalysis, setSelectedAnalysis] = React.useState(null)
-    const [dateFormat, setDateFormat] = React.useState('DD/MM/YY');
-    const [language, setLanguage] = React.useState('TR');
+    const [dateFormat, setDateFormat] = React.useState('MM/DD/YY');
+    const [language, setLanguage] = React.useState('EN');
     const [page, setPage] = React.useState(0);
     const totalPage = 2
     const totalItem = 4
@@ -47,10 +46,33 @@ const Home = ({navigation}) => {
     const [fileName, setFileName] = React.useState('')
 
     React.useEffect(() => {
-        setTimeout(() => {
-            navigation.navigate('welcome')
-        },1000)
+        // AsyncStorage.clear();
+        AsyncStorage.getAllKeys().then(value => {
+            console.log(value)
+            if (!value.includes("language") || !value.includes("dateFormat")) {
+                setTimeout(() => {
+                    navigation.navigate('welcome')
+                },1000)
+            } else {
+                AsyncStorage.getItem('language').then(value => {
+                    if (value !== null) {
+                        setLanguage(value)
+                    }
+                });
+                AsyncStorage.getItem('dateFormat').then(value => {
+                    if (value !== null) {
+                        setDateFormat(value)
+                    }
+                });
+            }
+        })
     },[])
+    React.useEffect(() => {
+        if (route.params) {
+            setLanguage(route.params?.language)
+            setDateFormat(route.params?.dateFormat)
+        }
+    },[route])
 
     const handlePickDocument = async () => {
         await Haptics.selectionAsync()

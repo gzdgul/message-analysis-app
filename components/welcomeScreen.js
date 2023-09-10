@@ -9,6 +9,7 @@ import welcomeIcon from "../assets/sparkling-stars.png"
 import {LinearGradient} from "expo-linear-gradient";
 import * as Haptics from 'expo-haptics';
 import ScrollableInfoModal from "./ScrollableInfoModal";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const pozitifEmojiler = [
     "🤩", "😂", "🥰", "😋", "😊", "😍", "😜", "😇",
@@ -22,7 +23,7 @@ const pozitifEmojiler = [
 ];
 
 
-const buttonColor = [COLORS.white,COLORS.white,COLORS.white,COLORS.lightGreen,COLORS.purple,COLORS.pink,COLORS.lightBlue,COLORS.yellow,COLORS.white]
+const buttonColor = [COLORS.white,COLORS.white,COLORS.white,COLORS.white,COLORS.lightGreen,COLORS.purple,COLORS.pink,COLORS.lightBlue,COLORS.yellow,COLORS.white]
 
 const Denneme = ({icon,title,desc}) => (
     <MotiView
@@ -92,7 +93,13 @@ function WelcomeScreen({navigation}) {
     const handleButtonPress = () => {
         if (page < (icerik.length-1)) {
             setPage(prevState => prevState +1)
-        } else navigation.navigate('Home')
+            if (page === 1) {
+                AsyncStorage.setItem('language', language)
+            }
+            if (page === 2) {
+                AsyncStorage.setItem('dateFormat', dateFormat)
+            }
+        } else navigation.navigate('Home', {language,dateFormat})
     }
 const handleUsagePress = async () => {
     setInfoModalVisible(true)
@@ -143,7 +150,8 @@ const handleUsagePress = async () => {
                                         opacity: 0
                                     }}
                                     style={{}}>
-                                    <Pressable  onPress={() => setLanguage(x.id)}
+                                    <Pressable
+                                        onPress={() =>setLanguage(x.id)}
                                                style={{width: '100%', height: 50, borderRadius:15, borderWidth: 1, borderColor: language === x.id ? COLORS.white : COLORS.ash, justifyContent: 'center', alignItems: 'center'}}>
                                         <Text style={{ fontSize: 16, color: COLORS.white, fontWeight: '600'}}>{x.title}</Text>
                                     </Pressable>
@@ -174,7 +182,8 @@ const handleUsagePress = async () => {
                                         opacity: 0
                                     }}
                                     style={{}}>
-                                    <Pressable  onPress={() => setDateFormat(x.id)}
+                                    <Pressable
+                                        onPress={() =>setDateFormat(x.id)}
                                                 style={{width: '100%', height: 50, borderRadius:15, borderWidth: 1, borderColor: dateFormat === x.id ? COLORS.white : COLORS.ash, justifyContent: 'center', alignItems: 'center'}}>
                                         <Text style={{ fontSize: 16, color: COLORS.white, fontWeight: '600'}}>{x.title}</Text>
                                     </Pressable>
@@ -199,7 +208,7 @@ const handleUsagePress = async () => {
                                 pointerEvents="none"
                             />
                         </MotiView>
-                        <Text style={{ fontSize: 16, color: COLORS.darkBG, fontWeight: '600'}}>{page === 2 ? "Keşfet" : page === (icerik.length-1) ? translations[language]['start'] : translations[language]['next']}</Text>
+                        <Text style={{ fontSize: 16, color: COLORS.darkBG, fontWeight: '600'}}>{page === (icerik.length-1) ? translations[language]['start'] : translations[language]['next']}</Text>
                     </Pressable>
                     <MotiView
                         animate={{

@@ -83,7 +83,7 @@ import U8 from "../assets/U8.png"
 const UsageInstructions = {
     "TR" : {
         titles: ['Adım 1: Kişiye Dokun','Adım 2: Kişi Bilgisi Sekmesine Git','Adım 3: Sohbeti Dışa Aktar','Adım 4: Medya Ekleme',
-            'Adım 5:  Dosyalara Kaydet','Adım 6: Zip Dosyasını Ayıkla','Adım 7: Analiz Yöntemi Seçin','Adım 8:  Analize Başlayın'],
+            'Adım 5:  Dosyalara Kaydet','Adım 6: Zip Dosyasını Ayıkla','Adım 7: Dosya Seç ve Analiz Yap'],
         descriptions: [
             'Whatsapp üzerinden bir kişiye dokunarak başlayın.',
             'Kişi bilgilerini görmek için kişiye dokunun.',
@@ -91,13 +91,12 @@ const UsageInstructions = {
             '"Medya ekleme" seçeneğine tıklayın.',
             '"Dosyalara kaydet" seçeneğine tıklayın.',
             'Dosyalarınıza gidin. mesaj dosyanızı çıkarmak için zip dosyasına bir kez dokunun.',
-            'Uygulama üzerinden istediğiniz analiz yöntemini seçin. "Dosya Seç" seçeneğine dokunun ve mesaj dosyanızı seçin.',
-            'Analize başlamak için "Başla" düğmesine tıklayın.'
+            'Uygulama üzerinden "Dosya Seç" seçeneğine dokunun ve mesaj dosyanızı seçin. Ardından istediğiniz analiz yöntemini seçerek analize başlayın',
         ]
     },
     "EN": {
         titles: ['Step 1: Touch the Person','Step 2: Go to Person Info Tab','Step 3: Export the Chat','Step 4: Without Media',
-            'Step 5: Save to Files','Step 6: Extract the Zip File','Step 7: Select Analysis Method','Step 8: Start the Analysis'],
+            'Step 5: Save to Files','Step 6: Extract the Zip File','Step 7: Select File and Analyze'],
         descriptions: [
             'Begin by touching a person on WhatsApp.',
             'Touch the person to view their information.',
@@ -105,11 +104,10 @@ const UsageInstructions = {
             'Click on "Without Media" option.',
             'Click on "Save to Files" option.',
             'Go to your files. Tap the zip file to extract your message file.',
-            'Choose the desired analysis method within the application. Tap "Select File" and choose your message file.',
-            'Click "Start" to initiate the analysis.'
+            'Tap "Select File" on the app and select your message file. Then start analysis by choosing the analysis method you want',
         ]
     },
-    images: [U1,U2,U3,U4,U5,U6,U7,U8]
+    images: [U1,U2,U3,U4,U5,U6,U7]
 }
 const UsageSecurity = {
     "TR" : {

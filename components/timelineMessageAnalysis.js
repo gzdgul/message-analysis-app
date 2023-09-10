@@ -34,24 +34,28 @@ const TimelineMessageAnalysis = ({analyzedData, language}) => {
     const [data, setData] = React.useState([])
     const [isSettingsVisible, setSettingsVisible] = React.useState(false);
     const isMessageTyping = React.useMemo(() => newMessage.length > 0, [newMessage]);
+    const inputRef = React.useRef();
     const filterByNameAndWord = (AllMessages, NAME, WORD) => {
         return AllMessages
             .filter((y) => y.name === NAME)
-            .filter((z) => z.message
-                ?.toLowerCase()
-                .includes(WORD))
+            .filter((z) => {
+                const messageWords = z.message?.toLowerCase()?.split(' ');
+                return messageWords.includes(WORD.toLowerCase());
+            });
     }
     const handleDeneme = (message) => {
         let response = []
-        const text = message.toLowerCase();
-        if (!text.length > 0) {
+        if (!message.length > 0) {
             return;
         }
+        const text = message?.toLowerCase();
+
         // İçerisinde text geçen benim mesajı bul
         const textSplitted = text.split(' ').filter((a) => a !== "");
         textSplitted.push(text)
         let messageCounts = {}
         textSplitted.forEach((x) => {
+            console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!',x)
             const aaa = filterByNameAndWord(AllMessages, USER_ME, x).length
             messageCounts[x] = (messageCounts[x] || 0) + aaa;
         })
@@ -59,37 +63,56 @@ const TimelineMessageAnalysis = ({analyzedData, language}) => {
         console.log('min', minCount)
         console.log(messageCounts)
         console.log('************************************************************')
-        const deneme = filterByNameAndWord(AllMessages, USER_ME, minCount)
-        const randomNum = Math.floor(Math.random() * (deneme.length));
-        const denemeIndex = AllMessages.findIndex((x) => x === deneme[randomNum])
-        console.log(USER_ME, ' /// ', AllMessages[denemeIndex]?.message)
+        if (minCount) {
+            const deneme = filterByNameAndWord(AllMessages, USER_ME, minCount)
+            const randomNum = Math.floor(Math.random() * (deneme.length));
+            const denemeIndex = AllMessages.findIndex((x) => x === deneme[randomNum])
+            console.log(USER_ME, ' /// ', AllMessages[denemeIndex]?.message)
 
-        // Benim mesajıma karşılık gelen mesajı bul
-        let startIndex = denemeIndex; // Başlangıç indeksi
-        let foundIndex = []; // Bulunan indeksleri sakla
-        if (denemeIndex !== -1) {
-            for (let i = startIndex; i < AllMessages.length; i++) {
-                if (AllMessages[i].name === USER_YOU) {
-                    foundIndex.push(i); // mesajın indekslerini pushla
-                } else if (foundIndex.length > 0) {
-                    break;
+            // Benim mesajıma karşılık gelen mesajı bul
+            let startIndex = denemeIndex; // Başlangıç indeksi
+            let foundIndex = []; // Bulunan indeksleri sakla
+            if (denemeIndex !== -1) {
+                for (let i = startIndex; i < AllMessages.length; i++) {
+                    if (AllMessages[i].name === USER_YOU) {
+                        foundIndex.push(i); // mesajın indekslerini pushla
+                    } else if (foundIndex.length > 0) {
+                        break;
+                    }
                 }
-            }
-            console.log(foundIndex)
-            response = foundIndex.map((x) => {
-                return AllMessages[x]?.message
-            })
-        } else response = ["bu konu hakkında bilgim yok 😞"]
+                console.log(foundIndex)
+                response = foundIndex.map((x) => {
+                    return AllMessages[x]?.message
+                })
+            } else response = ["bu konu hakkında bilgim yokkkkkkkkkkk 😞"] //henüz cevap verilmemiş
+        } else response = ["bu konu hakkında bilgim yok 😞"] // böyle bi konuşma geçmemiş
         return response;
     }
-
-    const handleSendButtonPress = () => {
-        if (!(newMessage.length > 0)) {
+    // const handleEndEditing = (ref) => {
+    //     if (ref.text?.trim() === '') {
+    //         setValue('')
+    //         ref.current.clear();
+    //         if (required === true) {
+    //             setPlaceholder({text: type + " required", color: 'red'})
+    //         }
+    //
+    //     }else {
+    //         setValue(ref.text)
+    //         console.log("giriş kaydedildi: ", ref.text)
+    //     }
+    //
+    // }
+    const handleSendButtonPress = (ref) => {
+        const newMessage = ref.text;
+        if (!newMessage || newMessage?.trim() === '') {
+            ref.current.clear();
             return;
         }
         setData(prevState => [...prevState, {name: USER_ME, message: newMessage, type: 'input', media: null}])
         const response = handleDeneme(newMessage)
         console.log('!!!!!!!!!!!!!!!!!!!!!!!', response)
+        inputRef.text = "";
+        ref.current.clear();
         setNewMessage('')
         response.forEach((x, index) => {
             let data = {name: USER_YOU, message: x, type: 'response', media: null}
@@ -320,10 +343,12 @@ const TimelineMessageAnalysis = ({analyzedData, language}) => {
 
                     <MotiView
                         animate={{
-                            width: isMessageTyping ? (width - 45 - 30 - 10) : width - 30
+                             width: (width - 45 - 30 - 10)
                         }}
                         style={{}}>
                         <TextInput
+                            ref={inputRef}
+                            onChangeText={text => inputRef.text = text }
                             style={{
                                 width: '100%',
                                 height: 45,
@@ -332,8 +357,8 @@ const TimelineMessageAnalysis = ({analyzedData, language}) => {
                                 color: COLORS.white,
                                 paddingHorizontal: 15,
                             }}
-                            onChangeText={handleTextChange}
-                            value={newMessage}
+                            // onChangeText={handleTextChange}
+                            // value={newMessage}
                             // onContentSizeChange={(x) => console.log('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',x)}
                             // onEndEditing={(x) => console.log('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',x)}
                             placeholder={translations[language]["type_something"]}
@@ -342,11 +367,11 @@ const TimelineMessageAnalysis = ({analyzedData, language}) => {
                             editable={selectedPerson !== null}
                         />
                     </MotiView>
-                    <TouchableOpacity onPress={() => handleSendButtonPress()}>
+                    <TouchableOpacity disabled={selectedPerson === null} onPress={() => handleSendButtonPress(inputRef)}>
                         <MotiView
                             animate={{
-                                scale: isMessageTyping ? 1 : 0,
-                                opacity: isMessageTyping ? 1 : 0,
+                                // scale: isMessageTyping ? 1 : 0,
+                                // opacity: isMessageTyping ? 1 : 0,
                             }}
                             style={{
                                 padding: 10,
