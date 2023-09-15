@@ -15,10 +15,9 @@ import {
     AboutUs,
     AnalysisMethods, AnalysisMethodsByLanguage,
     COLORS, translations,
-     UsageInstructionsData,
-     UsageSecurityData
+    UsageInstructionsData,
+    UsageSecurityData
 } from "../config/constants";
-import AnalysisBox from "../components/AnalysisBox";
 import {AnimatePresence, MotiView} from "moti";
 import ScrollableInfoModal from "../components/ScrollableInfoModal";
 import {LinearGradient} from "expo-linear-gradient";
@@ -28,11 +27,14 @@ import {findAnalysis, parseData, pickDocument, readFileContent} from "../librari
 import MaskedView from "@react-native-masked-view/masked-view";
 import * as Haptics from 'expo-haptics';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
 const {width, height} = Dimensions.get('window');
 const innerWidth = width - 30
 
 
 const Home = ({navigation, route}) => {
+    // const language = route.params.language;
+    // const dateFormat = route.params.language;
     const [selectedAnalysis, setSelectedAnalysis] = React.useState(null)
     const [dateFormat, setDateFormat] = React.useState('MM/DD/YY');
     const [language, setLanguage] = React.useState('EN');
@@ -45,34 +47,13 @@ const Home = ({navigation, route}) => {
     const [fileUri, setFileUri] = React.useState('')
     const [fileName, setFileName] = React.useState('')
 
-    React.useEffect(() => {
-        // AsyncStorage.clear();
-        AsyncStorage.getAllKeys().then(value => {
-            console.log(value)
-            if (!value.includes("language") || !value.includes("dateFormat")) {
-                setTimeout(() => {
-                    navigation.navigate('welcome')
-                },1000)
-            } else {
-                AsyncStorage.getItem('language').then(value => {
-                    if (value !== null) {
-                        setLanguage(value)
-                    }
-                });
-                AsyncStorage.getItem('dateFormat').then(value => {
-                    if (value !== null) {
-                        setDateFormat(value)
-                    }
-                });
-            }
-        })
-    },[])
+
     React.useEffect(() => {
         if (route.params) {
             setLanguage(route.params?.language)
             setDateFormat(route.params?.dateFormat)
         }
-    },[route])
+    }, [route])
 
     const handlePickDocument = async () => {
         await Haptics.selectionAsync()
@@ -90,7 +71,7 @@ const Home = ({navigation, route}) => {
                 await Haptics.notificationAsync(
                     Haptics.NotificationFeedbackType.Warning
                 )
-                Alert.alert('☁️', 'You have analysis in progress, please wait a moment')
+                Alert.alert('☁️', translations[language]["alerts"]["analysis_in_progress"])
                 return;
             }
             // setCircleText('Analyzing...')
@@ -102,7 +83,7 @@ const Home = ({navigation, route}) => {
             if (fileContent === null) {
                 setSelectedAnalysis(null);
                 // setCircleText('START')
-                Alert.alert('Oops..', 'The date format seems to be incorrect. please check👆')
+                Alert.alert('Oops..', translations[language]["alerts"]["incorrect_format"])
                 return;
             }
             const {
@@ -118,7 +99,7 @@ const Home = ({navigation, route}) => {
             if (allSendings.nameCount.length !== 2) {
                 setSelectedAnalysis(null);
                 // setCircleText('START')
-                Alert.alert('Oops..', 'Synto, şu an için sadece 2 kişi arasındaki konuşmaları destekler.')
+                Alert.alert('Oops..', translations[language]["alerts"]["supports_two"])
                 return;
             }
             setTimeout(() => {
@@ -144,7 +125,7 @@ const Home = ({navigation, route}) => {
             setTimeout(() => {
                 setSelectedAnalysis(null);
             }, 6000)
-        } else Alert.alert('Geçerli bir dosya giriniz')
+        } else Alert.alert(translations[language]["alerts"]["valid_file"] )
     }
     const toggleInfoModal = async (data) => {
         setInfoModalData(data)
@@ -198,10 +179,14 @@ const Home = ({navigation, route}) => {
     const handleOptionPress = async (option, type) => {
         await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
         if (type === 'Language') {
-            setLanguage(option)
+            AsyncStorage.setItem('language', option).then(() => {
+                setLanguage(option)
+            })
         }
         if (type === 'Date Format') {
-            setDateFormat(option)
+            AsyncStorage.setItem('dateFormat', option).then(() => {
+                setDateFormat(option)
+            })
         }
     }
     //belirtilen sayfa numarasına kaydır
@@ -246,67 +231,67 @@ const Home = ({navigation, route}) => {
                     </TouchableOpacity>
                 </View>
                 <View style={{width: width, alignItems: 'center', gap: 15, justifyContent: 'flex-end'}}>
-                    <Pressable disabled={selectedAnalysis !== null} onPress={() => navigation.navigate("welcome")}>
-                    <MotiView
-                        transition={{
-                            type: 'timing',
-                            delay: page === 1 ? 0 : 0,
-                            duration: 500
-                        }}
-                        animate={{
-                            top: page === 1 ? 20 : 0,
-                            scale: page === 1 ? 1.1 : 1
-                        }}
-                    >
-                        <MaskedView style={{}}
-                                    maskElement={
-                                        <Image
-                                            source={require('../assets/logo.png')}
-                                            style={{
-                                                width: 170,
-                                                height: 'auto',
-                                                aspectRatio: 801 / 276,
-                                                // tintColor: COLORS.white
-                                            }}
-                                        />
-                                    }>
+                    <Pressable disabled={selectedAnalysis !== null}>
+                        <MotiView
+                            transition={{
+                                type: 'timing',
+                                delay: page === 1 ? 0 : 0,
+                                duration: 500
+                            }}
+                            animate={{
+                                top: page === 1 ? 20 : 0,
+                                scale: page === 1 ? 1.1 : 1
+                            }}
+                        >
+                            <MaskedView style={{}}
+                                        maskElement={
+                                            <Image
+                                                source={require('../assets/logo.png')}
+                                                style={{
+                                                    width: 170,
+                                                    height: 'auto',
+                                                    aspectRatio: 801 / 276,
+                                                    // tintColor: COLORS.white
+                                                }}
+                                            />
+                                        }>
 
-                            <Image
-                                source={require('../assets/logo.png')}
-                                style={{
-                                    width: 170,
-                                    height: 'auto',
-                                    aspectRatio: 801 / 276,
-                                    tintColor: COLORS.white
-                                }}
-                            />
-
-                            <MotiView
-                                transition={{
-                                    type: 'timing',
-                                    duration: selectedAnalysis?.id ? 5000 : 800
-                                }}
-                                animate={{
-                                    top: selectedAnalysis?.id ? -180 : 0,
-                                    backgroundColor: (isSettingsVisible) ? COLORS.stone : 'transparent'
-                                }}
-                                style={{position: 'absolute'}}>
-                                <LinearGradient
-                                    colors={['transparent', COLORS.stone, selectedAnalysis?.color ? selectedAnalysis.color : COLORS.stone]}
-                                    start={{x: 0, y: 0}}
-                                    end={{x: 0, y: 1}}
+                                <Image
+                                    source={require('../assets/logo.png')}
                                     style={{
-                                        // position: 'absolute',
-                                        top: 0,
-                                        left: 0,
                                         width: 170,
-                                        height: 240,
+                                        height: 'auto',
                                         aspectRatio: 801 / 276,
+                                        tintColor: COLORS.white
                                     }}
                                 />
-                            </MotiView>
-                        </MaskedView>
-                    </MotiView>
+
+                                <MotiView
+                                    transition={{
+                                        type: 'timing',
+                                        duration: selectedAnalysis?.id ? 5000 : 800
+                                    }}
+                                    animate={{
+                                        top: selectedAnalysis?.id ? -180 : 0,
+                                        backgroundColor: (isSettingsVisible) ? COLORS.stone : 'transparent'
+                                    }}
+                                    style={{position: 'absolute'}}>
+                                    <LinearGradient
+                                        colors={['transparent', COLORS.stone, selectedAnalysis?.color ? selectedAnalysis.color : COLORS.stone]}
+                                        start={{x: 0, y: 0}}
+                                        end={{x: 0, y: 1}}
+                                        style={{
+                                            // position: 'absolute',
+                                            top: 0,
+                                            left: 0,
+                                            width: 170,
+                                            height: 240,
+                                            aspectRatio: 801 / 276,
+                                        }}
+                                    />
+                                </MotiView>
+                            </MaskedView>
+                        </MotiView>
                     </Pressable>
                     <MotiView
                         transition={{
@@ -318,7 +303,8 @@ const Home = ({navigation, route}) => {
                             opacity: isSettingsVisible ? 0.4 : 1
                         }}
                         style={{gap: 10, alignItems: 'center', marginTop: 5}}>
-                        <TouchableOpacity disabled={page === 1 || selectedAnalysis !== null} onPress={handlePickDocument} style={{
+                        <TouchableOpacity disabled={page === 1 || selectedAnalysis !== null}
+                                          onPress={handlePickDocument} style={{
                             backgroundColor: COLORS.stone,
                             width: 170,
                             height: 35,
@@ -326,7 +312,10 @@ const Home = ({navigation, route}) => {
                             justifyContent: 'center',
                             alignItems: 'center'
                         }}>
-                            <Text style={{color: COLORS.white, fontSize: 15}}>{translations[language]['select_doc']}</Text>
+                            <Text style={{
+                                color: COLORS.white,
+                                fontSize: 15
+                            }}>{translations[language]['select_doc']}</Text>
                         </TouchableOpacity>
                         <View style={{flexDirection: 'row'}}>
                             <Text style={{
@@ -464,7 +453,7 @@ const Home = ({navigation, route}) => {
                                                     }}>
                                                     {
                                                         x.title === 'Chat'
-                                                        ?   <Image
+                                                            ? <Image
                                                                 source={require('../assets/logo_chat.png')}
                                                                 style={{
                                                                     width: 90,
@@ -474,7 +463,10 @@ const Home = ({navigation, route}) => {
                                                             />
                                                             : (
                                                                 <>
-                                                                    <Text style={{color: COLORS.white, fontSize: 12}}>{translations[language]['message_analysis']}</Text>
+                                                                    <Text style={{
+                                                                        color: COLORS.white,
+                                                                        fontSize: 12
+                                                                    }}>{translations[language]['message_analysis']}</Text>
                                                                     <Text style={{
                                                                         color: x.color,
                                                                         fontSize: 22,
@@ -605,15 +597,12 @@ const Home = ({navigation, route}) => {
                                     )
                                 })
                             }
-
                         </View>
-
                     </ScrollView>
                 </View>
-
-
             </ScrollView>
-            <ScrollableInfoModal data={infoModalData} isVisible={isInfoModalVisible} setVisible={setInfoModalVisible} language={language}/>
+            <ScrollableInfoModal data={infoModalData} isVisible={isInfoModalVisible} setVisible={setInfoModalVisible}
+                                 language={language}/>
 
 
             {/*/////////////////////TOGGLE SETTINGS*/}
@@ -658,7 +647,11 @@ const Home = ({navigation, route}) => {
                 }}>
                 <View style={{gap: 20, paddingVertical: 20, paddingHorizontal: 20}}>
                     <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
-                        <Text style={{color: COLORS.white, fontSize: 13, fontWeight: 'bold'}}>{translations[language]['settings'].toUpperCase()}</Text>
+                        <Text style={{
+                            color: COLORS.white,
+                            fontSize: 13,
+                            fontWeight: 'bold'
+                        }}>{translations[language]['settings'].toUpperCase()}</Text>
                         <TouchableOpacity onPress={toggleSettings}>
                             <Text style={{
                                 color: COLORS.white,
@@ -681,8 +674,8 @@ const Home = ({navigation, route}) => {
                                             fontSize: 13
                                         }}>
                                             {x.title === 'Date Format'
-                                            ? translations[language]['select_your_date_format']
-                                            : translations[language]['select_your_language']}
+                                                ? translations[language]['select_your_date_format']
+                                                : translations[language]['select_your_language']}
                                         </Text>
                                         <View style={{flexDirection: 'row', gap: 10, marginTop: 10}}>
                                             {
@@ -713,7 +706,8 @@ const Home = ({navigation, route}) => {
                         })
                     }
                     <TouchableOpacity>
-                        <Text style={{color: COLORS.red, textAlign: 'center'}} onPress={fileClearPress}>{translations[language]['clear_selected_document']}</Text>
+                        <Text style={{color: COLORS.red, textAlign: 'center'}}
+                              onPress={fileClearPress}>{translations[language]['clear_selected_document']}</Text>
                     </TouchableOpacity>
 
                 </View>

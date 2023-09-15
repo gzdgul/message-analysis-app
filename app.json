@@ -1,15 +1,13 @@
 {
   "expo": {
-    "name": "message-analysis",
-    "slug": "message-analysis",
+    "name": "synto-message-analysis",
+    "slug": "synto-message-analysis",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
+    "userInterfaceStyle": "dark",
     "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#000000"
     },
     "assetBundlePatterns": [
       "**/*"

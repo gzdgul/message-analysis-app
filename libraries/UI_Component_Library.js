@@ -6,9 +6,9 @@ import {View as MotiView} from "moti/build/components/view";
 import {LinearGradient} from "expo-linear-gradient";
 const { width, height } = Dimensions.get('window');
 
-export const ButtonGradient = ({title, color, buttonStyle, titleStyle, onPress}) => {
+export const ButtonGradient = ({title, color, buttonStyle, titleStyle, onPress, onPressIn}) => {
     return (
-        <TouchableOpacity style={{width: '100%', height: 50, borderRadius: 15, overflow: 'hidden', justifyContent: 'center', alignItems: 'center', ...buttonStyle}} onPress={onPress}>
+        <TouchableOpacity style={{width: '100%', height: 50, borderRadius: 15, overflow: 'hidden', justifyContent: 'center', alignItems: 'center', ...buttonStyle}} onPress={onPress} onPressIn={onPressIn}>
             <LinearGradient
                 style={{ width: '100%', height: '100%', position: 'absolute'}}
                 colors={color}

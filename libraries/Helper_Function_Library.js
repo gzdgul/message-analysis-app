@@ -1,4 +1,4 @@
-import {COLORS, mediaTypes, medya, missedCalls} from "../config/constants";
+import {COLORS, mediaTypes, medya, missedCalls, translations} from "../config/constants";
 import emojiRegex from "emoji-regex";
 import * as FileSystem from "expo-file-system";
 import * as DocumentPicker from "expo-document-picker";
@@ -21,12 +21,11 @@ export const pickDocument = async () => {
             // Dosya seçildiyse
             return {fileUri: result.assets[0].uri, name: result.assets[0].name};
         } else {
-            console.log('Dosya seçilmedi');
             return {fileUri: null};
         }
     } catch (error) {
         console.log('Hata:', error);
-        Alert.alert('Dosya Seçilmedi')
+        // Alert.alert(translations[language]["alerts"]["failed_file"])
         return {fileUri: null};
     }
 };

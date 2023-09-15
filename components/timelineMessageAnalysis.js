@@ -84,8 +84,8 @@ const TimelineMessageAnalysis = ({analyzedData, language}) => {
                 response = foundIndex.map((x) => {
                     return AllMessages[x]?.message
                 })
-            } else response = ["bu konu hakkında bilgim yokkkkkkkkkkk 😞"] //henüz cevap verilmemiş
-        } else response = ["bu konu hakkında bilgim yok 😞"] // böyle bi konuşma geçmemiş
+            } else response = [translations[language]["no_response"]] //henüz cevap verilmemiş
+        } else response = [translations[language]["no_response"]] // böyle bi konuşma geçmemiş
         return response;
     }
     // const handleEndEditing = (ref) => {
@@ -194,10 +194,8 @@ const TimelineMessageAnalysis = ({analyzedData, language}) => {
 
     return (
         <KeyboardAvoidingView
-            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            behavior={Platform.OS === 'ios' ? 'padding' : undefined}
             style={styles.container}>
-
-
             <View style={styles.header}>
                 <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
                     <View>
@@ -339,8 +337,7 @@ const TimelineMessageAnalysis = ({analyzedData, language}) => {
             </View>
 
             <View style={styles.footer}>
-                <View style={{flexDirection: 'row', flex: 1, gap: 10, marginTop: 10}}>
-
+                <View style={{flexDirection: 'row', gap: 10, marginTop: 8}}>
                     <MotiView
                         animate={{
                              width: (width - 45 - 30 - 10)
@@ -450,7 +447,7 @@ const styles = StyleSheet.create({
         // alignItems: 'center',
         // paddingVertical: 10,
         paddingHorizontal: 15,
-        gap: 10,
+        // gap: 10,
         backgroundColor: COLORS.stone
 
     },
